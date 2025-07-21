@@ -22,17 +22,21 @@ permissions:
   actions: write
   contents: read
 
-env:
-  STACK_PREFIX: "fjordcleanup-trash"
-  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-  AWS_REGION: "eu-north-1"
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   saga:
     runs-on: ubuntu-latest
 
     environment: production
+
+    env:
+      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      STACK_PREFIX: ${{ vars.STACK_PREFIX }}
+      MAP_API_KEY: ${{ vars.MAP_API_KEY }}
+      COGNITO_USER_POOL_CLIENT_ID: ${{ vars.COGNITO_USER_POOL_CLIENT_ID }}
+      COGNITO_USER_POOL_URL: ${{ vars.COGNITO_USER_POOL_URL }}
+      BASE_DOMAIN_NAME: ${{ vars.BASE_DOMAIN_NAME }}
 
     outputs:
       version: ${{ steps.version.outputs.version }}

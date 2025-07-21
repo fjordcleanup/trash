@@ -34,8 +34,26 @@ npx cdk deploy --all
 
 Create a GitHub environment `production`.
 
-Store the account ID and the region as a variable:
+Store the account ID as a variable:
 
 ```bash
 gh secret set ACCOUNT_ID --env production --body "<account id>"
+```
+
+Provide these environment variables:
+
+- For the stack
+  - `STACK_PREFIX` (e.g. `fjordcleanup-trash`)
+  - `AWS_REGION` (e.g. `eu-north-1`)
+  - `BASE_DOMAIN_NAME` (e.g. `fjordcleanup.org`)
+
+- For the map resources (e.g. using <https://github.com/hello-nrfcloud/aws-map>)
+  - `MAP_API_KEY`
+
+- For Cognito
+  - `COGNITO_USER_POOL_CLIENT_ID`
+  - `COGNITO_USER_POOL_URL`
+
+```bash
+gh variable set <STACK_PREFIX> --env production --body "<value>"
 ```

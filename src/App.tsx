@@ -1,5 +1,6 @@
 import { Redirect } from '#components/Redirect.tsx'
 import { Provider as AuthProvider, useAuth } from '#context/Auth.tsx'
+import { About } from '#page/About.tsx'
 import { Home } from '#page/Home.tsx'
 import { Route, Router } from 'preact-router'
 
@@ -15,6 +16,7 @@ export const Routing = () => {
 		return (
 			<Router>
 				<Route path="/" component={Home} />
+				<Route path="/about" component={About} />
 			</Router>
 		)
 	}
@@ -22,6 +24,7 @@ export const Routing = () => {
 	return (
 		<Router>
 			<Route path="/" component={Home} />
+			<Route path="/about" component={About} />
 			<Redirect path="/auth/callback" to="/" />
 		</Router>
 	)

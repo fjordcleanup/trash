@@ -1,5 +1,5 @@
 import { useAuth } from '#context/Auth.tsx'
-import { Home, LogIn, LogOut } from 'lucide-preact'
+import { HelpCircle, Home, LogIn, LogOut } from 'lucide-preact'
 
 import './Navbar.css'
 
@@ -13,11 +13,14 @@ const Nav = () => {
 	const auth = useAuth()
 	const { email, name } = auth.user?.profile ?? {}
 	return (
-		<div class="topNav mb-4">
+		<div class="topNav ">
 			<nav class="left">
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo" />
 				<a href="/" class="ms-2">
 					<Home /> Home
+				</a>
+				<a href="/about" class="ms-2">
+					<HelpCircle /> About
 				</a>
 			</nav>
 			<nav class="right">

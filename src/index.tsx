@@ -12,6 +12,10 @@ console.debug(
 	}),
 )
 
+console.debug('MAP_API_KEY', MAP_API_KEY)
+console.debug('COGNITO_USER_POOL_URL', COGNITO_USER_POOL_URL)
+console.debug('COGNITO_USER_POOL_CLIENT_ID', COGNITO_USER_POOL_CLIENT_ID)
+
 const root = document.getElementById('root')
 
 if (root === null) {

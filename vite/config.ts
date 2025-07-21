@@ -4,23 +4,26 @@ import { replaceInIndex } from './replaceInIndex.ts'
 import { homepage, version } from './siteInfo.ts'
 
 export const createConfig = ({
-	domainName,
 	plugins,
 	cognitoUserPoolURL,
 	cognitoUserPoolClientId,
+	mapAPIKey,
+	awsRegion,
 }: {
-	domainName: string
 	cognitoUserPoolURL: URL
 	cognitoUserPoolClientId: string
+	mapAPIKey: string
+	awsRegion: string
 	plugins?: PluginOption[]
 }): ReturnType<typeof defineConfig> => {
 	const define: Record<string, string> = {
 		HOMEPAGE: JSON.stringify(homepage),
 		VERSION: JSON.stringify(version),
 		BUILD_TIME: JSON.stringify(new Date().toISOString()),
-		DOMAIN_NAME: JSON.stringify(domainName),
 		COGNITO_USER_POOL_URL: JSON.stringify(cognitoUserPoolURL.toString()),
 		COGNITO_USER_POOL_CLIENT_ID: JSON.stringify(cognitoUserPoolClientId),
+		MAP_API_KEY: JSON.stringify(mapAPIKey),
+		AWS_REGION: JSON.stringify(awsRegion),
 	}
 	for (const [k, v] of Object.entries(define)) {
 		console.debug(`[vite define] ${k}:`, v)

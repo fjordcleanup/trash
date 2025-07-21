@@ -4,11 +4,10 @@
 declare const VERSION: string
 declare const HOMEPAGE: string
 declare const BUILD_TIME: string
-/** Domain name where app is hosted. */
-declare const DOMAIN_NAME: string
-
+declare const MAP_API_KEY: string
 declare const COGNITO_USER_POOL_URL: string
 declare const COGNITO_USER_POOL_CLIENT_ID: string
+declare const AWS_REGION: string
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 interface ImportMeta {

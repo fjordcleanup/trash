@@ -1,11 +1,17 @@
+import { fromEnv } from '@bifravst/from-env'
 import { createConfig } from './vite/config.ts'
 
+const { cognitoUserPoolURL, cognitoUserPoolClientId, mapAPIKey, awsRegion } =
+	fromEnv({
+		cognitoUserPoolURL: 'COGNITO_USER_POOL_URL',
+		cognitoUserPoolClientId: 'COGNITO_USER_POOL_CLIENT_ID',
+		mapAPIKey: 'MAP_API_KEY',
+		awsRegion: 'AWS_REGION',
+	})(process.env)
+
 export default createConfig({
-	domainName: process.env.DOMAIN_NAME ?? 'trash.fjordcleanup.org',
-	cognitoUserPoolURL: new URL(
-		process.env.COGNITO_USER_POOL_URL ??
-			'https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_I8tzxRuIa',
-	),
-	cognitoUserPoolClientId:
-		process.env.COGNITO_USER_POOL_CLIENT_ID ?? '129j8n6vtpat0rk0l15sk83kfl',
+	cognitoUserPoolURL: new URL(cognitoUserPoolURL),
+	cognitoUserPoolClientId,
+	mapAPIKey,
+	awsRegion,
 })

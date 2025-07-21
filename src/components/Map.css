@@ -1,0 +1,5 @@
+#map {
+  width: 100%;
+  overflow: clip;
+  height: calc(100vh - 50px);
+}
