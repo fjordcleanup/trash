@@ -1,0 +1,87 @@
+{
+  "name": "@fjordcleanup/trash",
+  "version": "0.0.0-development",
+  "description": "Web application to view and report trash to Fjord CleanUp",
+  "type": "module",
+  "imports": {
+    "#utils/*": {
+      "import": "./src/utils/*"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fjordcleanup/trash.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fjordcleanup/trash/issues"
+  },
+  "homepage": "https://trash.fjordcleanup.org",
+  "author": "Markus Tacker <m@coderbyheart.com> | https://coderbyheart.com",
+  "license": "MIT",
+  "scripts": {
+    "start": "vite",
+    "build": "node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js build --emptyOutDir",
+    "prepare": "husky",
+    "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules|e2e-tests)/**/*.spec.ts\""
+  },
+  "dependencies": {
+    "bootstrap": "5.3.7",
+    "compare-versions": "6.1.1",
+    "date-fns": "4.1.0",
+    "lucide-preact": "0.525.0",
+    "oidc-client-ts": "3.3.0",
+    "preact": "10.26.9",
+    "preact-router": "4.1.2"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-sts": "3.848.0",
+    "@babel/plugin-syntax-import-assertions": "7.27.1",
+    "@bifravst/ci": "2.1.1",
+    "@bifravst/cloudformation-helpers": "9.1.1",
+    "@bifravst/eslint-config-typescript": "6.4.2",
+    "@bifravst/from-env": "3.0.2",
+    "@bifravst/prettier-config": "1.1.11",
+    "@commitlint/config-conventional": "19.8.1",
+    "@preact/preset-vite": "2.10.2",
+    "@types/node": "24.0.15",
+    "aws-cdk-lib": "2.206.0",
+    "cdk": "2.1021.0",
+    "commitlint": "19.8.1",
+    "handlebars": "4.7.8",
+    "husky": "9.1.7",
+    "lint-staged": "16.1.2",
+    "typescript": "5.8.3",
+    "vite": "7.0.5"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint"
+    ],
+    "*.{md,json,yaml,yml,html,css}": [
+      "prettier --write"
+    ]
+  },
+  "prettier": "@bifravst/prettier-config",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "remoteTags": true,
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/github",
+        {
+          "successCommentCondition": false,
+          "failTitle": false
+        }
+      ]
+    ]
+  }
+}

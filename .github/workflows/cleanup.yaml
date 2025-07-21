@@ -1,0 +1,52 @@
+name: Clean up test resources
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      stackPrefix:
+        description: "Prefix of the stacks to clean"
+        required: true
+
+env:
+  NODE_NO_WARNINGS: 1
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+
+    env:
+      STACK_PREFIX: ${{ github.event.inputs.stackPrefix }}
+      VERSION: ${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Authenticate against NPM for private repo access
+        run:
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
+          ~/.npmrc
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # The role is set up via https://github.com/bifravst/ci
+          # secrets.BILLING_SERVICE__CI__AWS_ACCOUNT_ID is an organization secret
+          role-to-assume: |
+            arn:aws:iam::${{ secrets.BILLING_SERVICE__CI__AWS_ACCOUNT_ID }}:role/${{ github.repository_owner }}-ci-${{ github.event.repository.name }}
+          # vars.AWS_REGION_CI is an organization variable
+          aws-region: ${{ vars.BILLING_SERVICE__CI__AWS_REGION }}
+
+      - name: Clean up resources
+        run: npx cdk destroy --force --all

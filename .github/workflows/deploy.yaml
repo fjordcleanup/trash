@@ -1,0 +1,126 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Version to deploy"
+        required: true
+      bootstrap:
+        description: "Bootstrap the stack"
+        required: false
+        default: "false"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  actions: write
+  contents: read
+
+env:
+  STACK_PREFIX: "fjordcleanup-trash"
+  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  AWS_REGION: "eu-north-1"
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  COGNITO_USER_POOL_CLIENT_ID: 1i63q022e5rgk3ojn7bk53apem
+  COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_2u7cSZZ4K
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: Determine released version
+        id: version
+        run: |
+          git fetch --tags
+          VERSION=`git describe --abbrev=0 --tags --always | tr -d '\n'`
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Authenticate against NPM for private repo access
+        run:
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
+          ~/.npmrc
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Build
+        run: |
+          npm run build
+          cp -L -r ./static ./build
+          mkdir -p build/node_modules/bootstrap/dist/css/
+          cp node_modules/bootstrap/dist/css/bootstrap.css build/node_modules/bootstrap/dist/css/
+          mkdir  ./build/.well-known
+          echo ${{ steps.version.outputs.version }} > ./build/.well-known/release
+
+      - name: Cache AWS CLI (Linux)
+        id: cache-aws-cli
+        uses: actions/cache@v4
+        with:
+          path: aws/
+          key: cache-aws-cli
+
+      - name: Install AWS
+        if: steps.cache-aws-cli.outputs.cache-hit != 'true'
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
+
+      - name: configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: |-
+            arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.STACK_PREFIX }}-cd-cd
+          role-session-name: gh-actions-publish
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get bucket name
+        run: |-
+          echo "BUCKET_NAME=`aws cloudformation describe-stacks --stack-name ${{ env.STACK_PREFIX }}-hosting | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "bucketName") | .OutputValue'`" >> $GITHUB_ENV
+
+      - name: Remove old files
+        run: |
+          aws s3 rm s3://${{ env.BUCKET_NAME }} --recursive
+
+      - name: Upload build
+        run: |
+          aws s3 sync build s3://${{ env.BUCKET_NAME }}
+
+      - name: Set cache metadata
+        run: |
+          # All files to 1 year
+          aws s3 cp s3://${{ env.BUCKET_NAME }} s3://${{ env.BUCKET_NAME }} --recursive --cache-control max-age=30758400,public
+          # HTML files and .well-known/ to 10 minutes
+          aws s3 cp s3://${{ env.BUCKET_NAME }} s3://${{ env.BUCKET_NAME }} --exclude "*" --include "*.html" --include ".well-known/*" --recursive --cache-control max-age=600,public --content-type "text/html; charset=UTF-8"
+
+      - name:
+          Trigger CloudFront cache invalidation for fixed resources (all other
+          files have unique names)
+        run: |
+          node --no-warnings --experimental-transform-types .github/workflows/invalidate-cloudfront.ts
+
+      - name: Trigger Deployment Metrics
+        run: |
+          gh workflow run --ref main publish-deployment-metrics.yaml -F version=${{ steps.version.outputs.version }}

@@ -1,0 +1,143 @@
+name: Test and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: write
+  actions: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  VERSION: ${{ github.sha }}
+
+jobs:
+  stack-name:
+    runs-on: ubuntu-24.04
+
+    outputs:
+      stackPrefix: ${{ steps.stackPrefix.outputs.stackPrefix }}
+
+    steps:
+      - name: Generate Stack name
+        id: stackPrefix
+        run: |
+          RANDOM_STRING=`node -e "const crypto = require('crypto'); process.stdout.write(crypto.randomBytes(Math.ceil(8 * 0.5)).toString('hex').slice(0, 8));"`
+          echo "stackPrefix=bsw-${RANDOM_STRING}" >> $GITHUB_OUTPUT
+
+  test-resources:
+    needs: [stack-name]
+
+    runs-on: ubuntu-latest
+
+    env:
+      STACK_PREFIX: ${{ needs.stack-name.outputs.stackPrefix }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Authenticate against NPM for private repo access
+        run:
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
+          ~/.npmrc
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # The role is set up via https://github.com/bifravst/ci
+          # secrets.BILLING_SERVICE__CI__AWS_ACCOUNT_ID is an organization secret
+          role-to-assume: |
+            arn:aws:iam::${{ secrets.BILLING_SERVICE__CI__AWS_ACCOUNT_ID }}:role/${{ github.repository_owner }}-ci-${{ github.event.repository.name }}
+          # vars.AWS_REGION_CI is an organization variable
+          aws-region: ${{ vars.BILLING_SERVICE__CI__AWS_REGION }}
+
+      - name: Deploy to AWS
+        run: npm run cdk:e2e-resources
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Authenticate against NPM for private repo access
+        run:
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
+          ~/.npmrc
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Compile TypeScript
+        run: npx tsc
+
+      - name: Check source code with eslint
+        run: npx eslint ./
+
+      - name: Check if source code is properly formatted
+        run: npx prettier -c ./
+
+      - name: Run tests
+        run: npm test
+
+      - name: Ensure it builds
+        env:
+          COGNITO_USER_POOL_CLIENT_ID: some-client-id
+          COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_some-pool-id
+        run: |
+          npm run build
+          cp -L -r ./static ./build
+
+  release:
+    runs-on: ubuntu-latest
+
+    needs: [build]
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "npm"
+
+      - name: Export to-be released version
+        run: |
+          npx semantic-release --dry-run > semantic-release.out
+          echo "RELEASE_VERSION=$(cat semantic-release.out | grep -i 'the next release version is' | awk '{print $11}')" >> $GITHUB_ENV
+          cat semantic-release.out
+
+      - name: Semantic release
+        id: semantic-release
+        run: npx semantic-release
+
+      - name: Trigger deployment workflow
+        if:
+          steps.semantic-release.outcome == 'success' && env.RELEASE_VERSION
+          !=  ''
+        run: |
+          gh workflow run --ref main deploy.yaml -F ref=${{ github.sha }}

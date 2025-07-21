@@ -1,0 +1,14 @@
+{
+  "@aws-cdk/customresources:installLatestAwsSdkDefault": false,
+  "acknowledged-issue-numbers": [
+    34892
+  ],
+  "hosted-zone:account=322276017280:domainName=fjordcleanup.org:region=us-east-1": {
+    "Id": "/hostedzone/Z069585220G1K0COCFW5Q",
+    "Name": "fjordcleanup.org."
+  },
+  "hosted-zone:account=322276017280:domainName=fjordcleanup.org:region=eu-north-1": {
+    "Id": "/hostedzone/Z069585220G1K0COCFW5Q",
+    "Name": "fjordcleanup.org."
+  }
+}
