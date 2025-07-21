@@ -3,7 +3,7 @@ name: Test and Release
 on:
   push:
     branches:
-      - main
+      - saga
   workflow_dispatch:
   pull_request:
 
@@ -115,7 +115,7 @@ jobs:
 
     needs: [build]
 
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/saga'
 
     steps:
       - uses: actions/checkout@v4
@@ -140,4 +140,4 @@ jobs:
           steps.semantic-release.outcome == 'success' && env.RELEASE_VERSION
           !=  ''
         run: |
-          gh workflow run --ref main deploy.yaml -F ref=${{ github.sha }}
+          gh workflow run --ref saga deploy.yaml -F ref=${{ github.sha }}

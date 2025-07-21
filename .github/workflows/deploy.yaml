@@ -31,7 +31,7 @@ env:
   COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_2u7cSZZ4K
 
 jobs:
-  main:
+  saga:
     runs-on: ubuntu-latest
 
     environment: production
@@ -123,4 +123,4 @@ jobs:
 
       - name: Trigger Deployment Metrics
         run: |
-          gh workflow run --ref main publish-deployment-metrics.yaml -F version=${{ steps.version.outputs.version }}
+          gh workflow run --ref saga publish-deployment-metrics.yaml -F version=${{ steps.version.outputs.version }}
