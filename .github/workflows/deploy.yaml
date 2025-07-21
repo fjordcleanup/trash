@@ -120,7 +120,3 @@ jobs:
           files have unique names)
         run: |
           node --no-warnings --experimental-transform-types .github/workflows/invalidate-cloudfront.ts
-
-      - name: Trigger Deployment Metrics
-        run: |
-          gh workflow run --ref saga publish-deployment-metrics.yaml -F version=${{ steps.version.outputs.version }}
