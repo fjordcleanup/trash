@@ -27,8 +27,6 @@ env:
   ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
   AWS_REGION: "eu-north-1"
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  COGNITO_USER_POOL_CLIENT_ID: 1i63q022e5rgk3ojn7bk53apem
-  COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_2u7cSZZ4K
 
 jobs:
   saga:
