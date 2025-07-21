@@ -11,19 +11,15 @@ export const Footer = () => (
 	<footer>
 		<main>
 			<span class="copyright">
-				© <CopyrightYear /> <a href='https://coderbyheart.com'>Markus Tacker</a>. All rights reserved.
+				© <CopyrightYear />{' '}
+				<a href="https://coderbyheart.com">Markus Tacker</a>. All rights
+				reserved.
 			</span>
 			<nav>
-				<a
-					target="_blank"
-					href="https://fjordcleanup.no/"
-				>
+				<a target="_blank" href="https://fjordcleanup.no/">
 					Fjord CleanUP
 				</a>
-				<a
-					target="_blank"
-					href="https://github.com/fjordcleanup/trash"
-				>
+				<a target="_blank" href="https://github.com/fjordcleanup/trash">
 					Source
 				</a>
 			</nav>
