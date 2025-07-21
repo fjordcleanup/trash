@@ -34,6 +34,7 @@
     "preact-router": "4.1.2"
   },
   "devDependencies": {
+    "@aws-sdk/client-cloudfront": "3.848.0",
     "@aws-sdk/client-sts": "3.848.0",
     "@babel/plugin-syntax-import-assertions": "7.27.1",
     "@bifravst/ci": "2.1.1",
@@ -43,10 +44,12 @@
     "@bifravst/prettier-config": "1.1.11",
     "@commitlint/config-conventional": "19.8.1",
     "@preact/preset-vite": "2.10.2",
+    "@types/glob": "8.1.0",
     "@types/node": "24.0.15",
     "aws-cdk-lib": "2.206.0",
     "cdk": "2.1021.0",
     "commitlint": "19.8.1",
+    "glob": "11.0.3",
     "handlebars": "4.7.8",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",

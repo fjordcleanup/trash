@@ -30,5 +30,12 @@
       "#page/*": ["page/*"],
       "#api/*": ["api/*"]
     }
-  }
+  },
+  "include": [
+    ".github/workflows/invalidate-cloudfront.ts",
+    "src/**/*",
+    "vite.config.ts",
+    "cdk/**/*",
+    "vite/**/*"
+  ]
 }
