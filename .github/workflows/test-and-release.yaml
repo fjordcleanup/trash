@@ -56,6 +56,9 @@ jobs:
         env:
           COGNITO_USER_POOL_CLIENT_ID: some-client-id
           COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_some-pool-id
+          AWS_REGION: eu-north-1
+          MAP_API_KEY: v1.public.some-map-api-key
+
         run: |
           npm run build
           cp -L -r ./static ./build
