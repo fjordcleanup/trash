@@ -12,12 +12,6 @@
   margin-left: 1rem;
 }
 
-#root > footer main nav a {
-  color: var(--color-nordic-blue);
-  text-decoration: none;
-  opacity: 0.9;
-}
-
 #root > footer aside {
   font-size: 90%;
   opacity: 0.8;
