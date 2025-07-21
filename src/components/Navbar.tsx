@@ -1,13 +1,9 @@
 import { useAuth } from '#context/Auth.tsx'
-import { HelpCircle, Home, LogIn, LogOut } from 'lucide-preact'
+import { HelpCircle, Home, LogIn, LogOut, PlusCircle } from 'lucide-preact'
 
 import './Navbar.css'
 
-export const Navbar = () => (
-	<>
-		<Nav />
-	</>
-)
+export const Navbar = () => <Nav />
 
 const Nav = () => {
 	const auth = useAuth()
@@ -18,6 +14,9 @@ const Nav = () => {
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo" />
 				<a href="/" class="ms-2">
 					<Home /> Home
+				</a>
+				<a href="/report" class="ms-2">
+					<PlusCircle /> Report
 				</a>
 				<a href="/about" class="ms-2">
 					<HelpCircle /> About
@@ -31,7 +30,7 @@ const Nav = () => {
 						onClick={() => auth.login()}
 					>
 						<LogIn class="me-2" />
-						Login
+						Log in
 					</button>
 				)}
 				{auth.user !== undefined && (

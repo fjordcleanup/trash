@@ -1,6 +1,7 @@
-import maplibregl from 'maplibre-gl'
+import maplibregl, { Marker } from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
+import { useMarker } from '#context/Marker.tsx'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './Map.css'
 
@@ -12,7 +13,8 @@ const colorScheme = 'Light'
 export const Map = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const initialized = useRef<boolean>(false)
-	const [, setMap] = useState<maplibregl.Map | undefined>(undefined)
+	const [mapInstance, setMap] = useState<maplibregl.Map>()
+	const marker = useMarker()
 
 	useEffect(() => {
 		if (containerRef.current === null) return
@@ -38,12 +40,36 @@ export const Map = () => {
 			setMap(map)
 		})
 
+		map.on('click', (e) => {
+			const lngLat = e.lngLat
+			console.debug(`[Map]`, `clicked at`, lngLat)
+			marker.setLocation(lngLat)
+		})
+
 		return () => {
 			console.debug(`[Map]`, `unmounted`)
 			console.debug(`[Map]`, `cleaning up`)
 			map.remove()
 		}
 	}, [containerRef, initialized])
+
+	useEffect(() => {
+		if (mapInstance === undefined) return
+		if (marker.location === undefined) return
+
+		console.debug(`[Map]`, `updating marker location to`, marker.location)
+		const markerIcon = new Marker({
+			color: '#ff6100',
+			draggable: true,
+		})
+			.setLngLat(marker.location)
+			.addTo(mapInstance)
+
+		return () => {
+			markerIcon.remove()
+			console.debug(`[Map]`, `marker removed`)
+		}
+	}, [marker.location, mapInstance])
 
 	return <div id="map" ref={containerRef} />
 }
