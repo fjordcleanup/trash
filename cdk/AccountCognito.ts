@@ -5,6 +5,7 @@ import {
 	CfnManagedLoginBranding,
 	ManagedLoginVersion,
 	OAuthScope,
+	PasskeyUserVerification,
 	UserPool,
 	UserPoolClient,
 	UserPoolClientIdentityProvider,
@@ -57,6 +58,16 @@ export class AccountCognito extends Construct {
 			autoVerify: {
 				email: true,
 			},
+			signInPolicy: {
+				allowedFirstAuthFactors: {
+					// The password authentication cannot be disabled right now.
+					password: true,
+					emailOtp: true,
+					passkey: true,
+				},
+			},
+			passkeyUserVerification: PasskeyUserVerification.PREFERRED,
+			// signInCaseSensitive: false,
 		})
 
 		const hostedZone = HostedZone.fromLookup(this, 'hostedZone', {
@@ -114,7 +125,12 @@ export class AccountCognito extends Construct {
 			userPool: this.userPool,
 			userPoolClientName: 'managedLogin',
 			generateSecret: false,
-			authFlows: {},
+			authFlows: {
+				userPassword: false,
+				userSrp: false,
+				custom: false,
+				user: true,
+			},
 			oAuth: {
 				flows: {
 					authorizationCodeGrant: true,
