@@ -13,10 +13,6 @@
   flex-direction: column;
 }
 
-#reportMapContainer > nav small {
-  font-size: 12px;
-}
-
 #reportMap {
   width: 100%;
   height: 100%;

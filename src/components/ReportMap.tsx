@@ -100,18 +100,18 @@ export const ReportMap = ({
 						type="button"
 						class="btn btn-secondary d-flex align-items-center flex-column"
 						onClick={() => setStyle('Standard')}
+						title="Terrain view"
 					>
 						<Map />
-						<small>Terrain</small>
 					</button>
 				) : (
 					<button
 						type="button"
 						class="btn btn-secondary d-flex align-items-center flex-column"
 						onClick={() => setStyle('Satellite')}
+						title="Satellite view"
 					>
 						<Satellite />
-						<small>Satellite</small>
 					</button>
 				)}
 
@@ -137,9 +137,9 @@ export const ReportMap = ({
 								{ enableHighAccuracy: true },
 							)
 						}}
+						title="Locate me"
 					>
 						<Locate />
-						<small>My location</small>
 					</button>
 				)}
 			</nav>

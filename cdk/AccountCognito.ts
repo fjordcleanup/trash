@@ -10,6 +10,8 @@ import {
 	UserPoolClient,
 	UserPoolClientIdentityProvider,
 	UserPoolDomain,
+	UserPoolEmail,
+	VerificationEmailStyle,
 	type IUserPool,
 	type IUserPoolClient,
 } from 'aws-cdk-lib/aws-cognito'
@@ -68,6 +70,15 @@ export class AccountCognito extends Construct {
 			},
 			passkeyUserVerification: PasskeyUserVerification.PREFERRED,
 			// signInCaseSensitive: false,
+			userVerification: {
+				emailSubject: '[Fjord CleanUP] Verify your email',
+				emailBody:
+					'Hello {username},\n\nYour verification code is {####}.\n\nThank you for helping Fjord CleanUP!',
+				emailStyle: VerificationEmailStyle.CODE,
+			},
+			email: UserPoolEmail.withSES({
+				fromEmail: `notifications@${baseDomainName}`,
+			}),
 		})
 
 		const hostedZone = HostedZone.fromLookup(this, 'hostedZone', {
