@@ -1,4 +1,5 @@
 import { ReportMap } from '#components/ReportMap.tsx'
+import { Info } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
 import { useMemo, useState } from 'preact/hooks'
 import proj4 from 'proj4'
@@ -51,9 +52,12 @@ export const ReportForm = () => {
 						Click on the map to select a location where you found trash. You can
 						drag the marker to adjust the position if needed.
 					</p>
-					<p class="text-muted">
-						If you want to report multiple locations, please submit a separate
-						report for each location.
+					<p class="text-muted d-flex">
+						<Info class="me-2" />
+						<span>
+							If you want to report multiple locations, please submit a separate
+							report for each location.
+						</span>
 					</p>
 				</div>
 			</div>
@@ -72,7 +76,7 @@ export const ReportForm = () => {
 							<h3 class="text-dark fs-3 mb-3 mt-4">Selected location</h3>
 						</div>
 					</div>
-					<div class="row  justify-content-center">
+					<div class="row justify-content-center">
 						<div class="col-5 col-md-3 col-lg-2">
 							<p>
 								<abbr title={`Latitude`}>Lat:</abbr>{' '}
@@ -88,35 +92,33 @@ export const ReportForm = () => {
 							</p>
 						</div>
 						<div class="col-7 col-md-5 col-lg-4">
-							<p>View location on</p>
-							<ul>
-								<li>
+							<p>
+								View location on:
+								<nav>
 									<a
 										href={`https://kart.finn.no/?lng=${location.lng}&lat=${location.lat}&zoom=19&mapType=norortho&markers=${location.lng},${location.lat},r,Trash`}
 										target="_blank"
 									>
 										kart.finn.no
 									</a>
-								</li>
-								{utm !== null && (
-									<li>
+									{utm !== null && (
 										<a
 											href={`https://www.norgeskart.no/#!?project=norgeskart&layers=1001&zoom=17&lat=${utm.northing}&lon=${utm.easting}&markerLat=${utm.northing}&markerLon=${utm.easting}`}
 											target="_blank"
+											class="ms-4"
 										>
 											Norgeskart
 										</a>
-									</li>
-								)}
-								<li>
+									)}
 									<a
 										href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`}
 										target="_blank"
+										class="ms-4"
 									>
 										Google Maps
 									</a>
-								</li>
-							</ul>
+								</nav>
+							</p>
 						</div>
 					</div>
 				</>
