@@ -33,7 +33,7 @@
     "oidc-client-ts": "3.3.0",
     "preact": "10.26.9",
     "preact-router": "4.1.2",
-    "proj4": "2.19.9"
+    "proj4": "2.19.10"
   },
   "devDependencies": {
     "@aws-sdk/client-cloudfront": "3.850.0",
