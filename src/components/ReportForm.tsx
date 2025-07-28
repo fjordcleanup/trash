@@ -120,11 +120,6 @@ export const ReportForm = () => {
 			)}
 			{step === Steps.Description && (
 				<>
-					<div class="row justify-content-center">
-						<div class="col-3 col-md-2">
-							<TrashTypeDiamond types={trashType} />
-						</div>
-					</div>
 					<Description
 						onDescriptionChange={setDescription}
 						description={description}
@@ -169,6 +164,28 @@ export const ReportForm = () => {
 							}
 						}}
 					/>
+				</>
+			)}
+			{step === Steps.Submit && (
+				<>
+					<div class="row justify-content-center">
+						<div class="col-3 col-md-2">
+							<TrashTypeDiamond types={trashType} />
+						</div>
+					</div>
+					<div class="row justify-content-center mt-4">
+						<div class="col-12 col-md-8 col-lg-6">
+							<p>
+								<strong>Location:</strong> {location?.toString()}
+							</p>
+							<p>
+								<strong>Description:</strong> {description}
+							</p>
+							<p>
+								<strong>Photos:</strong> {photos.length} uploaded
+							</p>
+						</div>
+					</div>
 				</>
 			)}
 			{step === Steps.ThankYou && <ThankYou />}
