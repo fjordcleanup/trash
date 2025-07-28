@@ -1,9 +1,11 @@
 import { ArrowDownToDot, LineSquiggle, Section } from 'lucide-preact'
 
-export const PhotoHelp = () => (
+export const PhotoHelp = ({ limit }: { limit: number }) => (
 	<div class="row justify-content-center">
 		<div class="col-12 col-md-8 col-lg-6 mb-4">
-			<p>Upload a photo of the location where we can find the trash.</p>
+			<p>
+				Upload up to {limit} photos of the location where we can find the trash.
+			</p>
 			<p class="d-flex">
 				<ArrowDownToDot class="flex-shrink-0 me-2" size={24} />
 				Make sure the photo clearly shows the trash and its surroundings so we

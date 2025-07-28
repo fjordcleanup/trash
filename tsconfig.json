@@ -28,6 +28,7 @@
       "#components/*": ["components/*"],
       "#context/*": ["context/*"],
       "#page/*": ["page/*"],
+      "#icons/*": ["icons/*"],
       "#api/*": ["api/*"]
     }
   },

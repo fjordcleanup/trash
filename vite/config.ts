@@ -54,6 +54,7 @@ export const createConfig = ({
 				{ find: '#components/', replacement: '/src/components/' },
 				{ find: '#context/', replacement: '/src/context/' },
 				{ find: '#page/', replacement: '/src/page/' },
+				{ find: '#icons/', replacement: '/src/icons/' },
 				{ find: '#api/', replacement: '/src/api/' },
 			],
 		},

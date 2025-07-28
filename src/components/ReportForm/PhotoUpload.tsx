@@ -26,6 +26,11 @@ export const PhotoUpload = ({
 							setProblem('File is too small, please upload a larger image.')
 							return
 						}
+						if (file.size > 20 * 1024 * 1024) {
+							// Maximum size of 20MB
+							setProblem('File is too large, please upload a smaller image.')
+							return
+						}
 						console.log('Selected file:', file)
 						const reader = new FileReader()
 						reader.onload = () => {

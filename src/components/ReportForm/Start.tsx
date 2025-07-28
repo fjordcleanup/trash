@@ -1,6 +1,11 @@
 export const Start = () => (
 	<div class="row justify-content-center">
 		<div class="col-12 col-md-8 col-lg-6">
+			<h1 class="text-dark fs-1 mb-3">
+				Report trash
+				<br />
+				<small>to Fjord CleanUP</small>
+			</h1>
 			<p>Thank you for helping the Oslo fjord and Akerselva cleaner.</p>
 			<h2 class="text-muted fs-4 mb-3">Only report trash in water bodies</h2>
 			<p>

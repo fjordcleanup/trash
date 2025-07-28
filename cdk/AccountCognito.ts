@@ -78,6 +78,8 @@ export class AccountCognito extends Construct {
 			},
 			email: UserPoolEmail.withSES({
 				fromEmail: `notifications@${baseDomainName}`,
+				fromName: 'Fjord CleanUP',
+				sesVerifiedDomain: baseDomainName,
 			}),
 		})
 
