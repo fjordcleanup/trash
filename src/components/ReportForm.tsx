@@ -1,128 +1,123 @@
-import { ReportMap } from '#components/ReportMap.tsx'
-import { Info } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
 import { useMemo, useState } from 'preact/hooks'
-import proj4 from 'proj4'
+import { PhotoGallery } from './ReportForm/PhotoGallery.tsx'
+import { PhotoHelp } from './ReportForm/PhotoHelp.tsx'
+import { PhotoUpload } from './ReportForm/PhotoUpload.tsx'
+import { SelectLocation } from './ReportForm/ReportForm.tsx'
+import { Start } from './ReportForm/Start.tsx'
+import { ThankYou } from './ReportForm/ThankYou.tsx'
 
-const toEUREF89 = (gps: LngLat) => {
-	// Define the projection from WGS84 (GPS) to EUREF89 UTM for the calculated zone
-	const wgs84 = '+proj=longlat +datum=WGS84 +no_defs'
-	const utm = `+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs`
-
-	// Transform the coordinates
-	const [easting, northing] = (proj4 as any)(wgs84, utm, [gps.lng, gps.lat])
-
-	return {
-		easting,
-		northing,
-	}
+enum Steps {
+	Start = 'start',
+	SelectLocation = 'select-location',
+	Submit = 'submit',
+	PhotoUpload = 'photo-upload',
+	Description = 'description',
+	ThankYou = 'thank-you',
 }
 
-export const ReportForm = () => {
-	const [location, setLocation] = useState<LngLat>()
+const stepOrder = [
+	Steps.Start,
+	Steps.SelectLocation,
+	Steps.PhotoUpload,
+	Steps.Description,
+	Steps.Submit,
+	Steps.ThankYou,
+]
 
-	const utm = useMemo(() => {
-		if (location === undefined) return null
-		const utm = toEUREF89(location)
-		return {
-			easting: utm.easting,
-			northing: utm.northing,
+export const ReportForm = () => {
+	const [step, setStep] = useState<Steps>(Steps.Start)
+	const [location, setLocation] = useState<LngLat>()
+	const [photos, setPhotos] = useState<Blob[]>([])
+
+	const steps: Record<Steps, boolean> = useMemo(() => {
+		const states = {
+			[Steps.Start]: true,
+			[Steps.SelectLocation]: location !== undefined,
+			[Steps.PhotoUpload]: photos.length > 0,
+			[Steps.Description]: false,
+			[Steps.Submit]: false,
+			[Steps.ThankYou]: false,
 		}
-	}, [location])
+		return states
+	}, [location, photos])
+
+	const nextEnabled = useMemo(() => steps[step] ?? false, [steps, step])
+	const prevEnabled = useMemo(() => stepOrder.indexOf(step) > 0, [steps, step])
+
+	const next = () => {
+		if (!nextEnabled) return
+		const nextStep = stepOrder[stepOrder.indexOf(step) + 1]
+		if (nextStep !== undefined) {
+			setStep(nextStep)
+		}
+	}
+
+	const prev = () => {
+		if (!prevEnabled) return
+		const prevStep = stepOrder[stepOrder.indexOf(step) - 1]
+		if (prevStep !== undefined) {
+			setStep(prevStep)
+		}
+	}
 
 	return (
 		<main class="container mt-4">
 			<div class="row justify-content-center">
 				<div class="col-12 col-md-8 col-lg-6">
-					<h1 class="text-dark fs-1 mb-3">Report trash</h1>
-					<p class="text-muted">
-						<span>
-							Note that we only accept reports for locations for trash that is
-							in water bodies, such as the Oslo fjord, or Akerselva. If you
-							found trash on land, please use{' '}
-							<a href="https://www.fiksgatami.no/" target="_blank">
-								fiksgatami.no
-							</a>
-							.
-						</span>
-					</p>
-					<hr />
-					<h2 class="text-dark fs-2 mb-3">Select the location on the map</h2>
-					<p>
-						Click on the map to select a location where you found trash. You can
-						drag the marker to adjust the position if needed.
-					</p>
-					<p class="text-muted d-flex">
-						<Info class="me-2" />
-						<span>
-							If you want to report multiple locations, please submit a separate
-							report for each location.
-						</span>
-					</p>
+					<h1 class="text-dark fs-1 mb-3">Report trash to Fjord CleanUP</h1>
 				</div>
 			</div>
-			<div class="row justify-content-center">
-				<div class="col-12 col-md-8">
-					<ReportMap
-						onClick={(lngLat) => setLocation(lngLat)}
-						markerLocation={location}
-					/>
-				</div>
-			</div>
-			{location !== undefined && (
+			{step === Steps.Start && <Start />}
+			{step === Steps.SelectLocation && (
+				<SelectLocation
+					selectedLocation={location}
+					onLocation={(lngLat) => setLocation(lngLat)}
+				/>
+			)}
+			{step === Steps.PhotoUpload && (
 				<>
-					<div class="row  justify-content-center">
-						<div class="col-12 col-md-8 col-lg-6">
-							<h3 class="text-dark fs-3 mb-3 mt-4">Selected location</h3>
-						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-5 col-md-3 col-lg-2">
-							<p>
-								<abbr title={`Latitude`}>Lat:</abbr>{' '}
-								<abbr title={location.lat.toString()}>
-									{location.lat.toFixed(4)}…
-								</abbr>
-								<br />
-								<abbr title={`Longitude`}>Lon:</abbr>{' '}
-								<abbr title={location.lng.toString()}>
-									{location.lng.toFixed(4)}…
-								</abbr>
-								<br />
-							</p>
-						</div>
-						<div class="col-7 col-md-5 col-lg-4">
-							<p>
-								View location on:
-								<nav>
-									<a
-										href={`https://kart.finn.no/?lng=${location.lng}&lat=${location.lat}&zoom=19&mapType=norortho&markers=${location.lng},${location.lat},r,Trash`}
-										target="_blank"
-									>
-										kart.finn.no
-									</a>
-									{utm !== null && (
-										<a
-											href={`https://www.norgeskart.no/#!?project=norgeskart&layers=1001&zoom=17&lat=${utm.northing}&lon=${utm.easting}&markerLat=${utm.northing}&markerLon=${utm.easting}`}
-											target="_blank"
-											class="ms-4"
-										>
-											Norgeskart
-										</a>
-									)}
-									<a
-										href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`}
-										target="_blank"
-										class="ms-4"
-									>
-										Google Maps
-									</a>
-								</nav>
-							</p>
-						</div>
-					</div>
+					<PhotoHelp />
+
+					<PhotoGallery
+						photos={photos}
+						removePhoto={(index) => {
+							setPhotos((prev) => prev.filter((_, i) => i !== index))
+						}}
+					/>
+					{photos.length < 2 && (
+						<PhotoUpload
+							onImage={(image) => {
+								setPhotos((prev) => [...prev, image])
+							}}
+						/>
+					)}
 				</>
 			)}
+			{step === Steps.ThankYou && <ThankYou />}
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-8 col-lg-6">
+					<hr />
+					<p class="d-flex justify-content-between align-items-center">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							disabled={!prevEnabled}
+							onClick={() => prev()}
+						>
+							Previous
+						</button>
+						<button
+							type="button"
+							class="btn btn-primary"
+							disabled={!nextEnabled}
+							onClick={() => next()}
+						>
+							Next
+						</button>
+					</p>
+				</div>
+			</div>
 		</main>
 	)
 }
