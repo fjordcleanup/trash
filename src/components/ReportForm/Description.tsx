@@ -38,10 +38,10 @@ export const Description = ({
 				"Other" and provide a description.
 			</p>
 			<div class="trash-type-selection">
-				<div class="d-flex align-items-center">
+				<div class="d-flex align-items-start">
 					<button
 						type="button"
-						class={cx('btn btn-outline-secondary me-4 escooter', {
+						class={cx('btn btn-outline-secondary me-3 escooter', {
 							active: EscooterSelected,
 						})}
 						onClick={onEscooterClick}
@@ -61,10 +61,10 @@ export const Description = ({
 						</small>
 					</p>
 				</div>
-				<div class="d-flex align-items-center">
+				<div class="d-flex align-items-start">
 					<button
 						type="button"
-						class={cx('btn btn-outline-secondary me-4 bulk', {
+						class={cx('btn btn-outline-secondary me-3 bulk', {
 							active: BulkSelected,
 						})}
 						onClick={onBulkClick}
@@ -88,10 +88,10 @@ export const Description = ({
 						</small>
 					</p>
 				</div>
-				<div class="d-flex align-items-center">
+				<div class="d-flex align-items-start">
 					<button
 						type="button"
-						class={cx('btn btn-outline-secondary me-4 litter', {
+						class={cx('btn btn-outline-secondary me-3 litter', {
 							active: LitterSelected,
 						})}
 						onClick={onLitterClick}
@@ -112,10 +112,10 @@ export const Description = ({
 						</small>
 					</p>
 				</div>
-				<div class="d-flex align-items-center">
+				<div class="d-flex align-items-start">
 					<button
 						type="button"
-						class={cx('btn btn-outline-secondary me-4 other', {
+						class={cx('btn btn-outline-secondary me-3 other', {
 							active: OtherSelected,
 						})}
 						onClick={onOtherClick}

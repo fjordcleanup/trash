@@ -121,7 +121,7 @@ export const ReportForm = () => {
 			{step === Steps.Description && (
 				<>
 					<div class="row justify-content-center">
-						<div class="col-2">
+						<div class="col-3 col-md-2">
 							<TrashTypeDiamond types={trashType} />
 						</div>
 					</div>
