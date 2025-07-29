@@ -75,7 +75,7 @@ export const ReportMap = ({
 
 		console.debug(`[Map]`, `updating marker location to`, markerLocation)
 		const marker = new Marker({
-			color: '#ff6100',
+			color: 'var(--fjordcleanup-color)',
 			draggable: true,
 		})
 			.setLngLat(markerLocation)

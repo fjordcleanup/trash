@@ -24,10 +24,13 @@ export const MiniMap = ({ markerLocation }: { markerLocation: LngLat }) => {
 			trackResize: true,
 			keyboard: false,
 			renderWorldCopies: false,
+			attributionControl: {
+				compact: true,
+			},
 		})
 
 		const marker = new Marker({
-			color: '#ff6100',
+			color: 'var(--fjordcleanup-color)',
 			draggable: false,
 		})
 			.setLngLat(markerLocation)

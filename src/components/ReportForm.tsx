@@ -199,7 +199,7 @@ export const ReportForm = () => {
 						{step === Steps.Submit && (
 							<button
 								type="button"
-								class="btn btn-success"
+								class="btn btn-primary"
 								onClick={() => setStep(Steps.ThankYou)}
 							>
 								Report
