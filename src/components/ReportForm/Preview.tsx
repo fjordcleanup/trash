@@ -1,7 +1,7 @@
-import type { TrashType } from '#components/ReportForm.tsx'
 import { TrashCard } from '#components/TrashCard.tsx'
 import { CircleFadingArrowUp } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
+import type { TrashType } from '../../api/TrashType.ts'
 
 export const Preview = ({
 	trashType,

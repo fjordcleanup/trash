@@ -25,6 +25,10 @@
     "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules|e2e-tests)/**/*.spec.ts\""
   },
   "dependencies": {
+    "@hello.nrfcloud.com/lambda-helpers": "3.3.25",
+    "@middy/core": "6.4.1",
+    "@middy/input-output-logger": "6.4.1",
+    "@sinclair/typebox": "0.34.38",
     "bootstrap": "5.3.7",
     "classnames": "2.5.1",
     "compare-versions": "6.1.1",
@@ -34,7 +38,8 @@
     "oidc-client-ts": "3.3.0",
     "preact": "10.26.9",
     "preact-router": "4.1.2",
-    "proj4": "2.19.10"
+    "proj4": "2.19.10",
+    "ulidx": "2.4.1"
   },
   "devDependencies": {
     "@aws-sdk/client-cloudfront": "3.850.0",
@@ -47,6 +52,7 @@
     "@bifravst/prettier-config": "1.1.12",
     "@commitlint/config-conventional": "19.8.1",
     "@preact/preset-vite": "2.10.2",
+    "@types/aws-lambda": "8.10.152",
     "@types/node": "24.1.0",
     "aws-cdk-lib": "2.207.0",
     "cdk": "2.1022.0",

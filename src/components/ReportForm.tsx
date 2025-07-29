@@ -1,5 +1,6 @@
 import type { LngLat } from 'maplibre-gl'
 import { useMemo, useState } from 'preact/hooks'
+import { TrashType } from '../api/TrashType.ts'
 import { Description } from './ReportForm/Description.tsx'
 import { PhotoGallery } from './ReportForm/PhotoGallery.tsx'
 import { PhotoHelp } from './ReportForm/PhotoHelp.tsx'
@@ -28,13 +29,6 @@ const stepOrder = [
 ]
 
 const photoLimit = 2
-
-export enum TrashType {
-	Escooter = 'escooter',
-	Bulk = 'bulk',
-	Litter = 'litter',
-	Other = 'other',
-}
 
 export const ReportForm = () => {
 	const [step, setStep] = useState<Steps>(Steps.Start)
