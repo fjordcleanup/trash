@@ -1,7 +1,7 @@
+import { Locate, Map, Satellite } from 'lucide-preact'
 import maplibregl, { LngLat, Marker, type LngLatLike } from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
-import { Locate, Map, Satellite } from 'lucide-preact'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './ReportMap.css'
 
@@ -20,9 +20,11 @@ export const ReportMap = ({
 	const [mapInstance, setMap] = useState<maplibregl.Map>()
 	const [style, setStyle] = useState<'Satellite' | 'Standard'>('Standard')
 	const [zoom, setZoom] = useState(13)
-	const [center, setCenter] = useState<LngLatLike>([
-		10.7496181292028, 59.905900733292235,
-	])
+	const [center, setCenter] = useState<LngLatLike>(
+		markerLocation
+			? [markerLocation.lng, markerLocation.lat]
+			: [10.7496181292028, 59.905900733292235],
+	)
 
 	useEffect(() => {
 		if (containerRef.current === null) return

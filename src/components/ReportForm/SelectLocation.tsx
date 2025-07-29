@@ -1,5 +1,5 @@
 import { ReportMap } from '#components/ReportMap.tsx'
-import { MapPin, Waves } from 'lucide-preact'
+import { LocateFixed, MapPin } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
 import { useMemo, useState } from 'preact/hooks'
 import proj4 from 'proj4'
@@ -40,20 +40,13 @@ export const SelectLocation = ({
 		<>
 			<div class="row justify-content-center">
 				<div class="col-12 col-md-8 col-lg-6">
-					<h2 class="text-dark fs-2 mb-3">
-						Select the location of the trash on the map
-					</h2>
-					<p class="d-flex">
-						<Waves class="flex-shrink-0 me-2" size={24} />
-						<span>
-							Note that we only accept reports for locations for trash that is
-							in water bodies, such as the Oslo fjord, or Akerselva. If you
-							found trash on land, please use{' '}
-							<a href="https://www.fiksgatami.no/" target="_blank">
-								fiksgatami.no
-							</a>
-							.
-						</span>
+					<h1 class="fs-2 mb-3 d-flex align-items-center">
+						<LocateFixed class="flex-shrink-0 me-2" size={24} />
+						<span>Mark the spot</span>
+					</h1>
+					<p>
+						Click on the map to select a location where you found trash. You can
+						drag the marker to adjust the position if needed.
 					</p>
 				</div>
 			</div>
@@ -68,14 +61,7 @@ export const SelectLocation = ({
 					/>
 				</div>
 			</div>
-			<div class="row justify-content-center">
-				<div class="col-12 col-md-8 col-lg-6">
-					<p>
-						Click on the map to select a location where you found trash. You can
-						drag the marker to adjust the position if needed.
-					</p>
-				</div>
-			</div>
+
 			{location !== undefined && (
 				<>
 					<div class="row  justify-content-center">

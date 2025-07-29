@@ -1,3 +1,5 @@
+import { Flag, Pointer, Waves } from 'lucide-preact'
+
 export const Start = () => (
 	<div class="row justify-content-center">
 		<div class="col-12 col-md-8 col-lg-6">
@@ -7,7 +9,10 @@ export const Start = () => (
 				<small>to Fjord CleanUP</small>
 			</h1>
 			<p>Thank you for helping the Oslo fjord and Akerselva cleaner.</p>
-			<h2 class="text-muted fs-4 mb-3">Only report trash in water bodies</h2>
+			<h2 class="fs-4 mb-3 d-flex align-items-center">
+				<Waves class="flex-shrink-0 me-2" size={24} />
+				<span>Only report trash in water bodies</span>
+			</h2>
 			<p>
 				Note that we only accept reports for locations for trash that is in
 				water bodies, such as the Oslo fjord, or Akerselva. If you found trash
@@ -17,13 +22,19 @@ export const Start = () => (
 				</a>
 				.
 			</p>
-			<h2 class="text-muted fs-4 mb-3">Only report one location at a time</h2>
+			<h2 class="fs-4 mb-3 d-flex align-items-center">
+				<Flag class="flex-shrink-0 me-2" size={24} />
+				<span>Only report one location at a time</span>
+			</h2>
 			<p>
 				If you want to report multiple locations, please submit a separate
 				report for each location.
 			</p>
 
-			<h2 class="text-muted fs-4 mb-3">How to report</h2>
+			<h2 class="fs-4 mb-3 d-flex align-items-center">
+				<Pointer class="flex-shrink-0 me-2" size={24} />
+				<span>How to report</span>
+			</h2>
 			<p>
 				This form will guide you through the process of reporting trash in the
 				Oslo fjord or Akerselva. You will be asked to select a location on the

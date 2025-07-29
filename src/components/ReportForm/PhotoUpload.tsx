@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useRef, useState } from 'preact/hooks'
 
 export const PhotoUpload = ({
 	onImage,
@@ -6,6 +6,7 @@ export const PhotoUpload = ({
 	onImage: (image: Blob) => void
 }) => {
 	const [problem, setProblem] = useState<string | null>(null)
+	const ref = useRef<HTMLInputElement>(null)
 
 	return (
 		<div class="row justify-content-center mb-4">
@@ -14,6 +15,7 @@ export const PhotoUpload = ({
 				<input
 					type="file"
 					accept="image/jpeg"
+					ref={ref}
 					onChange={(e) => {
 						setProblem(null)
 						if (e.target === null) return
@@ -41,6 +43,10 @@ export const PhotoUpload = ({
 							}
 						}
 						reader.readAsArrayBuffer(file)
+
+						if (ref.current !== null) {
+							ref.current.value = ''
+						}
 					}}
 				/>
 			</div>

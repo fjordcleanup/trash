@@ -1,3 +1,5 @@
+import { Trash2 } from 'lucide-preact'
+
 export const PhotoGallery = ({
 	photos,
 	removePhoto,
@@ -21,10 +23,11 @@ export const PhotoGallery = ({
 							/>
 							<br />
 							<button
-								class="btn btn-danger mt-2"
+								class="btn btn-outline-danger mt-2 d-flex align-items-center"
 								onClick={() => removePhoto(index)}
 							>
-								Remove
+								<Trash2 class="me-1" />
+								<span>Remove</span>
 							</button>
 						</div>
 					))}

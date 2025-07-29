@@ -2,7 +2,7 @@ import { EScooter } from '#icons/Escooter.tsx'
 import { Tire } from '#icons/Tire.tsx'
 import { Trash } from '#icons/Trash.tsx'
 import cx from 'classnames'
-import { Frown } from 'lucide-preact'
+import { Frown, MessageSquareQuote } from 'lucide-preact'
 
 import './Description.css'
 
@@ -31,7 +31,10 @@ export const Description = ({
 }) => (
 	<div class="row justify-content-center">
 		<div class="col-12 col-md-8 col-lg-6">
-			<h2 class="text-dark fs-4 mb-3">Type of trash</h2>
+			<h2 class="fs-2 mb-3 d-flex align-items-center">
+				<MessageSquareQuote class="flex-shrink-0 me-2" size={24} />
+				<span>Tell us more</span>
+			</h2>
 			<p>
 				This is important to help us organize the cleanup efforts. Please select
 				the type of trash you are reporting. If you are unsure, you can select
@@ -50,16 +53,29 @@ export const Description = ({
 							<EScooter class="icon" />
 						</div>
 					</button>
-					<p>
-						<strong>E-Scooter</strong>
-						<br />
-						Select this if the trash contains one or more e-scooters.
-						<br />
-						<small class="text-muted">
-							We can remove them from the water and place them at the side of
-							the road, so the scooter company can pick them up.
-						</small>
-					</p>
+					<div>
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								value=""
+								id="escooterCheck"
+								checked={EscooterSelected}
+								onChange={onEscooterClick}
+							/>
+							<label class="form-check-label" for="escooterCheck">
+								<strong>E-Scooter</strong>
+							</label>
+						</div>
+						<p>
+							Select this if the trash contains one or more e-scooters.
+							<br />
+							<small class="text-muted">
+								We can remove them from the water and place them at the side of
+								the road, so the scooter company can pick them up.
+							</small>
+						</p>
+					</div>
 				</div>
 				<div class="d-flex align-items-start">
 					<button
@@ -73,20 +89,33 @@ export const Description = ({
 							<Tire class="icon" />
 						</div>
 					</button>
-					<p>
-						<strong>Bulk trash</strong>
-						<br />
-						Select this if the trash contains bulk items like tires or
-						furniture.
-						<br />
-						<small class="text-muted">
-							We need to arrange for a big-pack from our sponsor{' '}
-							<a href="https://www.isekk.no/" target="_blank">
-								iSEKK
-							</a>{' '}
-							to be available for pickup.
-						</small>
-					</p>
+					<div>
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								value=""
+								id="bulkCheck"
+								checked={BulkSelected}
+								onChange={onBulkClick}
+							/>
+							<label class="form-check-label" for="bulkCheck">
+								<strong>Bulk trash</strong>
+							</label>
+						</div>
+						<p>
+							Select this if the trash contains bulk items like tires or
+							furniture.
+							<br />
+							<small class="text-muted">
+								We need to arrange for a big-pack from our sponsor{' '}
+								<a href="https://www.isekk.no/" target="_blank">
+									iSEKK
+								</a>{' '}
+								to be available for pickup.
+							</small>
+						</p>
+					</div>
 				</div>
 				<div class="d-flex align-items-start">
 					<button
@@ -100,17 +129,30 @@ export const Description = ({
 							<Trash class="icon" />
 						</div>
 					</button>
-					<p>
-						<strong>Litter</strong>
-						<br />
-						Select this if the trash contains small items like cans, bottles,
-						etc.
-						<br />
-						<small class="text-muted">
-							We can collect this and throw it into regular trash containers
-							nearby.
-						</small>
-					</p>
+					<div>
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								value=""
+								id="litterCheck"
+								checked={LitterSelected}
+								onChange={onLitterClick}
+							/>
+							<label class="form-check-label" for="litterCheck">
+								<strong>Litter</strong>
+							</label>
+						</div>
+						<p>
+							Select this if the trash contains small items like cans, bottles,
+							etc.
+							<br />
+							<small class="text-muted">
+								We can collect this and throw it into regular trash containers
+								nearby.
+							</small>
+						</p>
+					</div>
 				</div>
 				<div class="d-flex align-items-start">
 					<button
@@ -124,16 +166,29 @@ export const Description = ({
 							<Frown class="icon" strokeWidth={1} />
 						</div>
 					</button>
-					<p>
-						<strong>Other</strong>
-						<br />
-						Select this if the trash does not fit into any of the other
-						categories.
-						<br />
-						<small class="text-muted">
-							Please provide a description of the trash you are reporting.
-						</small>
-					</p>
+					<div>
+						<div class="form-check">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								value=""
+								id="otherCheck"
+								checked={OtherSelected}
+								onChange={onOtherClick}
+							/>
+							<label class="form-check-label" for="otherCheck">
+								<strong>Other</strong>
+							</label>
+						</div>
+						<p>
+							Select this if the trash does not fit into any of the other
+							categories.
+							<br />
+							<small class="text-muted">
+								Please provide a description of the trash you are reporting.
+							</small>
+						</p>
+					</div>
 				</div>
 			</div>
 			<div class="mt-4">

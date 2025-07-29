@@ -4,10 +4,10 @@ import { Description } from './ReportForm/Description.tsx'
 import { PhotoGallery } from './ReportForm/PhotoGallery.tsx'
 import { PhotoHelp } from './ReportForm/PhotoHelp.tsx'
 import { PhotoUpload } from './ReportForm/PhotoUpload.tsx'
-import { SelectLocation } from './ReportForm/ReportForm.tsx'
+import { Preview } from './ReportForm/Preview.tsx'
+import { SelectLocation } from './ReportForm/SelectLocation.tsx'
 import { Start } from './ReportForm/Start.tsx'
 import { ThankYou } from './ReportForm/ThankYou.tsx'
-import { TrashTypeDiamond } from './ReportForm/TrashTypeDiamond.tsx'
 
 enum Steps {
 	Start = 'start',
@@ -103,12 +103,6 @@ export const ReportForm = () => {
 			{step === Steps.PhotoUpload && (
 				<>
 					<PhotoHelp limit={photoLimit} />
-					<PhotoGallery
-						photos={photos}
-						removePhoto={(index) => {
-							setPhotos((prev) => prev.filter((_, i) => i !== index))
-						}}
-					/>
 					{photos.length < photoLimit && (
 						<PhotoUpload
 							onImage={(image) => {
@@ -116,6 +110,12 @@ export const ReportForm = () => {
 							}}
 						/>
 					)}
+					<PhotoGallery
+						photos={photos}
+						removePhoto={(index) => {
+							setPhotos((prev) => prev.filter((_, i) => i !== index))
+						}}
+					/>
 				</>
 			)}
 			{step === Steps.Description && (
@@ -167,26 +167,12 @@ export const ReportForm = () => {
 				</>
 			)}
 			{step === Steps.Submit && (
-				<>
-					<div class="row justify-content-center">
-						<div class="col-3 col-md-2">
-							<TrashTypeDiamond types={trashType} />
-						</div>
-					</div>
-					<div class="row justify-content-center mt-4">
-						<div class="col-12 col-md-8 col-lg-6">
-							<p>
-								<strong>Location:</strong> {location?.toString()}
-							</p>
-							<p>
-								<strong>Description:</strong> {description}
-							</p>
-							<p>
-								<strong>Photos:</strong> {photos.length} uploaded
-							</p>
-						</div>
-					</div>
-				</>
+				<Preview
+					trashType={trashType}
+					location={location!}
+					description={description}
+					photos={photos}
+				/>
 			)}
 			{step === Steps.ThankYou && <ThankYou />}
 			<div class="row justify-content-center">
