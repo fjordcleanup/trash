@@ -17,7 +17,11 @@ const { version } = fromEnv({
 })(process.env)
 
 const InputSchema = Type.Object({
-	type: Type.Array(Type.Enum(TrashType, { title: 'TrashType' })),
+	type: Type.Array(Type.Enum(TrashType, { title: 'TrashType' }), {
+		title: 'Trash Types',
+		minItems: 1,
+		allowEmpty: false,
+	}),
 	location: Type.Object({
 		lat: Type.Number({ minimum: -90, maximum: 90, title: 'Latitude' }),
 		lng: Type.Number({ minimum: -180, maximum: 180, title: 'Longitude' }),
