@@ -5,11 +5,11 @@ import { Trash } from '#icons/Trash.tsx'
 import cx from 'classnames'
 import { Frown } from 'lucide-preact'
 
-import './TrashTypeDiamond.css'
+import './TrashTypeSymbol.css'
 
-export const TrashTypeDiamond = ({ types }: { types: Array<TrashType> }) => {
+export const TrashTypeSymbol = ({ types }: { types: Array<TrashType> }) => {
 	return (
-		<div className="trash-type-diamond">
+		<div className="trash-type-symbol">
 			<div
 				class={cx('escooter', { selected: types.includes(TrashType.Escooter) })}
 			>

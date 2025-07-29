@@ -1,18 +1,14 @@
-.trash-type-diamond {
+.trash-type-symbol {
   aspect-ratio: 1/1;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  transform: rotate(45deg);
   background-color: #666666;
   color: rgb(104, 104, 104);
-  margin-bottom: 2rem;
-  margin-top: 2rem;
-  box-shadow: 0.01rem 0.01rem 1rem #00000038;
 }
 
-.trash-type-diamond > div {
+.trash-type-symbol > div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,10 +18,9 @@
   background-color: rgb(190, 190, 190);
 }
 
-.trash-type-diamond .icon {
+.trash-type-symbol .icon {
   width: 70%;
   height: auto;
-  transform: rotate(-45deg);
 }
 
 .escooter.selected {

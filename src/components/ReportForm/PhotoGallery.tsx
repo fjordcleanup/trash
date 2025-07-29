@@ -2,10 +2,10 @@ import { Trash2 } from 'lucide-preact'
 
 export const PhotoGallery = ({
 	photos,
-	removePhoto,
+	removePhoto = () => {},
 }: {
 	photos: Blob[]
-	removePhoto: (index: number) => void
+	removePhoto?: (index: number) => void
 }) => (
 	<div class="row justify-content-center mb-4">
 		<div class="col-12 col-md-8 col-lg-6">

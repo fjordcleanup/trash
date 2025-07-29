@@ -1,8 +1,7 @@
 import type { TrashType } from '#components/ReportForm.tsx'
+import { TrashCard } from '#components/TrashCard.tsx'
 import { CircleFadingArrowUp } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
-import { MiniMap } from './MiniMap.tsx'
-import { TrashTypeDiamond } from './TrashTypeDiamond.tsx'
 
 export const Preview = ({
 	trashType,
@@ -30,26 +29,12 @@ export const Preview = ({
 		</div>
 		<div class="row justify-content-center">
 			<div class="col-12 col-md-8 col-lg-6 mb-4">
-				<div class="card">
-					<div class="card-header" style={{ padding: '0' }}>
-						<MiniMap markerLocation={location} />
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col-8">
-								<p>
-									<strong>Description:</strong> {description}
-								</p>
-								<p>
-									<strong>Photos:</strong> {photos.length} uploaded
-								</p>
-							</div>
-							<div class="col-4">
-								<TrashTypeDiamond types={trashType} />
-							</div>
-						</div>
-					</div>
-				</div>
+				<TrashCard
+					description={description}
+					location={location}
+					photos={photos.map((photo) => new URL(URL.createObjectURL(photo)))}
+					trashType={trashType}
+				/>
 			</div>
 		</div>
 	</>

@@ -175,9 +175,8 @@ export const ReportForm = () => {
 				/>
 			)}
 			{step === Steps.ThankYou && <ThankYou />}
-			<div class="row justify-content-center">
+			<div class="row justify-content-center mt-4">
 				<div class="col-12 col-md-8 col-lg-6">
-					<hr />
 					<p class="d-flex justify-content-between align-items-center">
 						<button
 							type="button"
@@ -187,14 +186,25 @@ export const ReportForm = () => {
 						>
 							Previous
 						</button>
-						<button
-							type="button"
-							class="btn btn-primary"
-							disabled={!nextEnabled}
-							onClick={() => next()}
-						>
-							Next
-						</button>
+						{step !== Steps.Submit && (
+							<button
+								type="button"
+								class="btn btn-primary"
+								disabled={!nextEnabled}
+								onClick={() => next()}
+							>
+								Next
+							</button>
+						)}
+						{step === Steps.Submit && (
+							<button
+								type="button"
+								class="btn btn-success"
+								onClick={() => setStep(Steps.ThankYou)}
+							>
+								Report
+							</button>
+						)}
 					</p>
 				</div>
 			</div>

@@ -18,7 +18,7 @@ export const MiniMap = ({ markerLocation }: { markerLocation: LngLat }) => {
 		const map = new maplibregl.Map({
 			container: containerRef.current,
 			center: markerLocation,
-			zoom: 14,
+			zoom: 12,
 			style: `https://maps.geo.${region}.amazonaws.com/v2/styles/${style}/descriptor?key=${apiKey}&color-scheme=${colorScheme}`,
 			refreshExpiredTiles: false,
 			trackResize: true,
