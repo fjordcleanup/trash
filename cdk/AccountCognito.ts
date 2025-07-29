@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib'
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager'
 import {
 	CfnIdentityPool,
@@ -159,6 +160,9 @@ export class AccountCognito extends Construct {
 				],
 			},
 			supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
+			accessTokenValidity: Duration.days(1),
+			idTokenValidity: Duration.days(1),
+			refreshTokenValidity: Duration.days(30),
 		})
 
 		// Create Managed Login Branding
