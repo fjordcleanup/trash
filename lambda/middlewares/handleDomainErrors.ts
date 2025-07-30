@@ -4,13 +4,13 @@ import { formatTypeBoxErrors } from '@hello.nrfcloud.com/proto'
 import { HttpStatusCode } from '@hello.nrfcloud.com/proto/hello'
 import type { MiddlewareObj } from '@middy/core'
 import type {
+	APIGatewayProxyEvent,
 	APIGatewayProxyStructuredResultV2,
 	Context as LambdaContext,
 } from 'aws-lambda'
-import type { APIGatewayProxyEventWithIAMIdentity } from '../authorizer/APIGatewayProxyEventWithIAMIdentity.ts'
 
 export const handleDomainErrors = (): MiddlewareObj<
-	APIGatewayProxyEventWithIAMIdentity,
+	APIGatewayProxyEvent,
 	APIGatewayProxyStructuredResultV2,
 	Error,
 	LambdaContext

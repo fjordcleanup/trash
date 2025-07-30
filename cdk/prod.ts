@@ -6,9 +6,12 @@ import chalk from 'chalk'
 import { env } from '../aws/env.ts'
 import pJSON from '../package.json' with { type: 'json' }
 import { FjordCleanUpTrashApp } from './FjordCleanUpTrashApp.ts'
+import { pack as packBaseLayer } from './lambdas/baseLayer.ts'
+import { packLambdas as packUserLambdas } from './lambdas/userLambdas.ts'
 
-const { baseDomainName } = fromEnv({
-	baseDomainName: 'DOMAIN_NAME',
+const { version, baseDomainName } = fromEnv({
+	baseDomainName: 'BASE_DOMAIN_NAME',
+	version: 'VERSION',
 })(process.env)
 
 const iam = new IAMClient({})
@@ -37,4 +40,9 @@ new FjordCleanUpTrashApp({
 		iam,
 	}),
 	env: accountEnv,
+	lambdaSources: {
+		user: await packUserLambdas(),
+	},
+	baseLayerSource: await packBaseLayer(),
+	version,
 })

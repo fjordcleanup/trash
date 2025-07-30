@@ -8,11 +8,13 @@ import { PhotoUpload } from './ReportForm/PhotoUpload.tsx'
 import { Preview } from './ReportForm/Preview.tsx'
 import { SelectLocation } from './ReportForm/SelectLocation.tsx'
 import { Start } from './ReportForm/Start.tsx'
+import { Submit } from './ReportForm/Submit.tsx'
 import { ThankYou } from './ReportForm/ThankYou.tsx'
 
 enum Steps {
 	Start = 'start',
 	SelectLocation = 'select-location',
+	Preview = 'preview',
 	Submit = 'submit',
 	PhotoUpload = 'photo-upload',
 	Description = 'description',
@@ -24,6 +26,7 @@ const stepOrder = [
 	Steps.SelectLocation,
 	Steps.PhotoUpload,
 	Steps.Description,
+	Steps.Preview,
 	Steps.Submit,
 	Steps.ThankYou,
 ]
@@ -43,6 +46,8 @@ export const ReportForm = () => {
 			[Steps.SelectLocation]: location !== undefined,
 			[Steps.PhotoUpload]: photos.length > 0,
 			[Steps.Description]: trashType.length > 0,
+			[Steps.Preview]:
+				photos.length > 0 && trashType.length > 0 && location !== undefined,
 			[Steps.Submit]: false,
 			[Steps.ThankYou]: false,
 		}
@@ -160,8 +165,16 @@ export const ReportForm = () => {
 					/>
 				</>
 			)}
-			{step === Steps.Submit && (
+			{step === Steps.Preview && (
 				<Preview
+					trashType={trashType}
+					location={location!}
+					description={description}
+					photos={photos}
+				/>
+			)}
+			{step === Steps.Submit && (
+				<Submit
 					trashType={trashType}
 					location={location!}
 					description={description}
@@ -180,7 +193,7 @@ export const ReportForm = () => {
 						>
 							Previous
 						</button>
-						{step !== Steps.Submit && (
+						{step !== Steps.Preview && (
 							<button
 								type="button"
 								class="btn btn-primary"
@@ -190,11 +203,11 @@ export const ReportForm = () => {
 								Next
 							</button>
 						)}
-						{step === Steps.Submit && (
+						{step === Steps.Preview && (
 							<button
 								type="button"
 								class="btn btn-primary"
-								onClick={() => setStep(Steps.ThankYou)}
+								onClick={() => setStep(Steps.Submit)}
 							>
 								Report
 							</button>

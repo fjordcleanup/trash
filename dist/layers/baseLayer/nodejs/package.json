@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@bifravst/from-env": "3.0.2",
+    "@middy/core": "6.4.1",
+    "@middy/input-output-logger": "6.4.1",
+    "@sinclair/typebox": "0.34.38",
+    "ulidx": "2.4.1",
+    "@hello.nrfcloud.com/lambda-helpers": "3.5.0"
+  }
+}

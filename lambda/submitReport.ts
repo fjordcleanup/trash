@@ -1,4 +1,7 @@
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { fromEnv } from '@bifravst/from-env'
+import { addCORSHeaders } from '@hello.nrfcloud.com/lambda-helpers/addCORSHeaders'
 import { addVersionHeader } from '@hello.nrfcloud.com/lambda-helpers/addVersionHeader'
 import { aResponse } from '@hello.nrfcloud.com/lambda-helpers/aResponse'
 import { tryAsJSON } from '@hello.nrfcloud.com/lambda-helpers/tryAsJSON'
@@ -9,11 +12,15 @@ import { Type } from '@sinclair/typebox'
 import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda'
 import { ulid } from 'ulidx'
 import { TrashType } from '../src/api/TrashType.ts'
-import type { APIGatewayProxyEventWithIAMIdentity } from './authorizer/APIGatewayProxyEventWithIAMIdentity.ts'
+import type { AuthorizedEvent } from './authorizer/AuthorizedEvent.ts'
+import type { CognitoClaims } from './authorizer/CognitoClaims.ts'
 import { handleDomainErrors } from './middlewares/handleDomainErrors.ts'
 
-const { version } = fromEnv({
+const s3Client = new S3Client({})
+
+const { version, photoUploadBucketName } = fromEnv({
 	version: 'VERSION',
+	photoUploadBucketName: 'PHOTO_UPLOAD_BUCKET_NAME',
 })(process.env)
 
 const InputSchema = Type.Object({
@@ -29,14 +36,20 @@ const InputSchema = Type.Object({
 	description: Type.Optional(
 		Type.String({ minLength: 1, title: 'Description' }),
 	),
+	numPhotos: Type.Integer({
+		title: 'Number of Photos',
+		minimum: 1,
+		maximum: 2,
+	}),
 })
 
 export const handler = middy<
-	APIGatewayProxyEventWithIAMIdentity,
+	AuthorizedEvent<CognitoClaims>,
 	APIGatewayProxyStructuredResultV2
 >()
 	.use(inputOutputLogger())
 	.use(addVersionHeader(version))
+	.use(addCORSHeaders())
 	.use(validateInput(InputSchema, (event) => tryAsJSON(event.body)))
 	.use(handleDomainErrors())
 	.handler(async (event, context) => {
@@ -49,13 +62,27 @@ export const handler = middy<
 		return aResponse(
 			201,
 			{
-				'@context': new URL('https://fjordcleanup.org/contexts/report'),
+				'@context': new URL('https://trash.fjordcleanup.org#context/report'),
 				id,
+				uploadURLs: await Promise.all(
+					Array.from({
+						length: context.decodedInput.numPhotos,
+					}).map(async (_, index) =>
+						getSignedUrl(
+							s3Client,
+							new PutObjectCommand({
+								Bucket: photoUploadBucketName,
+								Key: `${id}/photo-${index + 1}.original.jpeg`,
+								ContentType: 'image/jpeg',
+								Metadata: {
+									userId: event.requestContext.authorizer.claims.sub,
+								},
+							}),
+							{ expiresIn: 60 * 5 },
+						),
+					),
+				),
 			},
 			0,
-			{
-				// It should be possible read this resource from any origin
-				'Access-Control-Allow-Origin': '*',
-			},
 		)
 	})
