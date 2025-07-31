@@ -46,8 +46,10 @@
   },
   "devDependencies": {
     "@aws-sdk/client-cloudfront": "3.856.0",
+    "@aws-sdk/client-dynamodb": "3.858.0",
     "@aws-sdk/client-s3": "3.856.0",
     "@aws-sdk/client-sts": "3.856.0",
+    "@aws-sdk/util-dynamodb": "3.858.0",
     "@babel/plugin-syntax-import-assertions": "7.27.1",
     "@bifravst/aws-cdk-lambda-helpers": "3.4.20",
     "@bifravst/ci": "2.1.1",

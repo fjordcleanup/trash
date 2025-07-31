@@ -14,6 +14,8 @@ import {
 } from 'aws-cdk-lib/aws-s3'
 import { BaseLayerVersion } from './lambdas/BaseLayerVersion.ts'
 import type { PersistenceLambdas } from './lambdas/persistenceLambdas.ts'
+import { EventsTable } from './persistence/EventsTable.ts'
+import { ReportAggregatesTable } from './persistence/ReportAggregatesTable.ts'
 import { PERSISTENCE_STACK_NAME } from './stackName.ts'
 
 export class PersistenceStack extends Stack {
@@ -30,7 +32,21 @@ export class PersistenceStack extends Stack {
 		},
 	) {
 		super(parent, PERSISTENCE_STACK_NAME, {
-			description: `The persistence layer.`,
+			description: `Contains resources that persist data and cannot be deleted without data loss.`,
+		})
+
+		const reportAggregatesTable = new ReportAggregatesTable(this)
+		new CfnOutput(this, 'reportAggregatesTableName', {
+			value: reportAggregatesTable.table.tableName,
+			description: 'The name of the report aggregates table',
+			exportName: `${Stack.of(this).stackName}:reportAggregatesTableName`,
+		})
+
+		const eventsTable = new EventsTable(this)
+		new CfnOutput(this, 'eventsTableName', {
+			value: eventsTable.table.tableName,
+			description: 'The name of the events table',
+			exportName: `${Stack.of(this).stackName}:eventsTableName`,
 		})
 
 		// This bucket receives the original photos uploaded by users
@@ -114,4 +130,6 @@ export class PersistenceStack extends Stack {
 export type StackOutputs = {
 	photoUploadBucketName: string
 	resizedBucketName: string
+	reportAggregatesTableName: string
+	eventsTableName: string
 }

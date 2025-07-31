@@ -1,7 +1,7 @@
 import type { LngLat } from 'maplibre-gl'
 import { createContext, type ComponentChildren } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
-import type { TrashType } from '../../api/TrashType.ts'
+import type { TrashType } from '../../domain/TrashType.ts'
 import { useAuth } from './Auth.tsx'
 
 const PHOTO_LIMIT = 2

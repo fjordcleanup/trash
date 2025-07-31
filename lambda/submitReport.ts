@@ -1,3 +1,4 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { fromEnv } from '@bifravst/from-env'
@@ -10,17 +11,27 @@ import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
 import { Type } from '@sinclair/typebox'
 import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda'
-import { ulid } from 'ulidx'
-import { TrashType } from '../api/TrashType.ts'
+import { createReportCommand } from '../command/createReportCommand.ts'
+import { TrashType } from '../domain/TrashType.ts'
+import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
+import { actorFromEvent } from './authorizer/actorFromEvent.ts'
 import type { AuthorizedEvent } from './authorizer/AuthorizedEvent.ts'
 import type { CognitoClaims } from './authorizer/CognitoClaims.ts'
 import { handleDomainErrors } from './middlewares/handleDomainErrors.ts'
 
 const s3Client = new S3Client({})
+const db = new DynamoDBClient({})
 
-const { version, photoUploadBucketName } = fromEnv({
+const {
+	version,
+	photoUploadBucketName,
+	reportAggregatesTableName,
+	eventsTableName,
+} = fromEnv({
 	version: 'VERSION',
 	photoUploadBucketName: 'PHOTO_UPLOAD_BUCKET_NAME',
+	reportAggregatesTableName: 'REPORT_AGGREGATES_TABLE_NAME',
+	eventsTableName: 'EVENTS_TABLE_NAME',
 })(process.env)
 
 const InputSchema = Type.Object({
@@ -43,6 +54,14 @@ const InputSchema = Type.Object({
 	}),
 })
 
+const persist = persistReportDynamoDB(
+	db,
+	reportAggregatesTableName,
+	eventsTableName,
+)
+
+const create = createReportCommand(persist)
+
 export const handler = middy<
 	AuthorizedEvent<CognitoClaims>,
 	APIGatewayProxyStructuredResultV2
@@ -53,29 +72,27 @@ export const handler = middy<
 	.use(validateInput(InputSchema, (event) => tryAsJSON(event.body)))
 	.use(handleDomainErrors())
 	.handler(async (event, context) => {
-		// FIXME: persist report
-		void context
-		void event
+		const report = await create(context.decodedInput, actorFromEvent(event))
 
-		const id = ulid()
+		const photos = Array.from({
+			length: context.decodedInput.numPhotos,
+		}).map((_, index) => `photo-${index + 1}.jpeg`)
 
 		return aResponse(
 			201,
 			{
 				'@context': new URL('https://trash.fjordcleanup.org#context/report'),
-				id,
+				id: report.$meta.id,
 				uploadURLs: await Promise.all(
-					Array.from({
-						length: context.decodedInput.numPhotos,
-					}).map(async (_, index) =>
+					photos.map(async (photo) =>
 						getSignedUrl(
 							s3Client,
 							new PutObjectCommand({
 								Bucket: photoUploadBucketName,
-								Key: `${id}/photo-${index + 1}.jpeg`,
+								Key: `${report.$meta.id}/${photo}`,
 								ContentType: 'image/jpeg',
 								Metadata: {
-									userId: event.requestContext.authorizer.claims.sub,
+									actor: actorFromEvent(event),
 								},
 							}),
 							{ expiresIn: 60 * 5 },

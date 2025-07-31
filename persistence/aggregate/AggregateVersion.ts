@@ -1,0 +1,8 @@
+export type AggregateVersion = number & {
+	readonly AggregateVersion: unique symbol
+}
+
+export const v1 = 1 as AggregateVersion
+
+export const v = (version: number): AggregateVersion =>
+	version as AggregateVersion

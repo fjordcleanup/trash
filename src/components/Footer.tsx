@@ -1,4 +1,4 @@
-import { Ago } from '#components/Ago.js'
+import { Ago } from '#components/Ago.tsx'
 import './Footer.css'
 
 const CopyrightYear = () => {

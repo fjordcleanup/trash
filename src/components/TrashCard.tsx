@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import type { LngLat } from 'maplibre-gl'
 import { useRef, useState } from 'preact/hooks'
-import type { TrashType } from '../../api/TrashType.ts'
+import type { TrashType } from '../../domain/TrashType.ts'
 import { MiniMap } from './MiniMap.tsx'
 import { TrashTypeSymbol } from './TrashTypeSymbol.tsx'
 

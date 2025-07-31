@@ -39,6 +39,9 @@
     "cdk/**/*",
     "vite/**/*",
     "lambda/**/*",
-    "api"
+    "domain/**/*",
+    "command/**/*",
+    "event/**/*",
+    "persistence/**/*"
   ]
 }

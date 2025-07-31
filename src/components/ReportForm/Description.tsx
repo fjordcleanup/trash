@@ -7,7 +7,7 @@ import { Frown, MessageSquareQuote } from 'lucide-preact'
 import { useReport } from '#context/Report.tsx'
 import { route } from 'preact-router'
 import { useMemo } from 'preact/hooks'
-import { TrashType } from '../../../api/TrashType.ts'
+import { TrashType } from '../../../domain/TrashType.ts'
 import './Description.css'
 
 export const Description = () => {
