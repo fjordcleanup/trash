@@ -24,6 +24,8 @@ npm start
 ## Deploy
 
 - Ensure that a hosted zone in Route53 exists for the base domain name.
+- Deploy the
+  [`image-magick-lambda-layer`](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:145266761615:applications~image-magick-lambda-layer)
 
 ```bash
 npx cdk bootstrap

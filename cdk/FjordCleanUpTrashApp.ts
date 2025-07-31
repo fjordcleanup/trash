@@ -5,6 +5,7 @@ import { AccountStack } from './AccountStack.ts'
 import { AppCustomDomainCertificateStack } from './AppCustomDomainCertificateStack.ts'
 import { CDStack } from './CDStack.ts'
 import { HostingStack } from './HostingStack.ts'
+import type { PersistenceLambdas } from './lambdas/persistenceLambdas.ts'
 import type { UserLambdas } from './lambdas/userLambdas.ts'
 import { PersistenceStack } from './PersistenceStack.ts'
 import { PublicAPIStack } from './PublicAPIStack.ts'
@@ -25,6 +26,7 @@ export class FjordCleanUpTrashApp extends App {
 		repository: { owner: string; repo: string }
 		lambdaSources: {
 			user: UserLambdas
+			persistence: PersistenceLambdas
 		}
 		baseLayerSource: PackedLayer
 		env: Environment
@@ -60,6 +62,8 @@ export class FjordCleanUpTrashApp extends App {
 
 		const persistence = new PersistenceStack(this, {
 			baseDomainName,
+			lambdaSources: lambdaSources.persistence,
+			baseLayerSource,
 		})
 
 		const publicAPI = new PublicAPIStack(this, {

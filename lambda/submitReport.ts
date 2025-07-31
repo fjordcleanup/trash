@@ -72,7 +72,7 @@ export const handler = middy<
 							s3Client,
 							new PutObjectCommand({
 								Bucket: photoUploadBucketName,
-								Key: `${id}/photo-${index + 1}.original.jpeg`,
+								Key: `${id}/photo-${index + 1}.jpeg`,
 								ContentType: 'image/jpeg',
 								Metadata: {
 									userId: event.requestContext.authorizer.claims.sub,

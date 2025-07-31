@@ -3,19 +3,24 @@ import { LambdaClient } from '@aws-sdk/client-lambda'
 import type { PackedLambda } from '@bifravst/aws-cdk-lambda-helpers'
 import { updateLambdaCode } from '@bifravst/aws-cdk-lambda-helpers/util'
 import chalk from 'chalk'
+import { packLambdas as packPersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { packLambdas as packUserLambdas } from '../lambdas/userLambdas.ts'
-import { PUBLIC_API_STACK_NAME } from '../stackName.ts'
+import { PERSISTENCE_STACK_NAME, PUBLIC_API_STACK_NAME } from '../stackName.ts'
 
 const cf = new CloudFormationClient()
 const lambda = new LambdaClient()
 const update = updateLambdaCode({ cf, lambda })
 
 const start = new Date()
-const [UserLambdas] = await Promise.all([packUserLambdas()])
+const [UserLambdas, PersistenceLambdas] = await Promise.all([
+	packUserLambdas(),
+	packPersistenceLambdas(),
+])
 console.debug('Packed lambdas in', new Date().getTime() - start.getTime(), 'ms')
 
 const stackLambdas: Array<[string, Record<string, PackedLambda>]> = [
 	[PUBLIC_API_STACK_NAME, UserLambdas],
+	[PERSISTENCE_STACK_NAME, PersistenceLambdas],
 ]
 
 await Promise.all(

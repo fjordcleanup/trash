@@ -97,7 +97,7 @@ export class PublicAPI extends Construct {
 	public addRoute(
 		methodAndRoute: string,
 		{ fn }: PackedLambdaFn,
-		authorizer: CognitoUserPoolsAuthorizer,
+		authorizer?: CognitoUserPoolsAuthorizer,
 		options?: RouteOptions,
 	): {
 		parsedResource: { method: string; resource: string }
@@ -132,14 +132,15 @@ export class PublicAPI extends Construct {
 				) ?? {}
 		}
 
+		if (authorizer !== undefined) {
+			methodOptions.authorizationType = RestApi.AuthorizationType.COGNITO
+			methodOptions.authorizer = authorizer
+		}
+
 		const methodObj = resourceObj.addMethod(
 			method,
 			new RestApi.LambdaIntegration(fn, integrationOptions),
-			{
-				...methodOptions,
-				authorizationType: RestApi.AuthorizationType.COGNITO,
-				authorizer,
-			},
+			methodOptions,
 		)
 
 		if (!this.corsMethods.has(resource)) {

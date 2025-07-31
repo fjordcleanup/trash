@@ -7,6 +7,7 @@ import { env } from '../aws/env.ts'
 import pJSON from '../package.json' with { type: 'json' }
 import { FjordCleanUpTrashApp } from './FjordCleanUpTrashApp.ts'
 import { pack as packBaseLayer } from './lambdas/baseLayer.ts'
+import { packLambdas as packPersistenceLambdas } from './lambdas/persistenceLambdas.ts'
 import { packLambdas as packUserLambdas } from './lambdas/userLambdas.ts'
 
 const { version, baseDomainName } = fromEnv({
@@ -42,6 +43,7 @@ new FjordCleanUpTrashApp({
 	env: accountEnv,
 	lambdaSources: {
 		user: await packUserLambdas(),
+		persistence: await packPersistenceLambdas(),
 	},
 	baseLayerSource: await packBaseLayer(),
 	version,
