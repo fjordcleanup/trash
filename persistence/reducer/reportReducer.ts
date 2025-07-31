@@ -11,7 +11,7 @@ export const reportReducer = reduceEvents<ReportAggregate>((event) => {
 			type: event.type,
 			location: event.location,
 			description: event.description,
-			numPhotos: event.numPhotos,
+			photos: event.photos,
 		}
 	}
 	return undefined

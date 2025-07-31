@@ -72,11 +72,19 @@ export const handler = middy<
 	.use(validateInput(InputSchema, (event) => tryAsJSON(event.body)))
 	.use(handleDomainErrors())
 	.handler(async (event, context) => {
-		const report = await create(context.decodedInput, actorFromEvent(event))
-
 		const photos = Array.from({
 			length: context.decodedInput.numPhotos,
 		}).map((_, index) => `photo-${index + 1}.jpeg`)
+
+		const report = await create(
+			{
+				type: context.decodedInput.type,
+				location: context.decodedInput.location,
+				description: context.decodedInput.description,
+				photos: Object.fromEntries(photos.map((photo) => [photo, null])),
+			},
+			actorFromEvent(event),
+		)
 
 		return aResponse(
 			201,

@@ -13,6 +13,7 @@ import { createReadStream } from 'node:fs'
 import { rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path, { parse } from 'node:path'
+import { PhotoSize } from '../domain/PhotoSize.ts'
 
 const s3 = new S3Client({})
 
@@ -96,9 +97,9 @@ export const handler = middy<S3Event>()
 
 			// Upload to S3
 			await Promise.all([
-				uploadScaled(record.s3, 'placeholder', placeHolderFile),
-				uploadScaled(record.s3, 'thumbnail', thumbFile),
-				uploadScaled(record.s3, 'scaled', scaledFile),
+				uploadScaled(record.s3, PhotoSize.placeholder, placeHolderFile),
+				uploadScaled(record.s3, PhotoSize.thumbnail, thumbFile),
+				uploadScaled(record.s3, PhotoSize.scaled, scaledFile),
 			])
 
 			// Delete local files
@@ -156,7 +157,7 @@ const run = async (cmd: string, args: string[]): Promise<Buffer> =>
 
 const uploadScaled = async (
 	original: S3Event['Records'][number]['s3'],
-	size: string,
+	size: PhotoSize,
 	scaledFilePath: string,
 ) => {
 	const orig = parse(original.object.key)
