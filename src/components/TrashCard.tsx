@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import type { LngLat } from 'maplibre-gl'
 import { useRef, useState } from 'preact/hooks'
-import type { TrashType } from '../api/TrashType.ts'
+import type { TrashType } from '../../api/TrashType.ts'
 import { MiniMap } from './MiniMap.tsx'
 import { TrashTypeSymbol } from './TrashTypeSymbol.tsx'
 
@@ -15,7 +15,7 @@ export const TrashCard = ({
 }: {
 	trashType: Array<TrashType>
 	location: LngLat
-	description: string
+	description?: string
 	photos: Array<URL>
 }) => (
 	<div class="card trash-card">
@@ -26,13 +26,15 @@ export const TrashCard = ({
 				<Photo key={index} url={url} />
 			))}
 		</div>
-		<div class="card-body">
-			<p>
-				<small class="text-muted">Description</small>
-				<br />
-				{description}
-			</p>
-		</div>
+		{description !== undefined && (
+			<div class="card-body">
+				<p>
+					<small class="text-muted">Description</small>
+					<br />
+					{description}
+				</p>
+			</div>
+		)}
 	</div>
 )
 

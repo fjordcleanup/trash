@@ -16,12 +16,6 @@ export const PhotoGallery = ({
 				<div class="row">
 					{photos.map((photo, index) => (
 						<div class="col-6" key={index}>
-							<img
-								src={URL.createObjectURL(photo)}
-								alt={`Photo ${index + 1}`}
-								class="img-fluid"
-							/>
-							<br />
 							<button
 								class="btn btn-outline-danger mt-2 d-flex align-items-center"
 								onClick={() => removePhoto(index)}
@@ -29,6 +23,12 @@ export const PhotoGallery = ({
 								<Trash2 class="me-1" />
 								<span>Remove</span>
 							</button>
+							<br />
+							<img
+								src={URL.createObjectURL(photo)}
+								alt={`Photo ${index + 1}`}
+								class="img-fluid"
+							/>
 						</div>
 					))}
 				</div>

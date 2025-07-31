@@ -29,7 +29,7 @@
       "#context/*": ["context/*"],
       "#page/*": ["page/*"],
       "#icons/*": ["icons/*"],
-      "#api/*": ["src/api/*"]
+      "#api/*": ["api/*"]
     }
   },
   "include": [
@@ -39,6 +39,6 @@
     "cdk/**/*",
     "vite/**/*",
     "lambda/**/*",
-    "src/api"
+    "api"
   ]
 }

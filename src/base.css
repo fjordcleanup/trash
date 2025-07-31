@@ -10,4 +10,16 @@
   --other-color: #ff6100;
   --other-color-text: white;
   --fjordcleanup-color: #ff6100;
+  --fjordcleanup-color-text: white;
+}
+
+.btn-fjordcleanup {
+  background-color: var(--fjordcleanup-color);
+  color: var(--fjordcleanup-color-text);
+}
+
+.btn-fjordcleanup:hover {
+  background-color: var(--fjordcleanup-color-text);
+  color: var(--fjordcleanup-color);
+  border-color: var(--fjordcleanup-color);
 }

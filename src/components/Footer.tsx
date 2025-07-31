@@ -8,7 +8,7 @@ const CopyrightYear = () => {
 }
 
 export const Footer = () => (
-	<footer>
+	<footer class="mt-4">
 		<main>
 			<span class="copyright">
 				© <CopyrightYear />{' '}

@@ -3,7 +3,7 @@ import { Tire } from '#icons/Tire.tsx'
 import { Trash } from '#icons/Trash.tsx'
 import cx from 'classnames'
 import { Frown } from 'lucide-preact'
-import { TrashType } from '../api/TrashType.ts'
+import { TrashType } from '../../api/TrashType.ts'
 
 import './TrashTypeSymbol.css'
 

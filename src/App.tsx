@@ -31,8 +31,7 @@ export const Routing = () => {
 		<Router>
 			<Route path="/" component={Home} />
 			<Route path="/about" component={About} />
-			<Route path="/report" component={Report} />
-			<Route path="/report/*" component={Report} />
+			<Route path="/report/:rest*" component={Report} />
 			<Redirect path="/auth/callback" to="/" />
 		</Router>
 	)

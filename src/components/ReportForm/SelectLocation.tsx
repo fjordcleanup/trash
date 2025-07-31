@@ -1,7 +1,9 @@
 import { ReportMap } from '#components/ReportMap.tsx'
+import { useReport } from '#context/Report.tsx'
 import { LocateFixed, MapPin } from 'lucide-preact'
 import type { LngLat } from 'maplibre-gl'
-import { useMemo, useState } from 'preact/hooks'
+import { route } from 'preact-router'
+import { useMemo } from 'preact/hooks'
 import proj4 from 'proj4'
 
 const toEUREF89 = (gps: LngLat) => {
@@ -18,14 +20,8 @@ const toEUREF89 = (gps: LngLat) => {
 	}
 }
 
-export const SelectLocation = ({
-	onLocation,
-	selectedLocation,
-}: {
-	onLocation: (lngLat: LngLat) => void
-	selectedLocation?: LngLat
-}) => {
-	const [location, setLocation] = useState<LngLat | undefined>(selectedLocation)
+export const SelectLocation = () => {
+	const { location, setLocation } = useReport()
 
 	const utm = useMemo(() => {
 		if (location === undefined) return null
@@ -54,7 +50,6 @@ export const SelectLocation = ({
 				<div class="col-12 col-md-8">
 					<ReportMap
 						onClick={(lngLat) => {
-							onLocation(lngLat)
 							setLocation(lngLat)
 						}}
 						markerLocation={location}
@@ -105,6 +100,25 @@ export const SelectLocation = ({
 					</div>
 				</>
 			)}
+			<div class="row justify-content-center mt-4">
+				<div class="col-12 col-md-8 col-lg-6">
+					<p class="d-flex justify-content-between align-items-center">
+						<button
+							onClick={() => route('/report')}
+							class="btn btn-outline-secondary"
+						>
+							Start over
+						</button>
+						<button
+							onClick={() => route('/report/photos')}
+							class="btn btn-primary"
+							disabled={location === undefined}
+						>
+							Use this location
+						</button>
+					</p>
+				</div>
+			</div>
 		</>
 	)
 }

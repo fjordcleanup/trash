@@ -33,13 +33,11 @@ export const PhotoUpload = ({
 							setProblem('File is too large, please upload a smaller image.')
 							return
 						}
-						console.log('Selected file:', file)
 						const reader = new FileReader()
 						reader.onload = () => {
 							if (reader.result instanceof ArrayBuffer) {
 								const blob = new Blob([reader.result], { type: 'image/jpeg' })
 								onImage(blob)
-								console.log('Image loaded into blob:', blob)
 							}
 						}
 						reader.readAsArrayBuffer(file)
