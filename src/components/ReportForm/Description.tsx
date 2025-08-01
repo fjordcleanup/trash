@@ -1,13 +1,13 @@
+import { useReport } from '#context/Report.tsx'
 import { EScooter } from '#icons/Escooter.tsx'
 import { Tire } from '#icons/Tire.tsx'
 import { Trash } from '#icons/Trash.tsx'
 import cx from 'classnames'
 import { Frown, MessageSquareQuote } from 'lucide-preact'
-
-import { useReport } from '#context/Report.tsx'
 import { route } from 'preact-router'
 import { useMemo } from 'preact/hooks'
 import { TrashType } from '../../../domain/TrashType.ts'
+
 import './Description.css'
 
 export const Description = () => {

@@ -121,15 +121,17 @@ export class PublicAPI extends Construct {
 				throw new Error(
 					`Cache key parameters can only be used with GET methods.`,
 				)
-			integrationOptions.cacheKeyParameters = options.cacheKeyParameters
-			methodOptions.requestParameters =
-				options.cacheKeyParameters!.reduce(
-					(acc, param) => ({
-						...acc,
-						[param]: true,
-					}),
-					{},
-				) ?? {}
+			if (options.cacheKeyParameters !== undefined) {
+				integrationOptions.cacheKeyParameters = options.cacheKeyParameters
+				methodOptions.requestParameters =
+					options.cacheKeyParameters.reduce(
+						(acc, param) => ({
+							...acc,
+							[param]: true,
+						}),
+						{},
+					) ?? {}
+			}
 		}
 
 		if (authorizer !== undefined) {

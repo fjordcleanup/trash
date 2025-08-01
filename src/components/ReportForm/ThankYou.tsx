@@ -21,13 +21,12 @@ export const ThankYou = () => {
 					<p>We will review your report and publish it as soon as possible.</p>
 					<p>
 						You can follow the progress of your report using this URL:{' '}
-						<a href={`/reports/${reportId}`}>
-							{window.location.origin}/reports/{reportId}
+						<a href={`/map/${reportId}`}>
+							{window.location.origin}/map/{reportId}
 						</a>
 					</p>
 					<p>
-						You can also view all reports on the{' '}
-						<a href="/reports">reports page</a>.
+						You can also view all reports on the <a href="/">home page</a>.
 					</p>
 					<p>
 						If you have any feedback or questions, please do not hesitate to{' '}

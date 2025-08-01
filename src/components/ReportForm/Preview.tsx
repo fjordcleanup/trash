@@ -1,4 +1,4 @@
-import { TrashCard } from '#components/TrashCard.tsx'
+import { TrashCardPreview } from '#components/TrashCard/TrashCardPreview.tsx'
 import { useReport } from '#context/Report.tsx'
 import { CircleFadingArrowUp } from 'lucide-preact'
 import { route } from 'preact-router'
@@ -38,7 +38,7 @@ export const Preview = () => {
 			{location !== undefined && (
 				<div class="row justify-content-center">
 					<div class="col-12 col-md-8 col-lg-6 mb-4">
-						<TrashCard
+						<TrashCardPreview
 							description={description}
 							location={location}
 							photos={photos.map(

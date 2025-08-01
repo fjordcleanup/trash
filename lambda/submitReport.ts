@@ -5,7 +5,6 @@ import { fromEnv } from '@bifravst/from-env'
 import { addCORSHeaders } from '@hello.nrfcloud.com/lambda-helpers/addCORSHeaders'
 import { addVersionHeader } from '@hello.nrfcloud.com/lambda-helpers/addVersionHeader'
 import { aResponse } from '@hello.nrfcloud.com/lambda-helpers/aResponse'
-import { tryAsJSON } from '@hello.nrfcloud.com/lambda-helpers/tryAsJSON'
 import { validateInput } from '@hello.nrfcloud.com/lambda-helpers/validateInput'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
@@ -69,7 +68,7 @@ export const handler = middy<
 	.use(inputOutputLogger())
 	.use(addVersionHeader(version))
 	.use(addCORSHeaders())
-	.use(validateInput(InputSchema, (event) => tryAsJSON(event.body)))
+	.use(validateInput(InputSchema))
 	.use(handleDomainErrors())
 	.handler(async (event, context) => {
 		const photos = Array.from({
@@ -90,7 +89,7 @@ export const handler = middy<
 			201,
 			{
 				'@context': new URL('https://trash.fjordcleanup.org#context/report'),
-				id: report.$meta.id,
+				...report,
 				uploadURLs: await Promise.all(
 					photos.map(async (photo) =>
 						getSignedUrl(

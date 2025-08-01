@@ -3,6 +3,7 @@ import { createContext, type ComponentChildren } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
 import type { TrashType } from '../../domain/TrashType.ts'
 import { useAuth } from './Auth.tsx'
+import { useReports } from './Reports.tsx'
 
 const PHOTO_LIMIT = 2
 
@@ -41,6 +42,7 @@ export const ReportContext = createContext<{
 
 export const Provider = ({ children }: { children: ComponentChildren }) => {
 	const { user } = useAuth()
+	const { addReport } = useReports()
 	const [location, setLocation] = useState<LngLat>()
 	const [photos, setPhotos] = useState<Blob[]>([])
 	const [description, setDescription] = useState<string | undefined>(undefined)
@@ -99,7 +101,8 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 					})
 						.then(async (res) => res.json())
 						.then(async (res) => {
-							setReportId(res.id)
+							setReportId(res.$meta.id)
+							addReport(res)
 							return Promise.all(
 								res.uploadURLs.map(async (url: string, i: number) =>
 									fetch(url, {

@@ -14,12 +14,12 @@ export class PublicAPIOperations extends Construct {
 		{
 			api,
 			baseLayerVersion,
-			lambdaSources: { submitReport },
+			lambdaSources: { submitReport, listReports },
 			authorizer,
 			photoUploadBucket,
 		}: {
 			api: PublicAPI
-			lambdaSources: Pick<UserLambdas, 'submitReport'>
+			lambdaSources: Pick<UserLambdas, 'submitReport' | 'listReports'>
 			baseLayerVersion: BaseLayerVersion
 			authorizer: CognitoUserPoolsAuthorizer
 			photoUploadBucket: IBucket
@@ -51,5 +51,18 @@ export class PublicAPIOperations extends Construct {
 		photoUploadBucket.grantWrite(submitReportFn.fn)
 		reportAggregatesTable.table.grantWriteData(submitReportFn.fn)
 		eventsTable.table.grantWriteData(submitReportFn.fn)
+
+		// GET /2025-08-01/reports
+		const listReportsFn = new PackedLambdaFn(this, 'listReports', listReports, {
+			description: 'GET /2025-08-01/reports: List all trash reports',
+			layers: [baseLayerVersion.layerVersion],
+			environment: {
+				REPORT_AGGREGATES_TABLE_NAME: reportAggregatesTable.table.tableName,
+			},
+		})
+		api.addRoute('GET /2025-08-01/reports', listReportsFn, undefined, {
+			cachingEnabled: true,
+		})
+		reportAggregatesTable.table.grantReadData(listReportsFn.fn)
 	}
 }

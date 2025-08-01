@@ -1,6 +1,9 @@
 import { useMapSettings } from '#context/MapSettings.tsx'
+import { useReports } from '#context/Reports.tsx'
 import maplibregl from 'maplibre-gl'
-import { useEffect, useRef } from 'preact/hooks'
+import { route } from 'preact-router'
+import { useEffect, useRef, useState } from 'preact/hooks'
+import { TrashType } from '../../domain/TrashType.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './Map.css'
@@ -10,10 +13,12 @@ const region = AWS_REGION
 const style = 'Standard'
 const colorScheme = 'Light'
 
-export const Map = () => {
+export const Map = ({ center }: { center?: { lat: number; lng: number } }) => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const initialized = useRef<boolean>(false)
 	const settings = useMapSettings()
+	const { reports } = useReports()
+	const [mapInstance, setMap] = useState<maplibregl.Map>()
 
 	useEffect(() => {
 		if (containerRef.current === null) return
@@ -22,10 +27,11 @@ export const Map = () => {
 
 		const map = new maplibregl.Map({
 			container: containerRef.current,
-			center: settings.center ?? {
-				lng: 10.7496181292028,
-				lat: 59.905900733292235,
-			},
+			center: center ??
+				settings.center ?? {
+					lng: 10.7496181292028,
+					lat: 59.905900733292235,
+				},
 			zoom: 13,
 			style: `https://maps.geo.${region}.amazonaws.com/v2/styles/${style}/descriptor?key=${apiKey}&color-scheme=${colorScheme}`,
 			refreshExpiredTiles: false,
@@ -36,12 +42,7 @@ export const Map = () => {
 
 		map.on('load', () => {
 			console.debug(`[Map]`, `loaded`)
-		})
-
-		map.on('click', (e) => {
-			const lngLat = e.lngLat
-			console.debug(`[Map]`, `clicked at`, lngLat)
-			settings.setCenter(lngLat)
+			setMap(map)
 		})
 
 		return () => {
@@ -50,6 +51,58 @@ export const Map = () => {
 			map.remove()
 		}
 	}, [containerRef, initialized])
+
+	useEffect(() => {
+		if (mapInstance === undefined) return
+		const markers: Array<maplibregl.Marker> = []
+
+		for (const report of reports) {
+			const el = document.createElement('div')
+			el.className = 'trash-marker'
+
+			el.addEventListener('click', () => {
+				route(`/map/${report.$meta.id}`)
+			})
+
+			const escooterEl = document.createElement('div')
+			escooterEl.className = report.type.includes(TrashType.Escooter)
+				? 'escooter active'
+				: 'escooter'
+			el.appendChild(escooterEl)
+			const bulkEl = document.createElement('div')
+			bulkEl.className = report.type.includes(TrashType.Bulk)
+				? 'bulk active'
+				: 'bulk'
+			el.appendChild(bulkEl)
+			const litterEl = document.createElement('div')
+			litterEl.className = report.type.includes(TrashType.Litter)
+				? 'litter active'
+				: 'litter'
+			el.appendChild(litterEl)
+			const otherEl = document.createElement('div')
+			otherEl.className = report.type.includes(TrashType.Other)
+				? 'other active'
+				: 'other'
+			el.appendChild(otherEl)
+
+			const titleEl = document.createElement('div')
+			titleEl.className = 'title'
+			titleEl.textContent = report.$meta.id.slice(-6)
+			el.appendChild(titleEl)
+
+			// add marker to map
+			const marker = new maplibregl.Marker({ element: el })
+				.setLngLat([report.location.lng, report.location.lat])
+				.addTo(mapInstance)
+
+			markers.push(marker)
+		}
+
+		return () => {
+			console.debug(`[Map]`, `cleaning up markers`)
+			markers.forEach((marker) => marker.remove())
+		}
+	}, [reports, mapInstance])
 
 	return <div id="map" ref={containerRef} />
 }

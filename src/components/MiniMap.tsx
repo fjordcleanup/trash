@@ -1,4 +1,4 @@
-import maplibregl, { type LngLat, Marker } from 'maplibre-gl'
+import maplibregl, { Marker } from 'maplibre-gl'
 import { useEffect, useRef } from 'preact/hooks'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -9,7 +9,11 @@ const region = AWS_REGION
 const colorScheme = 'Light'
 const style = 'Standard'
 
-export const MiniMap = ({ markerLocation }: { markerLocation: LngLat }) => {
+export const MiniMap = ({
+	markerLocation,
+}: {
+	markerLocation: { lng: number; lat: number }
+}) => {
 	const containerRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {

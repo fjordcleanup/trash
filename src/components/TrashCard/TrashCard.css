@@ -6,6 +6,7 @@
   grid-template-columns: 50% 50%;
   grid-template-rows: 50% 50%;
   overflow: hidden;
+  background-color: #bebebe;
 }
 
 .trash-card .photo-container {
@@ -29,4 +30,15 @@
 .trash-card .photo-container img.portrait {
   width: auto;
   height: 100%;
+}
+
+.trash-card .id {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fjordcleanup-color);
+  color: var(--fjordcleanup-color-text);
+  font-weight: bold;
+  height: 50px;
 }
