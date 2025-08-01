@@ -2,6 +2,7 @@ import type { AggregateEvent } from './AggregateEvent.ts'
 
 export enum EventNames {
 	ReportCreated = 'ReportCreated',
+	SizedPhotoAdded = 'SizedPhotoAdded',
 }
 
 export const isAggregateEvent = (event: unknown): event is AggregateEvent => {

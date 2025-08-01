@@ -11,8 +11,8 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager'
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins'
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53'
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets'
+import { SSMParameterReader } from '../constructs/SSMParameterReader.ts'
 import { AppCustomDomainCertificateStack } from './AppCustomDomainCertificateStack.ts'
-import { SSMParameterReader } from './SSMParameterReader.ts'
 import { HOSTING_STACK_NAME } from './stackName.ts'
 
 export class HostingStack extends Stack {

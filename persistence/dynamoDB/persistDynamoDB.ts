@@ -7,7 +7,7 @@ import {
 import { marshall } from '@aws-sdk/util-dynamodb'
 import { decodeTime } from 'ulidx'
 import type { PersistFn } from '../PersistFn.ts'
-import type { AggregateMeta } from '../aggregate/AggregateMeta.ts'
+import type { PersistedAggregate } from './PersistedAggregate.ts'
 
 export const reservedFields = new Set<string>([
 	'version',
@@ -27,7 +27,7 @@ export const persistDynamoDB =
 		db: DynamoDBClient,
 		aggregateTableName: string,
 		eventsTableName: string,
-	): PersistFn<Record<string, unknown> & { $meta: AggregateMeta }> =>
+	): PersistFn<PersistedAggregate> =>
 	async (
 		{ $meta: { id, version, actorId, updatedAt }, ...attributes },
 		event,

@@ -11,7 +11,7 @@ import { reportReducer } from '../persistence/reducer/reportReducer.ts'
 export const createReportCommand =
 	(persistReport: PersistReportFn) =>
 	async (
-		report: Omit<ReportAggregate, '$meta'>,
+		data: Omit<ReportAggregate, '$meta'>,
 		actorId: string,
 	): Promise<ReportAggregate> => {
 		const id = ulid() as ULID
@@ -22,7 +22,7 @@ export const createReportCommand =
 			aggregateId: id,
 			aggregateVersion: v1,
 			actorId,
-			...report,
+			...data,
 		}
 
 		const applied = reportReducer([event])

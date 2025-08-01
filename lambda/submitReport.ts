@@ -101,6 +101,8 @@ export const handler = middy<
 								ContentType: 'image/jpeg',
 								Metadata: {
 									actor: actorFromEvent(event),
+									// key is lowercase in S3 metadata
+									reportid: report.$meta.id,
 								},
 							}),
 							{ expiresIn: 60 * 5 },

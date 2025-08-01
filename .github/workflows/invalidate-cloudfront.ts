@@ -8,7 +8,7 @@ import chalk from 'chalk'
 import { glob } from 'glob'
 import { randomUUID } from 'node:crypto'
 import path, { parse } from 'node:path'
-import { HOSTING_STACK_NAME } from '../../cdk/stackName.ts'
+import { HOSTING_STACK_NAME } from '../../cdk/stacks/stackName.ts'
 
 const cloudFront = new CloudFrontClient({})
 const cloudFormation = new CloudFormationClient({})

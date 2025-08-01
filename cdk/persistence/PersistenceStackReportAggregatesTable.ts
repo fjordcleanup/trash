@@ -1,7 +1,7 @@
 import { Fn } from 'aws-cdk-lib'
 import { Table, type ITable } from 'aws-cdk-lib/aws-dynamodb'
 import { Construct } from 'constructs'
-import { PERSISTENCE_STACK_NAME } from '../stackName.ts'
+import { PERSISTENCE_STACK_NAME } from '../stacks/stackName.ts'
 import type { ReportAggregatesTableReference } from './ReportAggregatesTableReference.ts'
 
 export class PersistenceStackReportAggregatesTable

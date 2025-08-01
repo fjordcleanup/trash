@@ -1,3 +1,4 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import {
 	GetObjectCommand,
 	PutObjectCommand,
@@ -13,14 +14,32 @@ import { createReadStream } from 'node:fs'
 import { rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path, { parse } from 'node:path'
+import { addSizedPhotoCommand } from '../command/addSizedPhotoCommand.ts'
 import { PhotoSize } from '../domain/PhotoSize.ts'
+import { findReportByIdDynamoDB } from '../persistence/dynamoDB/findReportByIdDynamoDB.ts'
+import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
+import type { ULID } from '../persistence/event/AggregateEvent.ts'
 
 const s3 = new S3Client({})
+const db = new DynamoDBClient({})
 
-const { resizedBucketName } = fromEnv({
-	version: 'VERSION',
-	resizedBucketName: 'RESIZED_BUCKET_NAME',
-})(process.env)
+const { resizedBucketName, reportAggregatesTableName, eventsTableName } =
+	fromEnv({
+		version: 'VERSION',
+		resizedBucketName: 'RESIZED_BUCKET_NAME',
+		reportAggregatesTableName: 'REPORT_AGGREGATES_TABLE_NAME',
+		eventsTableName: 'EVENTS_TABLE_NAME',
+	})(process.env)
+
+const persist = persistReportDynamoDB(
+	db,
+	reportAggregatesTableName,
+	eventsTableName,
+)
+
+const find = findReportByIdDynamoDB(db, reportAggregatesTableName)
+
+const update = addSizedPhotoCommand(find, persist)
 
 export const handler = middy<S3Event>()
 	.use(inputOutputLogger())
@@ -32,7 +51,7 @@ export const handler = middy<S3Event>()
 			)
 			if (original === null) throw new Error(`Failed to fetch original image!`)
 			const originalFile = path.join(os.tmpdir(), randomUUID())
-			await writeFile(originalFile, original, 'binary')
+			await writeFile(originalFile, original.body, 'binary')
 
 			const originalInfo = (
 				await run('/opt/bin/identify', [originalFile])
@@ -96,11 +115,26 @@ export const handler = middy<S3Event>()
 			])
 
 			// Upload to S3
-			await Promise.all([
+			const [placeholderURL, thumbnailURL, scaledURL] = await Promise.all([
 				uploadScaled(record.s3, PhotoSize.placeholder, placeHolderFile),
 				uploadScaled(record.s3, PhotoSize.thumbnail, thumbFile),
 				uploadScaled(record.s3, PhotoSize.scaled, scaledFile),
 			])
+
+			const orig = parse(record.s3.object.key)
+
+			const updated = await update(
+				original.reportId,
+				`${orig.name}${orig.ext}`,
+				{
+					placeholder: placeholderURL.toString(),
+					thumbnail: thumbnailURL.toString(),
+					scaled: scaledURL.toString(),
+				},
+				'resize-photos-lambda',
+			)
+
+			console.log(JSON.stringify(updated, null, 2))
 
 			// Delete local files
 			void rm(originalFile)
@@ -115,18 +149,23 @@ const cacheForAYear = 'public, max-age=31449600, immutable'
 const fetchOriginal = async (
 	Bucket: string,
 	Key: string,
-): Promise<Buffer | null> => {
+): Promise<{ body: Buffer; reportId: ULID } | null> => {
 	// Try to fetch original
 	try {
-		const { Body } = await s3.send(
+		const { Body, Metadata } = await s3.send(
 			new GetObjectCommand({
 				Bucket,
 				Key,
 			}),
 		)
 		if (Body === undefined) return null
+		if (Metadata?.reportid === undefined)
+			throw new Error('Missing reportId in metadata')
 		const stream = await Body.transformToByteArray()
-		return Buffer.from(stream)
+		return {
+			body: Buffer.from(stream),
+			reportId: Metadata.reportid as ULID,
+		}
 	} catch (err) {
 		console.error(err)
 		return null
@@ -159,7 +198,7 @@ const uploadScaled = async (
 	original: S3Event['Records'][number]['s3'],
 	size: PhotoSize,
 	scaledFilePath: string,
-) => {
+): Promise<URL> => {
 	const orig = parse(original.object.key)
 	const Key = `${orig.dir}/${orig.name}.${size}.webp`
 	await s3.send(
@@ -174,8 +213,7 @@ const uploadScaled = async (
 	console.log(
 		`Uploaded ${size} image ${scaledFilePath} to s3://${resizedBucketName}/${Key}`,
 	)
-	console.log(
-		`${size} image URL: `,
+	return new URL(
 		`https://${resizedBucketName}.s3.${process.env.AWS_DEFAULT_REGION}.amazonaws.com/${Key}`,
 	)
 }

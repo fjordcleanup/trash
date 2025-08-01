@@ -2,7 +2,7 @@ import {
 	packLambdaFromPath,
 	type PackedLambda,
 } from '@bifravst/aws-cdk-lambda-helpers'
-import { PERSISTENCE_STACK_NAME } from '../stackName.ts'
+import { PERSISTENCE_STACK_NAME } from '../stacks/stackName.ts'
 
 export type PersistenceLambdas = {
 	resizePhotos: PackedLambda

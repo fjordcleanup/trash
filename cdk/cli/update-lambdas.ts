@@ -5,7 +5,10 @@ import { updateLambdaCode } from '@bifravst/aws-cdk-lambda-helpers/util'
 import chalk from 'chalk'
 import { packLambdas as packPersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { packLambdas as packUserLambdas } from '../lambdas/userLambdas.ts'
-import { PERSISTENCE_STACK_NAME, PUBLIC_API_STACK_NAME } from '../stackName.ts'
+import {
+	PERSISTENCE_STACK_NAME,
+	PUBLIC_API_STACK_NAME,
+} from '../stacks/stackName.ts'
 
 const cf = new CloudFormationClient()
 const lambda = new LambdaClient()

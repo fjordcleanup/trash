@@ -1,6 +1,6 @@
 import type { App, Environment } from 'aws-cdk-lib'
 import { CfnOutput, Stack } from 'aws-cdk-lib'
-import { AccountCognito } from './AccountCognito.ts'
+import { AccountCognito } from '../persistence/AccountCognito.ts'
 import { ACCOUNT_STACK_NAME } from './stackName.ts'
 
 export class AccountStack extends Stack {

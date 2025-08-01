@@ -8,7 +8,7 @@ export const ThankYou = () => {
 		<>
 			<div class="row justify-content-center">
 				<div class="col-12 col-md-8 col-lg-6">
-					<h2 class="fs-2 mb-3 d-flex flex-direction-row">
+					<h2 class="fs-2 mb-3 d-flex flex-colum">
 						<span>
 							<Sparkles class="flex-shrink-0 me-2" size={24} />
 							<span>Thank you!</span>

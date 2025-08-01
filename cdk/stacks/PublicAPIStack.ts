@@ -4,10 +4,10 @@ import { CfnOutput, Duration, Fn, Stack } from 'aws-cdk-lib'
 import { CognitoUserPoolsAuthorizer } from 'aws-cdk-lib/aws-apigateway'
 import { UserPool } from 'aws-cdk-lib/aws-cognito'
 import { Bucket } from 'aws-cdk-lib/aws-s3'
-import { PublicAPI } from './api/PublicAPI.ts'
-import { PublicAPIOperations } from './api/PublicAPIOperations.ts'
-import { BaseLayerVersion } from './lambdas/BaseLayerVersion.ts'
-import type { UserLambdas } from './lambdas/userLambdas.ts'
+import { PublicAPI } from '../api/PublicAPI.ts'
+import { PublicAPIOperations } from '../api/PublicAPIOperations.ts'
+import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
+import type { UserLambdas } from '../lambdas/userLambdas.ts'
 import {
 	ACCOUNT_STACK_NAME,
 	PERSISTENCE_STACK_NAME,

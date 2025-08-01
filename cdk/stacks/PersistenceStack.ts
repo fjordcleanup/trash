@@ -12,10 +12,10 @@ import {
 	HttpMethods,
 	ObjectOwnership,
 } from 'aws-cdk-lib/aws-s3'
-import { BaseLayerVersion } from './lambdas/BaseLayerVersion.ts'
-import type { PersistenceLambdas } from './lambdas/persistenceLambdas.ts'
-import { EventsTable } from './persistence/EventsTable.ts'
-import { ReportAggregatesTable } from './persistence/ReportAggregatesTable.ts'
+import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
+import type { PersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
+import { EventsTable } from '../persistence/EventsTable.ts'
+import { ReportAggregatesTable } from '../persistence/ReportAggregatesTable.ts'
 import { PERSISTENCE_STACK_NAME } from './stackName.ts'
 
 export class PersistenceStack extends Stack {
@@ -113,6 +113,8 @@ export class PersistenceStack extends Stack {
 				layers: [baseLayerVersion.layerVersion, imageMagickLayerVersion],
 				environment: {
 					RESIZED_BUCKET_NAME: resizedBucket.bucketName,
+					REPORT_AGGREGATES_TABLE_NAME: reportAggregatesTable.table.tableName,
+					EVENTS_TABLE_NAME: eventsTable.table.tableName,
 				},
 				timeout: Duration.seconds(60),
 				events: [
@@ -124,6 +126,8 @@ export class PersistenceStack extends Stack {
 		)
 		photoUploadBucket.grantRead(resizePhotosFn.fn)
 		resizedBucket.grantReadWrite(resizePhotosFn.fn)
+		reportAggregatesTable.table.grantReadWriteData(resizePhotosFn.fn)
+		eventsTable.table.grantWriteData(resizePhotosFn.fn)
 	}
 }
 

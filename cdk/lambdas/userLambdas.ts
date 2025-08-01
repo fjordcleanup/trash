@@ -2,7 +2,7 @@ import {
 	packLambdaFromPath,
 	type PackedLambda,
 } from '@bifravst/aws-cdk-lambda-helpers'
-import { PUBLIC_API_STACK_NAME } from '../stackName.ts'
+import { PUBLIC_API_STACK_NAME } from '../stacks/stackName.ts'
 
 export type UserLambdas = {
 	submitReport: PackedLambda

@@ -24,9 +24,9 @@ import {
 	RecordTarget,
 } from 'aws-cdk-lib/aws-route53'
 import { Construct } from 'constructs'
-import { AccountCustomDomainCertificateStack } from './AccountCustomDomainCertificateStack.ts'
-import { SSMParameterReader } from './SSMParameterReader.ts'
-import { STACK_PREFIX } from './stackName.ts'
+import { SSMParameterReader } from '../constructs/SSMParameterReader.ts'
+import { AccountCustomDomainCertificateStack } from '../stacks/AccountCustomDomainCertificateStack.ts'
+import { STACK_PREFIX } from '../stacks/stackName.ts'
 
 export class AccountCognito extends Construct {
 	public readonly userPool: IUserPool

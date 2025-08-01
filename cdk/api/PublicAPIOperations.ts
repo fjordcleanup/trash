@@ -9,8 +9,6 @@ import { PersistenceStackReportAggregatesTable } from '../persistence/Persistenc
 import type { PublicAPI } from './PublicAPI.ts'
 
 export class PublicAPIOperations extends Construct {
-	public readonly submitReportFn: PackedLambdaFn
-
 	constructor(
 		scope: Construct,
 		{
@@ -35,7 +33,7 @@ export class PublicAPIOperations extends Construct {
 		const eventsTable = new PersistenceStackEventsTable(this)
 
 		// POST /2025-08-01/report
-		this.submitReportFn = new PackedLambdaFn(
+		const submitReportFn = new PackedLambdaFn(
 			this,
 			'submitReport',
 			submitReport,
@@ -49,9 +47,9 @@ export class PublicAPIOperations extends Construct {
 				},
 			},
 		)
-		api.addRoute('POST /2025-08-01/report', this.submitReportFn, authorizer)
-		photoUploadBucket.grantWrite(this.submitReportFn.fn)
-		reportAggregatesTable.table.grantWriteData(this.submitReportFn.fn)
-		eventsTable.table.grantWriteData(this.submitReportFn.fn)
+		api.addRoute('POST /2025-08-01/report', submitReportFn, authorizer)
+		photoUploadBucket.grantWrite(submitReportFn.fn)
+		reportAggregatesTable.table.grantWriteData(submitReportFn.fn)
+		eventsTable.table.grantWriteData(submitReportFn.fn)
 	}
 }

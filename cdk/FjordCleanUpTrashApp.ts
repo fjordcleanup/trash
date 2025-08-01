@@ -1,14 +1,14 @@
 import type { PackedLayer } from '@bifravst/aws-cdk-lambda-helpers/layer'
 import { App, type Environment } from 'aws-cdk-lib'
-import { AccountCustomDomainCertificateStack } from './AccountCustomDomainCertificateStack.ts'
-import { AccountStack } from './AccountStack.ts'
-import { AppCustomDomainCertificateStack } from './AppCustomDomainCertificateStack.ts'
-import { CDStack } from './CDStack.ts'
-import { HostingStack } from './HostingStack.ts'
 import type { PersistenceLambdas } from './lambdas/persistenceLambdas.ts'
 import type { UserLambdas } from './lambdas/userLambdas.ts'
-import { PersistenceStack } from './PersistenceStack.ts'
-import { PublicAPIStack } from './PublicAPIStack.ts'
+import { AccountCustomDomainCertificateStack } from './stacks/AccountCustomDomainCertificateStack.ts'
+import { AccountStack } from './stacks/AccountStack.ts'
+import { AppCustomDomainCertificateStack } from './stacks/AppCustomDomainCertificateStack.ts'
+import { CDStack } from './stacks/CDStack.ts'
+import { HostingStack } from './stacks/HostingStack.ts'
+import { PersistenceStack } from './stacks/PersistenceStack.ts'
+import { PublicAPIStack } from './stacks/PublicAPIStack.ts'
 
 export class FjordCleanUpTrashApp extends App {
 	public constructor({
