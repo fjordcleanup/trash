@@ -26,7 +26,7 @@
     "cdk:lambda:update": "node --no-warnings --experimental-transform-types ./cdk/cli/update-lambdas.ts"
   },
   "dependencies": {
-    "@aws-sdk/s3-request-presigner": "3.856.0",
+    "@aws-sdk/s3-request-presigner": "3.859.0",
     "@bifravst/from-env": "3.0.2",
     "@hello.nrfcloud.com/lambda-helpers": "3.5.0",
     "@middy/core": "6.4.1",
@@ -36,7 +36,7 @@
     "classnames": "2.5.1",
     "compare-versions": "6.1.1",
     "date-fns": "4.1.0",
-    "lucide-preact": "0.534.0",
+    "lucide-preact": "0.536.0",
     "maplibre-gl": "5.6.1",
     "oidc-client-ts": "3.3.0",
     "preact": "10.27.0",
@@ -45,16 +45,16 @@
     "ulidx": "2.4.1"
   },
   "devDependencies": {
-    "@aws-sdk/client-cloudfront": "3.856.0",
-    "@aws-sdk/client-dynamodb": "3.858.0",
-    "@aws-sdk/client-s3": "3.856.0",
-    "@aws-sdk/client-sts": "3.856.0",
-    "@aws-sdk/util-dynamodb": "3.858.0",
+    "@aws-sdk/client-cloudfront": "3.859.0",
+    "@aws-sdk/client-dynamodb": "3.859.0",
+    "@aws-sdk/client-s3": "3.859.0",
+    "@aws-sdk/client-sts": "3.859.0",
+    "@aws-sdk/util-dynamodb": "3.859.0",
     "@babel/plugin-syntax-import-assertions": "7.27.1",
-    "@bifravst/aws-cdk-lambda-helpers": "3.4.20",
+    "@bifravst/aws-cdk-lambda-helpers": "3.4.26",
     "@bifravst/ci": "2.1.1",
     "@bifravst/cloudformation-helpers": "9.1.1",
-    "@bifravst/eslint-config-typescript": "6.4.2",
+    "@bifravst/eslint-config-typescript": "6.4.3",
     "@bifravst/prettier-config": "1.1.12",
     "@commitlint/config-conventional": "19.8.1",
     "@preact/preset-vite": "2.10.2",
@@ -67,7 +67,7 @@
     "handlebars": "4.7.8",
     "husky": "9.1.7",
     "lint-staged": "16.1.2",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vite": "7.0.6"
   },
   "engines": {
