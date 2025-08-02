@@ -6,6 +6,7 @@ import {
 	LogOut,
 	Menu,
 	PlusCircle,
+	User,
 	X,
 } from 'lucide-preact'
 import { useState } from 'preact/hooks'
@@ -27,14 +28,14 @@ const Nav = () => {
 			<nav class="left d-flex">
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo" />
 				<div class="desktop-nav">
-					<a href="/" class="ms-2">
-						<Home /> Home
+					<a href="/" class="ms-2 d-flex align-items-center me-2">
+						<Home class="me-2" /> Home
 					</a>
-					<a href="/report" class="ms-2">
-						<PlusCircle /> Report
+					<a href="/report" class="ms-2 d-flex align-items-center me-2">
+						<PlusCircle class="me-2" /> Report
 					</a>
-					<a href="/about" class="ms-2">
-						<HelpCircle /> About
+					<a href="/about" class="ms-2 d-flex align-items-center">
+						<HelpCircle class="me-2" /> About
 					</a>
 				</div>
 			</nav>
@@ -52,11 +53,13 @@ const Nav = () => {
 					)}
 					{auth.user !== undefined && (
 						<>
-							{email}
-							{name !== undefined ? <span class="ms-2">({name})</span> : null}
+							<div class="d-flex align-items-center">
+								<User class="me-1" />
+								{name ?? email}
+							</div>
 							<button
 								type="button"
-								class="btn btn-danger"
+								class="btn btn-outline-danger"
 								onClick={() => auth.logout()}
 							>
 								<LogOut class="me-2" />
@@ -109,15 +112,13 @@ const Nav = () => {
 							)}
 							{auth.user !== undefined && (
 								<>
-									<div class="mobile-user-info">
-										{email}
-										{name !== undefined ? (
-											<span class="ms-2">({name})</span>
-										) : null}
+									<div class="mobile-user-info d-flex align-items-center">
+										<User class="me-1" />
+										{name ?? email}
 									</div>
 									<button
 										type="button"
-										class="btn btn-danger mobile-auth-btn"
+										class="btn btn-outline-danger mobile-auth-btn"
 										onClick={() => {
 											auth.logout()
 											closeMobileMenu()
