@@ -1,3 +1,4 @@
+import cx from 'classnames'
 import type { TrashType } from '../../../domain/TrashType.ts'
 import { MiniMap } from '../MiniMap.tsx'
 import { TrashTypeSymbol } from '../TrashTypeSymbol.tsx'
@@ -17,7 +18,13 @@ export const TrashCardPreview = ({
 	photos: Array<URL>
 }) => (
 	<div class="card trash-card">
-		<div class="card-header" style={{ padding: '0' }}>
+		<div
+			class={cx('card-header', {
+				'one-photo': photos.length === 1,
+				'two-photos': photos.length === 2,
+			})}
+			style={{ padding: '0' }}
+		>
 			<MiniMap markerLocation={location} />
 			<TrashTypeSymbol types={trashType} />
 			{photos.map((url, index) => (
