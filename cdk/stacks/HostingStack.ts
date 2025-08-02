@@ -128,7 +128,13 @@ export class HostingStack extends Stack {
 						`),
 		})
 
-		const pathPatterns = ['/auth/callback', '/report/*', '/about']
+		const pathPatterns = [
+			'/auth/callback',
+			'/report/*',
+			'/about',
+			'/map',
+			'/map/*',
+		]
 
 		for (const pathPattern of pathPatterns) {
 			distribution.addBehavior(pathPattern, s3Origin, {

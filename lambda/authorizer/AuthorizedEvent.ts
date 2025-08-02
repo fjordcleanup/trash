@@ -1,10 +1,13 @@
-import type { APIGatewayProxyEvent } from 'aws-lambda'
+import type { APIGatewayProxyEventV2 } from 'aws-lambda'
 
 export type AuthorizedEvent<Context extends Record<string, unknown>> = Omit<
-	APIGatewayProxyEvent,
+	APIGatewayProxyEventV2,
 	'requestContext'
 > & {
-	requestContext: Omit<APIGatewayProxyEvent['requestContext'], 'authorizer'> & {
+	requestContext: Omit<
+		APIGatewayProxyEventV2['requestContext'],
+		'authorizer'
+	> & {
 		authorizer: Context
 	}
 }

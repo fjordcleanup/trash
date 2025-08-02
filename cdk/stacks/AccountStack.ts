@@ -46,6 +46,24 @@ export class AccountStack extends Stack {
 			description: 'Cognito User Pool Client ID',
 			exportName: `${Stack.of(this).stackName}:userPoolClientId`,
 		})
+
+		new CfnOutput(this, 'unauthenticatedUserRoleArn', {
+			value: account.unauthenticatedUserRole.roleArn,
+			description: 'Cognito Unauthenticated User Role ARN',
+			exportName: `${Stack.of(this).stackName}:unauthenticatedUserRoleArn`,
+		})
+
+		new CfnOutput(this, 'authenticatedUserRoleArn', {
+			value: account.authenticatedUserRole.roleArn,
+			description: 'Cognito Authenticated User Role ARN',
+			exportName: `${Stack.of(this).stackName}:authenticatedUserRoleArn`,
+		})
+
+		new CfnOutput(this, 'adminRoleArn', {
+			value: account.adminRole.roleArn,
+			description: 'Admin Role ARN',
+			exportName: `${Stack.of(this).stackName}:adminRoleArn`,
+		})
 	}
 }
 export type StackOutputs = {
@@ -53,4 +71,7 @@ export type StackOutputs = {
 	userPoolProviderName: string
 	userPoolClientId: string
 	identityPoolId: string
+	authenticatedUserRoleArn: string
+	unauthenticatedUserRoleArn: string
+	adminRoleArn: string
 }

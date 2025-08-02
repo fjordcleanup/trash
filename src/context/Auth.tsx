@@ -1,6 +1,6 @@
 import { UserManager, type User as OIDCUser } from 'oidc-client-ts'
 import { createContext, type ComponentChildren } from 'preact'
-import { useContext, useEffect, useState } from 'preact/hooks'
+import { useContext, useEffect, useMemo, useState } from 'preact/hooks'
 
 // create a UserManager instance
 const loginRedirectURL = new URL(
@@ -20,13 +20,23 @@ export const AuthContext = createContext<{
 	logout: () => void
 	login: () => void
 	user?: OIDCUser
+	isAdmin: boolean
 }>({
 	logout: () => undefined,
 	login: () => undefined,
+	isAdmin: false,
 })
 
 export const Provider = ({ children }: { children: ComponentChildren }) => {
 	const [oidcUser, setOIDCUser] = useState<undefined | OIDCUser>()
+
+	const isAdmin = useMemo(
+		() =>
+			(
+				oidcUser?.profile['cognito:groups'] as Array<string> | undefined
+			)?.includes('admins') ?? false,
+		[oidcUser],
+	)
 
 	useEffect(() => {
 		console.debug(`[Auth]`, `Checking user session...`)
@@ -39,13 +49,13 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 					setOIDCUser(maybeUser)
 				}
 			})
-			.catch(() => {
+			.catch(async () => {
 				// If signinCallback fails, it means we are not in a redirect callback
 				console.debug(
 					`[Auth]`,
 					`No signin callback found, checking user session...`,
 				)
-				userManager
+				return userManager
 					.getUser()
 					.then(async (maybeUser) => {
 						if (maybeUser !== null) {
@@ -111,6 +121,7 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 						})
 				},
 				user: oidcUser,
+				isAdmin,
 			}}
 		>
 			{children}

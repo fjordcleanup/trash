@@ -100,7 +100,9 @@ export const Map = ({
 
 			const titleEl = document.createElement('div')
 			titleEl.className = 'title'
-			titleEl.textContent = report.$meta.id.slice(-6)
+			let title = report.$meta.id.slice(-6)
+			if (report.isPublic !== true) title = '🔒' + title
+			titleEl.textContent = title
 			el.appendChild(titleEl)
 
 			// add marker to map

@@ -19,4 +19,6 @@ export type ReportAggregate = {
 	photos: Record<string, null | SizedPhoto>
 	// The report is public and can be viewed by anyone
 	isPublic?: boolean
+	// The report is deleted and should not be shown
+	isDeleted?: boolean
 }

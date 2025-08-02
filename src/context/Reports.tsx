@@ -1,8 +1,9 @@
 import { createContext, type ComponentChildren } from 'preact'
-import { useContext, useEffect, useMemo, useState } from 'preact/hooks'
+import { useContext, useEffect, useState } from 'preact/hooks'
 import type { PhotoSize } from '../../domain/PhotoSize.ts'
 import type { TrashType } from '../../domain/TrashType.ts'
 import type { AggregateMeta } from '../../persistence/aggregate/AggregateMeta.ts'
+import { useAuth } from './Auth.tsx'
 
 export type Report = {
 	$meta: AggregateMeta
@@ -20,7 +21,7 @@ export type Report = {
 		}
 	>
 	description?: string
-	status?: 'approved'
+	isPublic?: boolean
 }
 
 export const ReportsContext = createContext<{
@@ -33,24 +34,34 @@ export const ReportsContext = createContext<{
 
 export const Provider = ({ children }: { children: ComponentChildren }) => {
 	const [reports, setReports] = useState<Array<Report>>([])
+	const { user, isAdmin } = useAuth()
 
-	const fetchReports = useMemo(
-		() => async () => {
-			fetch(new URL('https://api.fjordcleanup.org/2025-08-01/reports'), {
-				method: 'GET',
-			})
+	useEffect(() => {
+		const t = setTimeout(() => {
+			fetch(
+				isAdmin
+					? new URL('https://api.fjordcleanup.org/sudo/reports')
+					: new URL('https://api.fjordcleanup.org/reports'),
+				{
+					method: 'GET',
+					headers:
+						user?.id_token === undefined
+							? {}
+							: {
+									Authorization: `Bearer ${user.id_token}`,
+								},
+				},
+			)
 				.then(async (res) => res.json())
 				.then(async (res) => {
 					setReports(res.items)
 				})
 				.catch(console.error)
-		},
-		[],
-	)
-
-	useEffect(() => {
-		fetchReports().catch(console.error)
-	}, [])
+		}, 500)
+		return () => {
+			clearTimeout(t)
+		}
+	}, [user, isAdmin])
 
 	return (
 		<ReportsContext.Provider

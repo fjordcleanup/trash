@@ -23,3 +23,7 @@
   color: var(--fjordcleanup-color);
   border-color: var(--fjordcleanup-color);
 }
+
+.color-fjordcleanup {
+  color: var(--fjordcleanup-color);
+}

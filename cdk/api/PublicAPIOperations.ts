@@ -32,13 +32,13 @@ export class PublicAPIOperations extends Construct {
 		)
 		const eventsTable = new PersistenceStackEventsTable(this)
 
-		// POST /2025-08-01/report
+		// POST /report
 		const submitReportFn = new PackedLambdaFn(
 			this,
 			'submitReport',
 			submitReport,
 			{
-				description: 'POST /2025-08-01/report: Submit a new trash report',
+				description: 'POST /report: Submit a new trash report',
 				layers: [baseLayerVersion.layerVersion],
 				environment: {
 					PHOTO_UPLOAD_BUCKET_NAME: photoUploadBucket.bucketName,
@@ -47,20 +47,20 @@ export class PublicAPIOperations extends Construct {
 				},
 			},
 		)
-		api.addRoute('POST /2025-08-01/report', submitReportFn, authorizer)
+		api.addRoute('POST /report', submitReportFn, authorizer)
 		photoUploadBucket.grantWrite(submitReportFn.fn)
 		reportAggregatesTable.table.grantWriteData(submitReportFn.fn)
 		eventsTable.table.grantWriteData(submitReportFn.fn)
 
-		// GET /2025-08-01/reports
+		// GET /reports
 		const listReportsFn = new PackedLambdaFn(this, 'listReports', listReports, {
-			description: 'GET /2025-08-01/reports: List all trash reports',
+			description: 'GET /reports: List all trash reports (public)',
 			layers: [baseLayerVersion.layerVersion],
 			environment: {
 				REPORT_AGGREGATES_TABLE_NAME: reportAggregatesTable.table.tableName,
 			},
 		})
-		api.addRoute('GET /2025-08-01/reports', listReportsFn, undefined, {
+		api.addRoute('GET /reports', listReportsFn, undefined, {
 			cachingEnabled: true,
 		})
 		reportAggregatesTable.table.grantReadData(listReportsFn.fn)

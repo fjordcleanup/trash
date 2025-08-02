@@ -8,6 +8,7 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 	Context as LambdaContext,
 } from 'aws-lambda'
+import { AccessDeniedError } from '../error/AccessDeniedError.ts'
 
 export const handleDomainErrors = (): MiddlewareObj<
 	APIGatewayProxyEvent,
@@ -23,6 +24,15 @@ export const handleDomainErrors = (): MiddlewareObj<
 				status: HttpStatusCode.BAD_REQUEST,
 				title: 'Invalid input',
 				detail: formatTypeBoxErrors(req.error.errors),
+			})
+			return
+		}
+
+		if (req.error instanceof AccessDeniedError) {
+			req.response = aProblem({
+				status: HttpStatusCode.FORBIDDEN,
+				title: 'Access denied',
+				detail: req.error.message,
 			})
 			return
 		}

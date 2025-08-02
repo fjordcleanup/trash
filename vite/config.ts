@@ -7,11 +7,13 @@ export const createConfig = ({
 	plugins,
 	cognitoUserPoolURL,
 	cognitoUserPoolClientId,
+	cognitoIdentityPoolId,
 	mapAPIKey,
 	awsRegion,
 }: {
 	cognitoUserPoolURL: URL
 	cognitoUserPoolClientId: string
+	cognitoIdentityPoolId: string
 	mapAPIKey: string
 	awsRegion: string
 	plugins?: PluginOption[]
@@ -22,6 +24,7 @@ export const createConfig = ({
 		BUILD_TIME: JSON.stringify(new Date().toISOString()),
 		COGNITO_USER_POOL_URL: JSON.stringify(cognitoUserPoolURL.toString()),
 		COGNITO_USER_POOL_CLIENT_ID: JSON.stringify(cognitoUserPoolClientId),
+		COGNITO_IDENTITY_POOL_ID: JSON.stringify(cognitoIdentityPoolId),
 		MAP_API_KEY: JSON.stringify(mapAPIKey),
 		AWS_REGION: JSON.stringify(awsRegion),
 	}

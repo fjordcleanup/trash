@@ -7,6 +7,7 @@ import {
 	Menu,
 	PlusCircle,
 	User,
+	UserStar,
 	X,
 } from 'lucide-preact'
 import { useState } from 'preact/hooks'
@@ -54,7 +55,7 @@ const Nav = () => {
 					{auth.user !== undefined && (
 						<>
 							<div class="d-flex align-items-center">
-								<User class="me-1" />
+								<UserRoleIcon isAdmin={auth.isAdmin} />
 								{name ?? email}
 							</div>
 							<button
@@ -113,7 +114,7 @@ const Nav = () => {
 							{auth.user !== undefined && (
 								<>
 									<div class="mobile-user-info d-flex align-items-center">
-										<User class="me-1" />
+										<UserRoleIcon isAdmin={auth.isAdmin} />
 										{name ?? email}
 									</div>
 									<button
@@ -136,3 +137,12 @@ const Nav = () => {
 		</div>
 	)
 }
+
+const UserRoleIcon = ({ isAdmin }: { isAdmin: boolean }) =>
+	isAdmin ? (
+		<abbr title="Admin">
+			<UserStar class="me-1 color-fjordcleanup" />
+		</abbr>
+	) : (
+		<User class="me-1" />
+	)

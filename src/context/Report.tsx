@@ -84,7 +84,7 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 					if (!isValid) return
 					if (user?.id_token === undefined) return
 					setSubmitting(true)
-					fetch(new URL('https://api.fjordcleanup.org/2025-08-01/report'), {
+					fetch(new URL('https://api.fjordcleanup.org/report'), {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',

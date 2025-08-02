@@ -23,5 +23,9 @@ export type CognitoClaims = {
 		 * @example 'alex@example.com'
 		 */
 		email: string
+		/**
+		 * Groups of the user
+		 */
+		'cognito:groups': string
 	}
 }

@@ -1,9 +1,12 @@
 import type { ReportCreatedEvent } from '../../event/ReportCreatedEvent.ts'
+import type { ReportDeletedEvent } from '../../event/ReportDeletedEvent.ts'
+import type { ReportPublishedEvent } from '../../event/ReportPublishedEvent.ts'
 import type { SizedPhotoAddedEvent } from '../../event/SizedPhotoAddedEvent.ts'
 import { fromEvent, updateFromEvent } from '../aggregate/AggregateMeta.ts'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
 import { assertAggregateEvent } from '../event/assertAggregateEvent.ts'
-import { EventNames, isNamedEvent } from '../event/EventNames.ts'
+import { EventNames } from '../event/EventNames.ts'
+import { isNamedEvent } from '../event/isNamedEvent.ts'
 import { reduceEvents } from './reduceEvents.ts'
 
 export const reportReducer = reduceEvents<ReportAggregate>(
@@ -28,6 +31,22 @@ export const reportReducer = reduceEvents<ReportAggregate>(
 				},
 			}
 		}
+		if (isReportDeletedEvent(event)) {
+			assertAggregateEvent(aggregate, event)
+			return {
+				...aggregate,
+				$meta: updateFromEvent(aggregate.$meta, event),
+				isDeleted: true,
+			}
+		}
+		if (isReportPublishedEvent(event)) {
+			assertAggregateEvent(aggregate, event)
+			return {
+				...aggregate,
+				$meta: updateFromEvent(aggregate.$meta, event),
+				isPublic: true,
+			}
+		}
 		return undefined
 	},
 )
@@ -38,4 +57,12 @@ const isReportCreatedEvent = isNamedEvent<ReportCreatedEvent>(
 
 const isSizedPhotoAddedEvent = isNamedEvent<SizedPhotoAddedEvent>(
 	EventNames.SizedPhotoAdded,
+)
+
+const isReportDeletedEvent = isNamedEvent<ReportDeletedEvent>(
+	EventNames.ReportDeleted,
+)
+
+const isReportPublishedEvent = isNamedEvent<ReportPublishedEvent>(
+	EventNames.ReportPublished,
 )

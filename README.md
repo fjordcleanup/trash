@@ -55,6 +55,7 @@ Provide these environment variables:
 - For Cognito
   - `COGNITO_USER_POOL_CLIENT_ID`
   - `COGNITO_USER_POOL_URL`
+  - `COGNITO_IDENTITY_POOL_ID`
 
 ```bash
 gh variable set <STACK_PREFIX> --env production --body "<value>"

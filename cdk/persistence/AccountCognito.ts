@@ -32,7 +32,9 @@ export class AccountCognito extends Construct {
 	public readonly userPool: IUserPool
 	public readonly userPoolClient: IUserPoolClient
 	public readonly identityPool: CfnIdentityPool
-	public readonly adminsRole: Role
+	public readonly adminRole: Role
+	public readonly authenticatedUserRole: Role
+	public readonly unauthenticatedUserRole: Role
 
 	constructor(
 		parent: Construct,
@@ -175,7 +177,7 @@ export class AccountCognito extends Construct {
 		// We cannot use the L2 construct here, because it creates a circular dependency:
 		// See https://github.com/aws/aws-cdk/issues/33725
 		this.identityPool = new CfnIdentityPool(this, 'identityPool', {
-			allowUnauthenticatedIdentities: false,
+			allowUnauthenticatedIdentities: true,
 			cognitoIdentityProviders: [
 				{
 					clientId: this.userPoolClient.userPoolClientId,
@@ -184,8 +186,8 @@ export class AccountCognito extends Construct {
 			],
 		})
 
-		// Create a role for billing admins
-		const identityPoolPrincipal = new WebIdentityPrincipal(
+		// Create a role for users
+		const authenticatedPrincipal = new WebIdentityPrincipal(
 			'cognito-identity.amazonaws.com',
 			{
 				StringEquals: {
@@ -197,30 +199,42 @@ export class AccountCognito extends Construct {
 			},
 		)
 
-		this.adminsRole = new Role(this, 'AdminsRole', {
-			assumedBy: identityPoolPrincipal,
+		this.adminRole = new Role(this, 'AdminsRole', {
+			assumedBy: authenticatedPrincipal,
 		})
 
 		this.userPool.addGroup('admins', {
 			groupName: 'admins',
 			description: 'Admins',
 			precedence: 0,
-			role: this.adminsRole,
+			role: this.adminRole,
 		})
 
-		const authenticatedUserRole = new Role(this, 'authenticatedUserRole', {
-			assumedBy: identityPoolPrincipal,
+		this.authenticatedUserRole = new Role(this, 'authenticatedUserRole', {
+			assumedBy: authenticatedPrincipal,
 		})
 
-		const unauthenticatedUserRole = new Role(this, 'unauthenticatedUserRole', {
-			assumedBy: identityPoolPrincipal,
+		const unauthenticatedPrincipal = new WebIdentityPrincipal(
+			'cognito-identity.amazonaws.com',
+			{
+				StringEquals: {
+					'cognito-identity.amazonaws.com:aud': this.identityPool.ref,
+				},
+				'ForAnyValue:StringLike': {
+					'cognito-identity.amazonaws.com:amr': 'unauthenticated',
+				},
+			},
+		)
+
+		this.unauthenticatedUserRole = new Role(this, 'unauthenticatedUserRole', {
+			assumedBy: unauthenticatedPrincipal,
 		})
 
 		new CfnIdentityPoolRoleAttachment(this, 'identityPoolRoles', {
 			identityPoolId: this.identityPool.ref,
 			roles: {
-				authenticated: authenticatedUserRole.roleArn,
-				unauthenticated: unauthenticatedUserRole.roleArn,
+				authenticated: this.authenticatedUserRole.roleArn,
+				unauthenticated: this.unauthenticatedUserRole.roleArn,
 			},
 			roleMappings: {
 				userPool: {

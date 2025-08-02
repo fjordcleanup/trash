@@ -7,12 +7,12 @@ import { validateInput } from '@hello.nrfcloud.com/lambda-helpers/validateInput'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
 import { Type } from '@sinclair/typebox'
-import type {
-	APIGatewayProxyEventV2,
-	APIGatewayProxyStructuredResultV2,
-} from 'aws-lambda'
+import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda'
 import { TrashType } from '../domain/TrashType.ts'
 import { listReportsDynamoDB } from '../persistence/dynamoDB/listReportsDynamoDB.ts'
+import type { AuthorizedEvent } from './authorizer/AuthorizedEvent.ts'
+import type { CognitoClaims } from './authorizer/CognitoClaims.ts'
+import { isAdmin } from './authorizer/isAdmin.ts'
 import { handleDomainErrors } from './middlewares/handleDomainErrors.ts'
 
 const db = new DynamoDBClient({})
@@ -35,7 +35,7 @@ const InputSchema = Type.Object({
 const list = listReportsDynamoDB(db, reportAggregatesTableName)
 
 export const handler = middy<
-	APIGatewayProxyEventV2,
+	AuthorizedEvent<CognitoClaims>,
 	APIGatewayProxyStructuredResultV2
 >()
 	.use(inputOutputLogger())
@@ -43,8 +43,11 @@ export const handler = middy<
 	.use(addCORSHeaders())
 	.use(validateInput(InputSchema))
 	.use(handleDomainErrors())
-	.handler(async () => {
-		const reports = (await list()).filter((report) => report.isPublic)
+	.handler(async (event) => {
+		const admin = isAdmin(event)
+		const reports = (await list()).filter(
+			(report) => (admin ?? report.isPublic) && report.isDeleted !== true,
+		)
 
 		return aResponse(
 			200,

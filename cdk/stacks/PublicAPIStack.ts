@@ -4,6 +4,7 @@ import { CfnOutput, Duration, Fn, Stack } from 'aws-cdk-lib'
 import { CognitoUserPoolsAuthorizer } from 'aws-cdk-lib/aws-apigateway'
 import { UserPool } from 'aws-cdk-lib/aws-cognito'
 import { Bucket } from 'aws-cdk-lib/aws-s3'
+import { AdminAPIOperations } from '../api/AdminAPIOperations.ts'
 import { PublicAPI } from '../api/PublicAPI.ts'
 import { PublicAPIOperations } from '../api/PublicAPIOperations.ts'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
@@ -69,6 +70,13 @@ export class PublicAPIStack extends Stack {
 			authorizer,
 			baseLayerVersion,
 			photoUploadBucket,
+		})
+
+		new AdminAPIOperations(this, {
+			api,
+			lambdaSources,
+			authorizer,
+			baseLayerVersion,
 		})
 
 		api.addCORSPreflights()

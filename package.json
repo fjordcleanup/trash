@@ -26,12 +26,18 @@
     "cdk:lambda:update": "node --no-warnings --experimental-transform-types ./cdk/cli/update-lambdas.ts"
   },
   "dependencies": {
+    "@aws-crypto/sha256-js": "5.2.0",
+    "@aws-sdk/credential-provider-cognito-identity": "3.859.0",
+    "@aws-sdk/credential-providers": "3.859.0",
     "@aws-sdk/s3-request-presigner": "3.859.0",
     "@bifravst/from-env": "3.0.2",
     "@hello.nrfcloud.com/lambda-helpers": "3.5.0",
     "@middy/core": "6.4.1",
     "@middy/input-output-logger": "6.4.1",
     "@sinclair/typebox": "0.34.38",
+    "@smithy/protocol-http": "5.1.2",
+    "@smithy/signature-v4": "5.1.2",
+    "@smithy/types": "4.3.1",
     "bootstrap": "5.3.7",
     "classnames": "2.5.1",
     "compare-versions": "6.1.1",

@@ -10,9 +10,12 @@ import { MiniMap } from '../MiniMap.tsx'
 import { TrashTypeSymbol } from '../TrashTypeSymbol.tsx'
 import { Photo } from './Photo.tsx'
 
+import { useAuth } from '#context/Auth.tsx'
+import { CheckCheck, Trash } from 'lucide-preact'
 import './TrashCard.css'
 
 export const TrashCard = ({ report }: { report: Report }) => {
+	const { isAdmin, user } = useAuth()
 	const photos = useMemo(
 		() =>
 			Object.values(report.photos)
@@ -57,14 +60,90 @@ export const TrashCard = ({ report }: { report: Report }) => {
 				</p>
 			</div>
 			<div class="card-footer d-flex justify-content-between">
-				<button
-					class="btn btn-success"
-					onClick={() => {
-						window.alert('This feature is not implemented yet!')
-					}}
-				>
-					It's cleaned!
-				</button>
+				<div>
+					<button
+						class="btn btn-success"
+						onClick={() => {
+							window.alert('This feature is not implemented yet!')
+						}}
+					>
+						It's cleaned!
+					</button>
+					{isAdmin && (
+						<button
+							class="btn btn-outline-danger ms-2"
+							title={'Delete this report'}
+							onClick={() => {
+								if (
+									window.confirm('Are you sure you want to delete this report?')
+								) {
+									fetch(
+										new URL(
+											`https://api.fjordcleanup.org/sudo/report/${report.$meta.id}`,
+										),
+										{
+											method: 'DELETE',
+											headers: {
+												Authorization: `Bearer ${user?.id_token}`,
+												'If-Match': report.$meta.version.toString(),
+											},
+										},
+									)
+										.then(async (res) => {
+											if (res.ok) {
+												route('/map')
+											} else {
+												throw new Error(
+													`Failed to delete report: ${await res.json()}`,
+												)
+											}
+										})
+										.catch(console.error)
+								}
+							}}
+						>
+							<Trash />
+						</button>
+					)}
+					{isAdmin && (
+						<button
+							class="btn btn-outline-info ms-2"
+							title={'Publish this report to the map'}
+							onClick={() => {
+								if (
+									window.confirm(
+										'Are you sure you want to publish this report?',
+									)
+								) {
+									fetch(
+										new URL(
+											`https://api.fjordcleanup.org/sudo/report/${report.$meta.id}/publish`,
+										),
+										{
+											method: 'PUT',
+											headers: {
+												Authorization: `Bearer ${user?.id_token}`,
+												'If-Match': report.$meta.version.toString(),
+											},
+										},
+									)
+										.then(async (res) => {
+											if (res.ok) {
+												route('/map')
+											} else {
+												throw new Error(
+													`Failed to publish report: ${await res.json()}`,
+												)
+											}
+										})
+										.catch(console.error)
+								}
+							}}
+						>
+							<CheckCheck />
+						</button>
+					)}
+				</div>
 				<button
 					class="btn btn-outline-secondary"
 					onClick={() => {

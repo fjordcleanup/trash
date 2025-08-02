@@ -7,6 +7,8 @@ import { PUBLIC_API_STACK_NAME } from '../stacks/stackName.ts'
 export type UserLambdas = {
 	submitReport: PackedLambda
 	listReports: PackedLambda
+	deleteReport: PackedLambda
+	publishReport: PackedLambda
 }
 
 export const packLambdas = async (): Promise<UserLambdas> => ({
@@ -17,5 +19,13 @@ export const packLambdas = async (): Promise<UserLambdas> => ({
 	listReports: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-listReports`,
 		sourceFilePath: 'lambda/listReports.ts',
+	}),
+	deleteReport: await packLambdaFromPath({
+		id: `${PUBLIC_API_STACK_NAME}-deleteReport`,
+		sourceFilePath: 'lambda/deleteReport.ts',
+	}),
+	publishReport: await packLambdaFromPath({
+		id: `${PUBLIC_API_STACK_NAME}-publishReport`,
+		sourceFilePath: 'lambda/publishReport.ts',
 	}),
 })
