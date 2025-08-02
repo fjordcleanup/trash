@@ -17,4 +17,6 @@ export type ReportAggregate = {
 	}
 	description?: string
 	photos: Record<string, null | SizedPhoto>
+	// The report is public and can be viewed by anyone
+	isPublic?: boolean
 }

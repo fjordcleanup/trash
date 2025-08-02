@@ -44,7 +44,7 @@ export const handler = middy<
 	.use(validateInput(InputSchema))
 	.use(handleDomainErrors())
 	.handler(async () => {
-		const reports = await list()
+		const reports = (await list()).filter((report) => report.isPublic)
 
 		return aResponse(
 			200,
