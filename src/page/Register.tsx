@@ -1,4 +1,3 @@
-import { Map } from '#components/Map.tsx'
 import { Navbar } from '#components/Navbar.tsx'
 import { useAuth } from '#context/Auth.tsx'
 
@@ -7,7 +6,6 @@ export const Register = () => {
 	return (
 		<>
 			<Navbar />
-			<Map />
 			<main class="container mt-4">
 				<div class="row justify-content-center">
 					<div class="col-md-5">
