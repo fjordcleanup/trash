@@ -1,27 +1,40 @@
+import { Ago } from '#components/Ago.tsx'
+import { LocationLinks } from '#components/LocationLinks.tsx'
 import type { Report } from '#context/Reports.tsx'
+import cx from 'classnames'
 import { route } from 'preact-router'
+import { useMemo } from 'preact/hooks'
+import { decodeTime } from 'ulidx'
 import { PhotoSize } from '../../../domain/PhotoSize.ts'
 import { MiniMap } from '../MiniMap.tsx'
 import { TrashTypeSymbol } from '../TrashTypeSymbol.tsx'
 import { Photo } from './Photo.tsx'
 
-import { Ago } from '#components/Ago.tsx'
-import { LocationLinks } from '#components/LocationLinks.tsx'
-import { decodeTime } from 'ulidx'
 import './TrashCard.css'
 
 export const TrashCard = ({ report }: { report: Report }) => {
+	const photos = useMemo(
+		() =>
+			Object.values(report.photos)
+				.filter((sizes) => sizes !== null)
+				.slice(0, 1),
+		[report],
+	)
 	return (
 		<div class="card trash-card">
-			<div class="card-header" style={{ padding: '0' }}>
+			<div
+				class={cx('card-header', {
+					'one-photo': photos.length === 1,
+					'two-photos': photos.length === 2,
+				})}
+				style={{ padding: '0' }}
+			>
 				<MiniMap markerLocation={report.location} />
-				<TrashTypeSymbol types={report.type} />
 				{/* TODO: use lazy loading for images */}
-				{Object.values(report.photos)
-					.filter((sizes) => sizes !== null)
-					.map((sizes, index) => (
-						<Photo key={index} url={new URL(sizes[PhotoSize.thumbnail])} />
-					))}
+				{photos.map((sizes, index) => (
+					<Photo key={index} url={new URL(sizes[PhotoSize.thumbnail])} />
+				))}
+				<TrashTypeSymbol types={report.type} />
 			</div>
 			<div class="id">{report.$meta.id.slice(-6)}</div>
 			<div class="card-body">
@@ -55,10 +68,7 @@ export const TrashCard = ({ report }: { report: Report }) => {
 				<button
 					class="btn btn-outline-secondary"
 					onClick={() => {
-						route(
-							'/#center:' + report.location.lat + ',' + report.location.lng,
-							true,
-						)
+						route('/map')
 					}}
 				>
 					close

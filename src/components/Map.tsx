@@ -13,7 +13,13 @@ const region = AWS_REGION
 const style = 'Standard'
 const colorScheme = 'Light'
 
-export const Map = ({ center }: { center?: { lat: number; lng: number } }) => {
+export const Map = ({
+	center,
+	onClick,
+}: {
+	onClick?: () => void
+	center?: { lat: number; lng: number }
+}) => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const initialized = useRef<boolean>(false)
 	const settings = useMapSettings()
@@ -45,6 +51,10 @@ export const Map = ({ center }: { center?: { lat: number; lng: number } }) => {
 			setMap(map)
 		})
 
+		map.on('click', () => {
+			onClick?.()
+		})
+
 		return () => {
 			console.debug(`[Map]`, `unmounted`)
 			console.debug(`[Map]`, `cleaning up`)
@@ -60,7 +70,10 @@ export const Map = ({ center }: { center?: { lat: number; lng: number } }) => {
 			const el = document.createElement('div')
 			el.className = 'trash-marker'
 
-			el.addEventListener('click', () => {
+			el.addEventListener('click', (ev) => {
+				ev.stopPropagation()
+				ev.preventDefault()
+				if (report.$meta.id === undefined) return
 				route(`/map/${report.$meta.id}`)
 			})
 
