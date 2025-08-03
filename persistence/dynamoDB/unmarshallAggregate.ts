@@ -1,6 +1,6 @@
 import type { AttributeValue } from '@aws-sdk/client-dynamodb'
 import { unmarshall } from '@aws-sdk/util-dynamodb'
-import type { AggregateMeta } from '../aggregate/AggregateMeta.ts'
+import type { AggregateMeta } from '../../aggregate/AggregateMeta.ts'
 import type { PersistedAggregate } from './PersistedAggregate.ts'
 
 export const unmarshallAggregate = (

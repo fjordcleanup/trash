@@ -1,5 +1,5 @@
-import type { SizedPhoto } from '../persistence/aggregate/ReportAggregate.ts'
-import type { AggregateEvent } from '../persistence/event/AggregateEvent.ts'
+import type { SizedPhoto } from '../aggregate/ReportAggregate.ts'
+import type { AggregateEvent } from './AggregateEvent.ts'
 
 export type SizedPhotoAddedEvent = AggregateEvent & {
 	photoId: string

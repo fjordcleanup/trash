@@ -42,6 +42,7 @@
     "domain/**/*",
     "command/**/*",
     "event/**/*",
-    "persistence/**/*"
+    "persistence/**/*",
+    "aggregate"
   ]
 }

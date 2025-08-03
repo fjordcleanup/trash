@@ -1,5 +1,5 @@
 import { type DynamoDBClient, paginateScan } from '@aws-sdk/client-dynamodb'
-import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
 import type { listReportsFn } from '../listReportsFn.ts'
 import { unmarshallAggregate } from './unmarshallAggregate.ts'
 

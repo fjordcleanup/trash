@@ -1,6 +1,6 @@
 import { type DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
-import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
 import type { findReportByIdFn } from '../findReportByIdFn.ts'
 import { unmarshallAggregate } from './unmarshallAggregate.ts'
 

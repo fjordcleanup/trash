@@ -16,9 +16,9 @@ import os from 'node:os'
 import path, { parse } from 'node:path'
 import { addSizedPhotoCommand } from '../command/addSizedPhotoCommand.ts'
 import { PhotoSize } from '../domain/PhotoSize.ts'
+import type { ULID } from '../event/AggregateEvent.ts'
 import { findReportByIdDynamoDB } from '../persistence/dynamoDB/findReportByIdDynamoDB.ts'
 import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
-import type { ULID } from '../persistence/event/AggregateEvent.ts'
 
 const s3 = new S3Client({})
 const db = new DynamoDBClient({})

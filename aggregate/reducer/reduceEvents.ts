@@ -1,5 +1,5 @@
-import type { AggregateMeta } from '../aggregate/AggregateMeta.ts'
-import type { AggregateEvent } from '../event/AggregateEvent.ts'
+import type { AggregateEvent } from '../../event/AggregateEvent.ts'
+import type { AggregateMeta } from '../AggregateMeta.ts'
 import type { ApplyEventFn, ApplyEventsFn } from './ApplyEventsFn.ts'
 
 export const reduceEvents =

@@ -1,5 +1,5 @@
 import { Type } from '@sinclair/typebox'
-import type { AggregateVersion } from '../../persistence/aggregate/AggregateVersion.ts'
+import type { AggregateVersion } from '../../aggregate/AggregateVersion.ts'
 
 export const AggregateVersionSchema = Type.Transform(
 	Type.Integer({

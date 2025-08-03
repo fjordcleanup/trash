@@ -1,8 +1,8 @@
 import { createContext, type ComponentChildren } from 'preact'
 import { useContext, useEffect, useState } from 'preact/hooks'
+import type { AggregateMeta } from '../../aggregate/AggregateMeta.ts'
 import type { PhotoSize } from '../../domain/PhotoSize.ts'
 import type { TrashType } from '../../domain/TrashType.ts'
-import type { AggregateMeta } from '../../persistence/aggregate/AggregateMeta.ts'
 import { useAuth } from './Auth.tsx'
 
 export type Report = {

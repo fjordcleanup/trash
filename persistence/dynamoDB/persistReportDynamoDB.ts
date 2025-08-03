@@ -1,5 +1,5 @@
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
 import type { PersistFn } from '../PersistFn.ts'
 import { persistDynamoDB } from './persistDynamoDB.ts'
 

@@ -1,12 +1,12 @@
 import { ulid } from 'ulidx'
+import { AggregateNames } from '../aggregate/AggregateNames.ts'
+import { v1 } from '../aggregate/AggregateVersion.ts'
+import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
+import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import type { ULID } from '../event/AggregateEvent.ts'
+import { EventNames } from '../event/EventNames.ts'
 import type { ReportCreatedEvent } from '../event/ReportCreatedEvent.ts'
-import { AggregateNames } from '../persistence/AggregateNames.ts'
-import { v1 } from '../persistence/aggregate/AggregateVersion.ts'
-import type { ReportAggregate } from '../persistence/aggregate/ReportAggregate.ts'
-import type { ULID } from '../persistence/event/AggregateEvent.ts'
-import { EventNames } from '../persistence/event/EventNames.ts'
 import type { PersistReportFn } from '../persistence/persistReport.ts'
-import { reportReducer } from '../persistence/reducer/reportReducer.ts'
 
 export const createReportCommand =
 	(persistReport: PersistReportFn) =>

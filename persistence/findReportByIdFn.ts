@@ -1,5 +1,5 @@
-import type { ReportAggregate } from './aggregate/ReportAggregate.ts'
-import type { ULID } from './event/AggregateEvent.ts'
+import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import type { ULID } from '../event/AggregateEvent.ts'
 
 export type findReportByIdFn = (
 	reportId: ULID,

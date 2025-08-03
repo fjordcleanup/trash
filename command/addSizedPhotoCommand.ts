@@ -1,16 +1,16 @@
 import { ulid } from 'ulidx'
-import type { SizedPhotoAddedEvent } from '../event/SizedPhotoAddedEvent.ts'
-import { AggregateNames } from '../persistence/AggregateNames.ts'
-import { inc } from '../persistence/aggregate/AggregateVersion.ts'
+import { AggregateNames } from '../aggregate/AggregateNames.ts'
+import { inc } from '../aggregate/AggregateVersion.ts'
+import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
 import type {
 	ReportAggregate,
 	SizedPhoto,
-} from '../persistence/aggregate/ReportAggregate.ts'
-import type { ULID } from '../persistence/event/AggregateEvent.ts'
-import { EventNames } from '../persistence/event/EventNames.ts'
+} from '../aggregate/ReportAggregate.ts'
+import type { ULID } from '../event/AggregateEvent.ts'
+import { EventNames } from '../event/EventNames.ts'
+import type { SizedPhotoAddedEvent } from '../event/SizedPhotoAddedEvent.ts'
 import type { findReportByIdFn } from '../persistence/findReportByIdFn.ts'
 import type { PersistReportFn } from '../persistence/persistReport.ts'
-import { reportReducer } from '../persistence/reducer/reportReducer.ts'
 
 export const addSizedPhotoCommand =
 	(findReportById: findReportByIdFn, persistReport: PersistReportFn) =>
