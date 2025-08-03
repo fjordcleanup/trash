@@ -1,7 +1,9 @@
 import { Ago } from '#components/Ago.tsx'
 import { LocationLinks } from '#components/LocationLinks.tsx'
+import { useAuth } from '#context/Auth.tsx'
 import type { Report } from '#context/Reports.tsx'
 import cx from 'classnames'
+import { CheckCheck, Trash } from 'lucide-preact'
 import { route } from 'preact-router'
 import { useMemo } from 'preact/hooks'
 import { decodeTime } from 'ulidx'
@@ -10,8 +12,6 @@ import { MiniMap } from '../MiniMap.tsx'
 import { TrashTypeSymbol } from '../TrashTypeSymbol.tsx'
 import { Photo } from './Photo.tsx'
 
-import { useAuth } from '#context/Auth.tsx'
-import { CheckCheck, Trash } from 'lucide-preact'
 import './TrashCard.css'
 
 export const TrashCard = ({ report }: { report: Report }) => {
@@ -27,6 +27,7 @@ export const TrashCard = ({ report }: { report: Report }) => {
 		<div class="card trash-card">
 			<div
 				class={cx('card-header', {
+					'no-photos': photos.length === 0, // In case the photos are not processed yet
 					'one-photo': photos.length === 1,
 					'two-photos': photos.length === 2,
 				})}
@@ -61,17 +62,19 @@ export const TrashCard = ({ report }: { report: Report }) => {
 			</div>
 			<div class="card-footer d-flex justify-content-between">
 				<div>
-					<button
-						class="btn btn-success"
-						onClick={() => {
-							window.alert('This feature is not implemented yet!')
-						}}
-					>
-						It's cleaned!
-					</button>
+					{report.isPublic === true && (
+						<button
+							class="btn btn-success me-2"
+							onClick={() => {
+								window.alert('This feature is not implemented yet!')
+							}}
+						>
+							It's cleaned!
+						</button>
+					)}
 					{isAdmin && (
 						<button
-							class="btn btn-outline-danger ms-2"
+							class="btn btn-outline-danger me-2"
 							title={'Delete this report'}
 							onClick={() => {
 								if (
@@ -105,9 +108,9 @@ export const TrashCard = ({ report }: { report: Report }) => {
 							<Trash />
 						</button>
 					)}
-					{isAdmin && (
+					{isAdmin && report.isPublic !== true && (
 						<button
-							class="btn btn-outline-info ms-2"
+							class="btn btn-outline-info"
 							title={'Publish this report to the map'}
 							onClick={() => {
 								if (

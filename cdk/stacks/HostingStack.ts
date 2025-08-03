@@ -130,6 +130,7 @@ export class HostingStack extends Stack {
 
 		const pathPatterns = [
 			'/auth/callback',
+			'/report',
 			'/report/*',
 			'/about',
 			'/map',

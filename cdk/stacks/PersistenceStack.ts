@@ -48,6 +48,16 @@ export class PersistenceStack extends Stack {
 			description: 'The name of the events table',
 			exportName: `${Stack.of(this).stackName}:eventsTableName`,
 		})
+		new CfnOutput(this, 'eventsTableArn', {
+			value: eventsTable.table.tableArn ?? '',
+			description: 'The ARN of the events table',
+			exportName: `${Stack.of(this).stackName}:eventsTableArn`,
+		})
+		new CfnOutput(this, 'eventsTableStreamArn', {
+			value: eventsTable.table.tableStreamArn ?? '',
+			description: 'The ARN of the events table stream',
+			exportName: `${Stack.of(this).stackName}:eventsTableStreamArn`,
+		})
 
 		// This bucket receives the original photos uploaded by users
 		// It is not public, but it has CORS enabled for PUT requests from the frontend
@@ -136,4 +146,6 @@ export type StackOutputs = {
 	resizedBucketName: string
 	reportAggregatesTableName: string
 	eventsTableName: string
+	eventsTableArn: string
+	eventsTableStreamArn: string
 }

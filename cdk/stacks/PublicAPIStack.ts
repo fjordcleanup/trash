@@ -2,18 +2,14 @@ import type { PackedLayer } from '@bifravst/aws-cdk-lambda-helpers/layer'
 import type { App, Environment } from 'aws-cdk-lib'
 import { CfnOutput, Duration, Fn, Stack } from 'aws-cdk-lib'
 import { CognitoUserPoolsAuthorizer } from 'aws-cdk-lib/aws-apigateway'
-import { UserPool } from 'aws-cdk-lib/aws-cognito'
 import { Bucket } from 'aws-cdk-lib/aws-s3'
 import { AdminAPIOperations } from '../api/AdminAPIOperations.ts'
 import { PublicAPI } from '../api/PublicAPI.ts'
 import { PublicAPIOperations } from '../api/PublicAPIOperations.ts'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { UserLambdas } from '../lambdas/userLambdas.ts'
-import {
-	ACCOUNT_STACK_NAME,
-	PERSISTENCE_STACK_NAME,
-	PUBLIC_API_STACK_NAME,
-} from './stackName.ts'
+import { AccountStackUserPool } from '../persistence/AccountStackUserPool.ts'
+import { PERSISTENCE_STACK_NAME, PUBLIC_API_STACK_NAME } from './stackName.ts'
 
 export class PublicAPIStack extends Stack {
 	public constructor(
@@ -44,14 +40,10 @@ export class PublicAPIStack extends Stack {
 			description: 'The URL of the REST API',
 		})
 
-		const userPool = UserPool.fromUserPoolId(
-			this,
-			'userPool',
-			Fn.importValue(`${ACCOUNT_STACK_NAME}:userPoolId`),
-		)
+		const userPool = new AccountStackUserPool(this)
 
 		const authorizer = new CognitoUserPoolsAuthorizer(this, 'authorizer', {
-			cognitoUserPools: [userPool],
+			cognitoUserPools: [userPool.userPool],
 			resultsCacheTtl: Duration.minutes(15),
 			authorizerName: 'CognitoUsers',
 		})

@@ -64,9 +64,9 @@ export const handler = middy<S3Event>()
 			const [w, h] = (dimensions ?? '0x0').split('x').map(Number)
 			const width = w ?? 0
 			const height = h ?? 0
-			if (width < 1000 || height < 1000) {
+			if (width < 500 || height < 500) {
 				throw new Error(
-					`Image dimensions too small: ${dimensions} (must be at least 1000x1000)`,
+					`Image dimensions too small: ${dimensions} (must be at least 500x500)`,
 				)
 			}
 			const isPortrait = height > width

@@ -8,8 +8,8 @@
 
 .trash-marker {
   background-color: #999;
-  width: 64px;
-  height: 64px;
+  width: 75px;
+  height: 75px;
   transform: rotate(45deg);
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -41,7 +41,7 @@
 
 .trash-marker .title {
   position: absolute;
-  top: 64px;
+  top: 75px;
   height: 20px;
   width: 100%;
   display: flex;
@@ -50,4 +50,5 @@
   background-color: var(--fjordcleanup-color);
   color: var(--fjordcleanup-color-text);
   font-weight: bold;
+  white-space: nowrap;
 }

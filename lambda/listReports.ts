@@ -46,7 +46,8 @@ export const handler = middy<
 	.handler(async (event) => {
 		const admin = isAdmin(event)
 		const reports = (await list()).filter(
-			(report) => (admin ?? report.isPublic) && report.isDeleted !== true,
+			(report) =>
+				(admin || report.isPublic === true) && report.isDeleted !== true,
 		)
 
 		return aResponse(

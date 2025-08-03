@@ -12,10 +12,11 @@ export class PersistenceStackEventsTable
 	constructor(scope: Construct) {
 		super(scope, PersistenceStackEventsTable.name)
 
-		this.table = Table.fromTableName(
-			this,
-			'table',
-			Fn.importValue(`${PERSISTENCE_STACK_NAME}:eventsTableName`),
-		)
+		this.table = Table.fromTableAttributes(this, 'table', {
+			tableName: Fn.importValue(`${PERSISTENCE_STACK_NAME}:eventsTableName`),
+			tableStreamArn: Fn.importValue(
+				`${PERSISTENCE_STACK_NAME}:eventsTableStreamArn`,
+			),
+		})
 	}
 }

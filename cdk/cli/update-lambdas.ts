@@ -3,9 +3,11 @@ import { LambdaClient } from '@aws-sdk/client-lambda'
 import type { PackedLambda } from '@bifravst/aws-cdk-lambda-helpers'
 import { updateLambdaCode } from '@bifravst/aws-cdk-lambda-helpers/util'
 import chalk from 'chalk'
+import { packLambdas as packNotificationLambdas } from '../lambdas/notificationLambdas.ts'
 import { packLambdas as packPersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { packLambdas as packUserLambdas } from '../lambdas/userLambdas.ts'
 import {
+	NOTIFICATIONS_STACK_NAME,
 	PERSISTENCE_STACK_NAME,
 	PUBLIC_API_STACK_NAME,
 } from '../stacks/stackName.ts'
@@ -15,15 +17,18 @@ const lambda = new LambdaClient()
 const update = updateLambdaCode({ cf, lambda })
 
 const start = new Date()
-const [UserLambdas, PersistenceLambdas] = await Promise.all([
-	packUserLambdas(),
-	packPersistenceLambdas(),
-])
+const [UserLambdas, PersistenceLambdas, NotificationLambdas] =
+	await Promise.all([
+		packUserLambdas(),
+		packPersistenceLambdas(),
+		packNotificationLambdas(),
+	])
 console.debug('Packed lambdas in', new Date().getTime() - start.getTime(), 'ms')
 
 const stackLambdas: Array<[string, Record<string, PackedLambda>]> = [
 	[PUBLIC_API_STACK_NAME, UserLambdas],
 	[PERSISTENCE_STACK_NAME, PersistenceLambdas],
+	[NOTIFICATIONS_STACK_NAME, NotificationLambdas],
 ]
 
 await Promise.all(

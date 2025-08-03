@@ -7,3 +7,4 @@ export const ACCOUNT_DOMAIN_CERTIFICATE_STACK_NAME = `${STACK_PREFIX}-account-do
 export const ACCOUNT_STACK_NAME = `${STACK_PREFIX}-account`
 export const PERSISTENCE_STACK_NAME = `${STACK_PREFIX}-persistence`
 export const PUBLIC_API_STACK_NAME = `${STACK_PREFIX}-public-api`
+export const NOTIFICATIONS_STACK_NAME = `${STACK_PREFIX}-notifications`
