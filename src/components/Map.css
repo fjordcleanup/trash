@@ -8,8 +8,8 @@
 
 .trash-marker {
   background-color: #999;
-  width: 75px;
-  height: 75px;
+  width: 74px;
+  height: 74px;
   transform: rotate(45deg);
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -41,7 +41,7 @@
 
 .trash-marker .title {
   position: absolute;
-  top: 75px;
+  top: 74px;
   height: 20px;
   width: 100%;
   display: flex;
