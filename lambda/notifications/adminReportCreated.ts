@@ -49,7 +49,7 @@ export const handler = middy<SQSEvent>()
 							},
 						},
 						Subject: {
-							Data: `[Fjord CleanUp] › New trash report created: ${reportEvent.aggregateId}`,
+							Data: `[Fjord CleanUP] › New trash report created: ${reportEvent.aggregateId}`,
 						},
 					},
 					Source: fromAddress,

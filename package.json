@@ -1,7 +1,7 @@
 {
   "name": "@fjordcleanup/trash",
   "version": "0.0.0-development",
-  "description": "Web application to view and report trash to Fjord CleanUp",
+  "description": "Web application to view and report trash to Fjord CleanUP",
   "type": "module",
   "imports": {
     "#utils/*": {
