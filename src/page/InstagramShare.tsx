@@ -27,7 +27,7 @@ export const InstagramShare = (props: { reportId: string }) => {
 								<small class="text-muted">Details</small>
 								<br />
 								<strong>
-									trash.fjordcleanup.org/{report.$meta.id.slice(-6)}
+									trash.fjordcleanup.org#{report.$meta.id.slice(-6)}
 								</strong>
 							</p>
 						</div>
