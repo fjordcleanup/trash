@@ -3,9 +3,11 @@ import { Provider as AuthProvider, useAuth } from '#context/Auth.tsx'
 import { Provider as MapSettingsProvider } from '#context/MapSettings.tsx'
 import { Provider as ReportsProvider } from '#context/Reports.tsx'
 import { About } from '#page/About.tsx'
+import { InstagramShare } from '#page/InstagramShare.tsx'
 import { Map } from '#page/Map.tsx'
 import { Register } from '#page/Register.tsx'
 import { Report } from '#page/Report.tsx'
+import { ShareLink } from '#page/ShareLink.tsx'
 import { Route, Router } from 'preact-router'
 
 export const App = () => (
@@ -28,6 +30,8 @@ export const Routing = () => {
 				<Route path="/map/:reportId" component={Map} />
 				<Route path="/about" component={About} />
 				<Route path="/report" component={Register} />
+				<Route path="/share/:reportId/ig" component={InstagramShare} />
+				<Route path="/:shortReportId" component={ShareLink} />
 			</Router>
 		)
 	}
@@ -39,7 +43,9 @@ export const Routing = () => {
 			<Route path="/map/:reportId" component={Map} />
 			<Route path="/about" component={About} />
 			<Route path="/report/:rest*" component={Report} />
+			<Route path="/share/:reportId/ig" component={InstagramShare} />
 			<Redirect path="/auth/callback" to="/" />
+			<Route path="/:shortReportId" component={ShareLink} />
 		</Router>
 	)
 }

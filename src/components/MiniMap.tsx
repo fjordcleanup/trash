@@ -28,9 +28,7 @@ export const MiniMap = ({
 			trackResize: true,
 			keyboard: false,
 			renderWorldCopies: false,
-			attributionControl: {
-				compact: true,
-			},
+			attributionControl: false,
 		})
 
 		const marker = new Marker({
