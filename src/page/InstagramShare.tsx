@@ -15,7 +15,11 @@ export const InstagramShare = (props: { reportId: string }) => {
 		<main class="ig-share">
 			<div class="d-flex flex-row align-items-center justify-content-center text-white pt-4">
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo me-4" />
-				<h1>Fjord CleanUP</h1>
+				<h1>
+					Fjord CleanUP
+					<br />
+					<small>Trash Report</small>
+				</h1>
 			</div>
 			{report !== undefined && (
 				<div class="d-flex flex-column align-items-center">
@@ -34,6 +38,17 @@ export const InstagramShare = (props: { reportId: string }) => {
 					</div>
 				</div>
 			)}
+			<div class="p-4 text-white opacity-75">
+				<p>
+					Trash reports are created by volunteers who care about the
+					environment.
+				</p>
+				<p>
+					Go to trash.fjordcleanup.org to discover more and report trash
+					yourself.
+				</p>
+				<p>Together, we can make the Oslo fjord and Akerselva cleaner.</p>
+			</div>
 		</main>
 	)
 }

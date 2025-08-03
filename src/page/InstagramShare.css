@@ -6,4 +6,6 @@ main.ig-share {
 
 main.ig-share .trash-card {
   max-width: 400px;
+  margin: 1rem;
+  box-shadow: 0px 0px 11px 0px #00000040;
 }
