@@ -23,14 +23,14 @@ export const PhotoUpload = ({
 						const file = (e.target.files as FileList)[0]
 						if (file === undefined) return
 						if (file.type !== 'image/jpeg') return
-						if (file.size < 2 * 1024 * 1024) {
-							// Minimum size of 2MB
-							setProblem('File is too small, please upload a larger image.')
+						if (file.size < 100 * 1024) {
+							// Minimum size of 100 KB
+							setProblem('File is too small, please select a larger image.')
 							return
 						}
 						if (file.size > 20 * 1024 * 1024) {
 							// Maximum size of 20MB
-							setProblem('File is too large, please upload a smaller image.')
+							setProblem('File is too large, please select a smaller image.')
 							return
 						}
 						const reader = new FileReader()
