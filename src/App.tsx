@@ -1,14 +1,13 @@
 import { Redirect } from '#components/Redirect.tsx'
 import { Provider as AuthProvider, useAuth } from '#context/Auth.tsx'
 import { Provider as MapSettingsProvider } from '#context/MapSettings.tsx'
-import { Provider as ReportsProvider, useReports } from '#context/Reports.tsx'
+import { Provider as ReportsProvider } from '#context/Reports.tsx'
 import { About } from '#page/About.tsx'
 import { InstagramShare } from '#page/InstagramShare.tsx'
 import { Map } from '#page/Map.tsx'
 import { Register } from '#page/Register.tsx'
 import { Report } from '#page/Report.tsx'
-import { route, Route, Router } from 'preact-router'
-import { useEffect } from 'preact/hooks'
+import { Route, Router } from 'preact-router'
 
 export const App = () => (
 	<AuthProvider>
@@ -22,20 +21,6 @@ export const App = () => (
 
 export const Routing = () => {
 	const { user } = useAuth()
-	const { reports } = useReports()
-
-	useEffect(() => {
-		if (reports.length === 0) return
-		const hash = window.location.hash.slice(1)
-		if (hash.length !== 6) return
-		const report = reports.find((r) => r.$meta.id.endsWith(hash))
-		if (report !== undefined) {
-			route(`/map/${report.$meta.id}`)
-		} else {
-			route('/')
-		}
-	}, [reports])
-
 	if (user === undefined) {
 		return (
 			<Router>

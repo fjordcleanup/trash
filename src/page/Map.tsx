@@ -3,7 +3,7 @@ import { Navbar } from '#components/Navbar.tsx'
 import { TrashCard } from '#components/TrashCard/TrashCard.tsx'
 import { useReports } from '#context/Reports.tsx'
 import { route } from 'preact-router'
-import { useMemo } from 'preact/hooks'
+import { useEffect, useMemo } from 'preact/hooks'
 
 export const Map = (props: { reportId?: string }) => {
 	const { reports } = useReports()
@@ -11,6 +11,16 @@ export const Map = (props: { reportId?: string }) => {
 		() => reports.find((r) => r.$meta.id === props.reportId),
 		[reports, props.reportId],
 	)
+
+	// Resolve shortened report IDs
+	useEffect(() => {
+		if (props.reportId?.length !== 6) return
+		const report = reports.find((r) => r.$meta.id.endsWith(props.reportId!))
+		if (report !== undefined) {
+			route(`/map/${report.$meta.id}`, true)
+		}
+	}, [reports, props.reportId])
+
 	return (
 		<>
 			<MapComponent onClick={() => route('/map')} />
