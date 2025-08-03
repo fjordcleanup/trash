@@ -12,7 +12,7 @@ export const InstagramShare = (props: { reportId: string }) => {
 		[reports, props.reportId],
 	)
 	return (
-		<main>
+		<main class="ig-share">
 			<div class="d-flex flex-row align-items-center justify-content-center text-white pt-4">
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo me-4" />
 				<h1>Fjord CleanUP</h1>

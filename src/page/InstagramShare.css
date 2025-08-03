@@ -1,9 +1,9 @@
-main {
+main.ig-share {
   background-color: #686461;
   width: 100vw;
   height: 100vh;
 }
 
-main .trash-card {
+main.ig-share .trash-card {
   max-width: 400px;
 }
