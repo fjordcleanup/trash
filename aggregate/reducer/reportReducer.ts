@@ -14,6 +14,7 @@ export const reportReducer = reduceEvents<ReportAggregate>(
 		if (isReportCreatedEvent(event)) {
 			return {
 				$meta: fromEvent(event),
+				authorId: event.actorId,
 				type: event.type,
 				location: event.location,
 				description: event.description,

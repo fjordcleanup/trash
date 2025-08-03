@@ -10,6 +10,7 @@ export type SizedPhoto = {
 
 export type ReportAggregate = {
 	$meta: AggregateMeta
+	authorId: string
 	type: Array<TrashType>
 	location: {
 		lat: number

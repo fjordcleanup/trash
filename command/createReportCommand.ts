@@ -11,7 +11,7 @@ import type { PersistReportFn } from '../persistence/persistReport.ts'
 export const createReportCommand =
 	(persistReport: PersistReportFn) =>
 	async (
-		data: Omit<ReportAggregate, '$meta'>,
+		data: Omit<ReportAggregate, '$meta' | 'authorId'>,
 		actorId: string,
 	): Promise<ReportAggregate> => {
 		const id = ulid() as ULID
