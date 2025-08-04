@@ -1,8 +1,9 @@
 import { useMapSettings } from '#context/MapSettings.tsx'
 import { useReports } from '#context/Reports.tsx'
+import cx from 'classnames'
 import maplibregl from 'maplibre-gl'
 import { route } from 'preact-router'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { TrashType } from '../../domain/TrashType.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -12,6 +13,8 @@ const apiKey = MAP_API_KEY
 const region = AWS_REGION
 const style = 'Standard'
 const colorScheme = 'Light'
+
+const isLandscape = () => window.innerWidth > window.innerHeight
 
 export const Map = ({
 	center,
@@ -25,6 +28,8 @@ export const Map = ({
 	const settings = useMapSettings()
 	const { reports } = useReports()
 	const [mapInstance, setMap] = useState<maplibregl.Map>()
+	const defaultZoom = useMemo(() => (isLandscape() ? 12 : 10), [])
+	const [zoom, setZoom] = useState<number>(defaultZoom)
 
 	useEffect(() => {
 		if (containerRef.current === null) return
@@ -38,7 +43,7 @@ export const Map = ({
 					lng: 10.7496181292028,
 					lat: 59.905900733292235,
 				},
-			zoom: 13,
+			zoom: defaultZoom,
 			style: `https://maps.geo.${region}.amazonaws.com/v2/styles/${style}/descriptor?key=${apiKey}&color-scheme=${colorScheme}`,
 			refreshExpiredTiles: false,
 			trackResize: true,
@@ -53,6 +58,14 @@ export const Map = ({
 
 		map.on('click', () => {
 			onClick?.()
+		})
+
+		map.on('zoomend', () => {
+			const newZoom = Math.floor(map.getZoom())
+			if (newZoom !== zoom) {
+				console.debug(`[Map]`, `zoom changed`, newZoom)
+				setZoom(newZoom)
+			}
 		})
 
 		return () => {
@@ -119,5 +132,13 @@ export const Map = ({
 		}
 	}, [reports, mapInstance])
 
-	return <div id="map" ref={containerRef} />
+	return (
+		<div
+			id="map"
+			class={cx({
+				'zoom-detail': zoom >= 14,
+			})}
+			ref={containerRef}
+		/>
+	)
 }
