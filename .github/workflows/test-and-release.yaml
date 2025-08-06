@@ -166,7 +166,7 @@ jobs:
           steps.semantic-release.outcome == 'success' && env.RELEASE_VERSION
           !=  ''
         run: |
-          gh workflow run --ref main deploy.yaml -F ref=${{ github.sha }}
+          gh workflow run --ref saga deploy.yaml -F ref=${{ github.sha }}
 
       - uses: actions/upload-artifact@v4
         if: always()
