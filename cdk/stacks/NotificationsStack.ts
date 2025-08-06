@@ -2,6 +2,7 @@ import type { PackedLayer } from '@bifravst/aws-cdk-lambda-helpers/layer'
 import type { App } from 'aws-cdk-lib'
 import { Stack } from 'aws-cdk-lib'
 import { AdminNotifications } from '../features/AdminNotifications.ts'
+import { UserNotifications } from '../features/UserNotifications.ts'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { NotificationLambdas } from '../lambdas/notificationLambdas.ts'
 import { AccountStackUserPool } from '../persistence/AccountStackUserPool.ts'
@@ -32,6 +33,14 @@ export class NotificationsStack extends Stack {
 		const eventsTable = new PersistenceStackEventsTable(this)
 
 		new AdminNotifications(this, {
+			lambdaSources,
+			baseLayerVersion,
+			baseDomainName,
+			userPool,
+			eventsTable,
+		})
+
+		new UserNotifications(this, {
 			lambdaSources,
 			baseLayerVersion,
 			baseDomainName,
