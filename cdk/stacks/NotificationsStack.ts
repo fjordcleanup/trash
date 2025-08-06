@@ -7,6 +7,7 @@ import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { NotificationLambdas } from '../lambdas/notificationLambdas.ts'
 import { AccountStackUserPool } from '../persistence/AccountStackUserPool.ts'
 import { PersistenceStackEventsTable } from '../persistence/PersistenceStackEventsTable.ts'
+import { PersistenceStackReportAggregatesTable } from '../persistence/PersistenceStackReportAggregatesTable.ts'
 import { NOTIFICATIONS_STACK_NAME } from './stackName.ts'
 
 export class NotificationsStack extends Stack {
@@ -32,6 +33,10 @@ export class NotificationsStack extends Stack {
 
 		const eventsTable = new PersistenceStackEventsTable(this)
 
+		const reportAggregatesTable = new PersistenceStackReportAggregatesTable(
+			this,
+		)
+
 		new AdminNotifications(this, {
 			lambdaSources,
 			baseLayerVersion,
@@ -46,6 +51,7 @@ export class NotificationsStack extends Stack {
 			baseDomainName,
 			userPool,
 			eventsTable,
+			reportAggregatesTable,
 		})
 	}
 }

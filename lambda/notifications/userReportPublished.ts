@@ -1,21 +1,28 @@
 import {
 	AdminGetUserCommand,
 	CognitoIdentityProviderClient,
+	ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
 import { fromEnv } from '@bifravst/from-env'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
 import type { SQSEvent } from 'aws-lambda'
 import { extractEventsFromDynamoDBEvent } from '../../persistence/dynamoDB/extractEventsFromDynamoDBEvent.ts'
+import { findReportByIdDynamoDB } from '../../persistence/dynamoDB/findReportByIdDynamoDB.ts'
 
-const { fromAddress, cognitoUserPoolId } = fromEnv({
+const { fromAddress, cognitoUserPoolId, reportAggregatesTableName } = fromEnv({
 	fromAddress: 'FROM_ADDRESS',
 	cognitoUserPoolId: 'COGNITO_USER_POOL_ID',
+	reportAggregatesTableName: 'REPORT_AGGREGATES_TABLE_NAME',
 })(process.env)
 
 const ses = new SESClient({})
 const cognito = new CognitoIdentityProviderClient({})
+const db = new DynamoDBClient({})
+
+const find = findReportByIdDynamoDB(db, reportAggregatesTableName)
 
 export const handler = middy<SQSEvent>()
 	.use(inputOutputLogger())
@@ -23,10 +30,33 @@ export const handler = middy<SQSEvent>()
 		const events = extractEventsFromDynamoDBEvent(event)
 
 		for (const reportEvent of events) {
+			const maybeReport = await find(reportEvent.aggregateId)
+
+			if (maybeReport === null) {
+				console.error(
+					`Report with ID ${reportEvent.aggregateId} not found, skipping notification`,
+				)
+				continue
+			}
+
+			const sub = maybeReport.authorId.split(':').pop()!
+
+			const { Users } = await cognito.send(
+				new ListUsersCommand({
+					UserPoolId: cognitoUserPoolId,
+					Filter: `sub = "${sub}"`,
+				}),
+			)
+
+			if ((Users?.length ?? 0) !== 1) {
+				console.warn(`No user found for sub ${sub}, skipping notification`)
+				continue
+			}
+
 			const userDetails = await cognito.send(
 				new AdminGetUserCommand({
 					UserPoolId: cognitoUserPoolId,
-					Username: reportEvent.actorId.split(':')[1],
+					Username: Users![0]!.Username!,
 				}),
 			)
 

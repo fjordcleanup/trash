@@ -8,6 +8,7 @@ import { EventNames } from '../../event/EventNames.ts'
 import type { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { NotificationLambdas } from '../lambdas/notificationLambdas.ts'
 import type { EventsTableReference } from '../persistence/EventsTableReference.ts'
+import type { ReportAggregatesTableReference } from '../persistence/ReportAggregatesTableReference.ts'
 import type { UserPoolReference } from '../persistence/UserPoolReference.ts'
 
 export class UserNotifications extends Construct {
@@ -19,12 +20,14 @@ export class UserNotifications extends Construct {
 			baseDomainName,
 			userPool,
 			eventsTable,
+			reportAggregatesTable,
 		}: {
 			lambdaSources: Pick<NotificationLambdas, 'userReportPublished'>
 			baseLayerVersion: BaseLayerVersion
 			baseDomainName: string
 			userPool: UserPoolReference
 			eventsTable: EventsTableReference
+			reportAggregatesTable: ReportAggregatesTableReference
 		},
 	) {
 		super(parent, UserNotifications.name)
@@ -40,6 +43,7 @@ export class UserNotifications extends Construct {
 				environment: {
 					FROM_ADDRESS: fromAddress,
 					COGNITO_USER_POOL_ID: userPool.userPool.userPoolId,
+					REPORT_AGGREGATES_TABLE_NAME: reportAggregatesTable.table.tableName,
 				},
 				events: [
 					new DynamoEventSource(eventsTable.table, {
@@ -79,6 +83,8 @@ export class UserNotifications extends Construct {
 		userPool.userPool.grant(
 			userReportPublishedFn.fn,
 			'cognito-idp:AdminGetUser',
+			'cognito-idp:ListUsers',
 		)
+		reportAggregatesTable.table.grantReadData(userReportPublishedFn.fn)
 	}
 }
