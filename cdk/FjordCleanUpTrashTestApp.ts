@@ -1,0 +1,43 @@
+import type { PackedLayer } from '@bifravst/aws-cdk-lambda-helpers/layer'
+import { App } from 'aws-cdk-lib'
+import type { NotificationLambdas } from './lambdas/notificationLambdas.ts'
+import type { PersistenceLambdas } from './lambdas/persistenceLambdas.ts'
+import type { UserLambdas } from './lambdas/userLambdas.ts'
+import { AccountStack } from './stacks/AccountStack.ts'
+import { PersistenceStack } from './stacks/PersistenceStack.ts'
+import { PublicAPIStack } from './stacks/PublicAPIStack.ts'
+
+export class FjordCleanUpTrashTestApp extends App {
+	public constructor({
+		baseLayerSource,
+		lambdaSources,
+	}: {
+		lambdaSources: {
+			user: UserLambdas
+			persistence: PersistenceLambdas
+			notifications: NotificationLambdas
+		}
+		baseLayerSource: PackedLayer
+	}) {
+		super({
+			context: {
+				isTest: true,
+				version: '0.0.0-development',
+			},
+		})
+
+		const account = new AccountStack(this)
+
+		const persistence = new PersistenceStack(this, {
+			lambdaSources: lambdaSources.persistence,
+			baseLayerSource,
+		})
+
+		const publicAPI = new PublicAPIStack(this, {
+			baseLayerSource,
+			lambdaSources: lambdaSources.user,
+		})
+		publicAPI.addDependency(account)
+		publicAPI.addDependency(persistence)
+	}
+}

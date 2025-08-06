@@ -6,21 +6,18 @@ import { ACCOUNT_STACK_NAME } from './stackName.ts'
 export class AccountStack extends Stack {
 	public constructor(
 		parent: App,
-		{
-			baseDomainName,
-			env,
-		}: {
+		args?: {
 			baseDomainName: string
 			env: Environment
 		},
 	) {
 		super(parent, ACCOUNT_STACK_NAME, {
-			env,
+			env: args?.env,
 			description: `Cognito instance for user registration.`,
 		})
 
 		const account = new AccountCognito(this, {
-			baseDomainName,
+			baseDomainName: args?.baseDomainName,
 		})
 
 		new CfnOutput(this, 'userPoolId', {

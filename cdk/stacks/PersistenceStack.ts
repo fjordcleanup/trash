@@ -26,7 +26,7 @@ export class PersistenceStack extends Stack {
 			lambdaSources,
 			baseLayerSource,
 		}: {
-			baseDomainName: string
+			baseDomainName?: string
 			lambdaSources: PersistenceLambdas
 			baseLayerSource: PackedLayer
 		},
@@ -61,6 +61,9 @@ export class PersistenceStack extends Stack {
 
 		// This bucket receives the original photos uploaded by users
 		// It is not public, but it has CORS enabled for PUT requests from the frontend
+		const allowedOrigins = ['http://localhost:8080']
+		if (baseDomainName !== undefined)
+			allowedOrigins.push(`https://trash.${baseDomainName}`)
 		const photoUploadBucket = new Bucket(this, 'photoUploadBucket', {
 			autoDeleteObjects: isTest(this),
 			removalPolicy: isTest(this)
@@ -70,10 +73,7 @@ export class PersistenceStack extends Stack {
 			blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
 			cors: [
 				{
-					allowedOrigins: [
-						'http://localhost:8080',
-						`https://trash.${baseDomainName}`,
-					],
+					allowedOrigins,
 					allowedMethods: [HttpMethods.PUT],
 					allowedHeaders: ['Content-Type'],
 				},

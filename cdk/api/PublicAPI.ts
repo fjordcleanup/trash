@@ -1,12 +1,19 @@
 import type { PackedLambdaFn } from '@bifravst/aws-cdk-lambda-helpers/cdk'
 import { isTest } from '@bifravst/aws-cdk-lambda-helpers/util'
 import type { aws_lambda as Lambda } from 'aws-cdk-lib'
-import { Duration, aws_apigateway as RestApi } from 'aws-cdk-lib'
-import type {
-	CognitoUserPoolsAuthorizer,
-	IntegrationOptions,
-	IRestApi,
-	MethodOptions,
+import { Duration } from 'aws-cdk-lib'
+import {
+	AuthorizationType,
+	type CognitoUserPoolsAuthorizer,
+	Cors,
+	DomainName,
+	EndpointType,
+	type IntegrationOptions,
+	LambdaIntegration,
+	type LambdaIntegrationOptions,
+	type Method,
+	type MethodOptions,
+	RestApi,
 } from 'aws-cdk-lib/aws-apigateway'
 import {
 	Certificate,
@@ -18,7 +25,7 @@ import { Construct } from 'constructs'
 
 export class PublicAPI extends Construct {
 	public readonly url: string
-	public readonly api: IRestApi
+	public readonly api: RestApi
 	private readonly corsMethods: Map<string, Set<string>> = new Map()
 
 	constructor(
@@ -26,15 +33,15 @@ export class PublicAPI extends Construct {
 		{
 			baseDomainName,
 		}: {
-			baseDomainName: string
+			baseDomainName?: string
 		},
 	) {
 		super(parent, PublicAPI.name)
 
-		this.api = new RestApi.RestApi(this, 'api', {
+		this.api = new RestApi(this, 'api', {
 			restApiName: 'Public API',
 			endpointConfiguration: {
-				types: [RestApi.EndpointType.REGIONAL],
+				types: [EndpointType.REGIONAL],
 			},
 			deployOptions: {
 				stageName: 'latest',
@@ -46,37 +53,43 @@ export class PublicAPI extends Construct {
 			},
 		})
 
-		const zone = HostedZone.fromLookup(this, 'zone', {
-			domainName: baseDomainName,
-		})
+		if (baseDomainName !== undefined) {
+			const zone = HostedZone.fromLookup(this, 'zone', {
+				domainName: baseDomainName,
+			})
 
-		const domainName = `api.${baseDomainName}`
+			const domainName = `api.${baseDomainName}`
+			// Certificate for API domain
+			const apiDomainCertificate = new Certificate(
+				this,
+				'apiDomainCertificate',
+				{
+					domainName,
+					validation: CertificateValidation.fromDns(zone),
+				},
+			)
 
-		// Certificate for API domain
-		const apiDomainCertificate = new Certificate(this, 'apiDomainCertificate', {
-			domainName,
-			validation: CertificateValidation.fromDns(zone),
-		})
+			const domain = new DomainName(this, 'apiDomain', {
+				domainName,
+				certificate: apiDomainCertificate,
+			})
+			domain.addBasePathMapping(this.api, { stage: this.api.deploymentStage })
 
-		const domain = new RestApi.DomainName(this, 'apiDomain', {
-			domainName,
-			certificate: apiDomainCertificate,
-		})
+			this.url = `https://${domainName}/`
 
-		domain.addBasePathMapping(this.api, { stage: this.api.deploymentStage })
-
-		this.url = `https://${domainName}/`
-
-		new ARecord(this, 'apiDomainAliasRecord', {
-			zone,
-			target: RecordTarget.fromAlias(
-				new ApiGatewayv2DomainProperties(
-					domain.domainNameAliasDomainName,
-					domain.domainNameAliasHostedZoneId,
+			new ARecord(this, 'apiDomainAliasRecord', {
+				zone,
+				target: RecordTarget.fromAlias(
+					new ApiGatewayv2DomainProperties(
+						domain.domainNameAliasDomainName,
+						domain.domainNameAliasHostedZoneId,
+					),
 				),
-			),
-			recordName: domainName,
-		})
+				recordName: domainName,
+			})
+		} else {
+			this.url = this.api.url
+		}
 	}
 
 	/**
@@ -86,9 +99,9 @@ export class PublicAPI extends Construct {
 	public addCORSPreflights(): void {
 		for (const [resource, methods] of this.corsMethods.entries()) {
 			this.api.root.resourceForPath(resource).addCorsPreflight({
-				allowOrigins: RestApi.Cors.ALL_ORIGINS,
+				allowOrigins: Cors.ALL_ORIGINS,
 				allowMethods: Array.from(methods).map((m) => m.toUpperCase()),
-				allowHeaders: [...RestApi.Cors.DEFAULT_HEADERS, 'If-Match', 'Accept'],
+				allowHeaders: [...Cors.DEFAULT_HEADERS, 'If-Match', 'Accept'],
 				exposeHeaders: ['ETag'],
 			})
 		}
@@ -101,7 +114,7 @@ export class PublicAPI extends Construct {
 		options?: RouteOptions,
 	): {
 		parsedResource: { method: string; resource: string }
-		method: RestApi.Method
+		method: Method
 	} {
 		const [method, resource] = methodAndRoute.split(' ', 2)
 		if (!isMethod(method)) throw new Error(`${method} is not a HTTP method.`)
@@ -112,7 +125,7 @@ export class PublicAPI extends Construct {
 		const resourceObj = this.api.root.resourceForPath(resource)
 
 		// Caching options
-		const integrationOptions: Writeable<RestApi.LambdaIntegrationOptions> = {
+		const integrationOptions: Writeable<LambdaIntegrationOptions> = {
 			proxy: true,
 		}
 		const methodOptions: Writeable<MethodOptions> = {}
@@ -135,13 +148,13 @@ export class PublicAPI extends Construct {
 		}
 
 		if (authorizer !== undefined) {
-			methodOptions.authorizationType = RestApi.AuthorizationType.COGNITO
+			methodOptions.authorizationType = AuthorizationType.COGNITO
 			methodOptions.authorizer = authorizer
 		}
 
 		const methodObj = resourceObj.addMethod(
 			method,
-			new RestApi.LambdaIntegration(fn, integrationOptions),
+			new LambdaIntegration(fn, integrationOptions),
 			methodOptions,
 		)
 

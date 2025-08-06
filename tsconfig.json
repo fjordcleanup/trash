@@ -43,6 +43,7 @@
     "command/**/*",
     "event/**/*",
     "persistence/**/*",
-    "aggregate"
+    "aggregate/**/*",
+    "aws/**/*"
   ]
 }

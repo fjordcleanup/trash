@@ -1,4 +1,5 @@
-import { Duration } from 'aws-cdk-lib'
+import { isTest } from '@bifravst/aws-cdk-lambda-helpers/util'
+import { Duration, RemovalPolicy } from 'aws-cdk-lib'
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager'
 import {
 	CfnIdentityPool,
@@ -41,7 +42,7 @@ export class AccountCognito extends Construct {
 		{
 			baseDomainName,
 		}: {
-			baseDomainName: string
+			baseDomainName?: string
 		},
 	) {
 		super(parent, AccountCognito.name)
@@ -61,7 +62,7 @@ export class AccountCognito extends Construct {
 				},
 			},
 			autoVerify: {
-				email: true,
+				email: !isTest(this),
 			},
 			signInPolicy: {
 				allowedFirstAuthFactors: {
@@ -79,63 +80,77 @@ export class AccountCognito extends Construct {
 					'Hello {username},\n\nYour verification code is {####}.\n\nThank you for helping Fjord CleanUP!',
 				emailStyle: VerificationEmailStyle.CODE,
 			},
-			email: UserPoolEmail.withSES({
-				fromEmail: `notifications@${baseDomainName}`,
-				fromName: 'Fjord CleanUP',
-				sesVerifiedDomain: baseDomainName,
-			}),
+			email:
+				isTest(this) || baseDomainName === undefined
+					? undefined
+					: UserPoolEmail.withSES({
+							fromEmail: `notifications@${baseDomainName}`,
+							fromName: 'Fjord CleanUP',
+							sesVerifiedDomain: baseDomainName,
+						}),
+			removalPolicy: isTest(this)
+				? RemovalPolicy.DESTROY
+				: RemovalPolicy.RETAIN,
 		})
 
-		const hostedZone = HostedZone.fromLookup(this, 'hostedZone', {
-			domainName: baseDomainName,
-		})
+		if (!isTest(this) && baseDomainName !== undefined) {
+			const hostedZone = HostedZone.fromLookup(this, 'hostedZone', {
+				domainName: baseDomainName,
+			})
+			// Create an A record that resolves the zone name to 1.1.1.1
+			// This is needed for the custom domain: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html#cognito-user-pools-add-custom-domain-prereq
+			const dummyRecord = new ARecord(this, 'ARecord', {
+				zone: hostedZone,
+				recordName: `accounts.${baseDomainName}`,
+				target: RecordTarget.fromIpAddresses('1.1.1.1'),
+			})
 
-		// Create an A record that resolves the zone name to 1.1.1.1
-		// This is needed for the custom domain: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html#cognito-user-pools-add-custom-domain-prereq
-		const dummyRecord = new ARecord(this, 'ARecord', {
-			zone: hostedZone,
-			recordName: `accounts.${baseDomainName}`,
-			target: RecordTarget.fromIpAddresses('1.1.1.1'),
-		})
+			// Reference the certificate ARN from the custom domain certificate stack using a custom resource
+			// This is necessary because the certificate must be in us-east-1 for CloudFront
+			// and the hosting stack may be in a different region.
+			// The certificate ARN is stored in an SSM parameter by the custom domain certificate stack
+			// @see https://aws.amazon.com/blogs/infrastructure-and-automation/read-parameters-across-aws-regions-with-aws-cloudformation-custom-resources/
+			const certificateArnReader = new SSMParameterReader(
+				this,
+				'CertificateARNReader',
+				{
+					parameterName: AccountCustomDomainCertificateStack.parameterName(),
+					region: 'us-east-1', // Certificates must be in us-east-1 for CloudFront
+				},
+			)
 
-		// Reference the certificate ARN from the custom domain certificate stack using a custom resource
-		// This is necessary because the certificate must be in us-east-1 for CloudFront
-		// and the hosting stack may be in a different region.
-		// The certificate ARN is stored in an SSM parameter by the custom domain certificate stack
-		// @see https://aws.amazon.com/blogs/infrastructure-and-automation/read-parameters-across-aws-regions-with-aws-cloudformation-custom-resources/
-		const certificateArnReader = new SSMParameterReader(
-			this,
-			'CertificateARNReader',
-			{
-				parameterName: AccountCustomDomainCertificateStack.parameterName(),
-				region: 'us-east-1', // Certificates must be in us-east-1 for CloudFront
-			},
-		)
+			const certificate = Certificate.fromCertificateArn(
+				this,
+				'userPoolDomainCertificate',
+				certificateArnReader.getParameterValue(),
+			)
 
-		const certificate = Certificate.fromCertificateArn(
-			this,
-			'userPoolDomainCertificate',
-			certificateArnReader.getParameterValue(),
-		)
+			// Create UserPool Domain for Managed Login
 
-		// Create UserPool Domain for Managed Login
+			const userPoolDomain = new UserPoolDomain(this, 'userPoolDomain', {
+				userPool: this.userPool,
+				customDomain: {
+					certificate,
+					domainName: `auth.accounts.${baseDomainName}`,
+				},
+				managedLoginVersion: ManagedLoginVersion.NEWER_MANAGED_LOGIN,
+			})
+			userPoolDomain.node.addDependency(dummyRecord)
 
-		const userPoolDomain = new UserPoolDomain(this, 'userPoolDomain', {
-			userPool: this.userPool,
-			customDomain: {
-				certificate,
-				domainName: `auth.accounts.${baseDomainName}`,
-			},
-			managedLoginVersion: ManagedLoginVersion.NEWER_MANAGED_LOGIN,
-		})
-		userPoolDomain.node.addDependency(dummyRecord)
+			// This is needed for the custom domain to work: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html#cognito-user-pools-add-custom-domain-console-step-2
+			new CnameRecord(this, 'CNAMERecord', {
+				zone: hostedZone,
+				recordName: `auth.accounts.${baseDomainName}`,
+				domainName: userPoolDomain.cloudFrontEndpoint,
+			})
+		}
 
-		// This is needed for the custom domain to work: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html#cognito-user-pools-add-custom-domain-console-step-2
-		new CnameRecord(this, 'CNAMERecord', {
-			zone: hostedZone,
-			recordName: `auth.accounts.${baseDomainName}`,
-			domainName: userPoolDomain.cloudFrontEndpoint,
-		})
+		const callbackUrls = [`http://localhost:8080/auth/callback`]
+		const logoutUrls = [`http://localhost:8080/`]
+		if (baseDomainName !== undefined) {
+			callbackUrls.push(`https://trash.${baseDomainName}/auth/callback`)
+			logoutUrls.push(`https://trash.${baseDomainName}/`)
+		}
 
 		this.userPoolClient = new UserPoolClient(this, 'UserPoolClient', {
 			userPool: this.userPool,
@@ -152,14 +167,8 @@ export class AccountCognito extends Construct {
 					authorizationCodeGrant: true,
 				},
 				scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE],
-				callbackUrls: [
-					`https://trash.${baseDomainName}/auth/callback`,
-					`http://localhost:8080/auth/callback`,
-				],
-				logoutUrls: [
-					`https://trash.${baseDomainName}/`,
-					`http://localhost:8080/`,
-				],
+				callbackUrls,
+				logoutUrls,
 			},
 			supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
 			accessTokenValidity: Duration.days(1),

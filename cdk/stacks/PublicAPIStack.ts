@@ -20,8 +20,8 @@ export class PublicAPIStack extends Stack {
 			baseLayerSource,
 			lambdaSources,
 		}: {
-			env: Environment
-			baseDomainName: string
+			env?: Environment
+			baseDomainName?: string
 			lambdaSources: UserLambdas
 			baseLayerSource: PackedLayer
 		},

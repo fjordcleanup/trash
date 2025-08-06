@@ -5,7 +5,7 @@ import { fromEnv } from '@bifravst/from-env'
 import chalk from 'chalk'
 import { env } from '../aws/env.ts'
 import pJSON from '../package.json' with { type: 'json' }
-import { FjordCleanUpTrashApp } from './FjordCleanUpTrashApp.ts'
+import { FjordCleanUpTrashProductionApp } from './FjordCleanUpTrashProductionApp.ts'
 import { pack as packBaseLayer } from './lambdas/baseLayer.ts'
 import { packLambdas as packNotificationLambdas } from './lambdas/notificationLambdas.ts'
 import { packLambdas as packPersistenceLambdas } from './lambdas/persistenceLambdas.ts'
@@ -35,7 +35,7 @@ for (const [k, v] of Object.entries({
 	console.debug(chalk.magenta(k), chalk.green(v))
 }
 
-new FjordCleanUpTrashApp({
+new FjordCleanUpTrashProductionApp({
 	repository,
 	baseDomainName,
 	gitHubOICDProviderArn: await ensureGitHubOIDCProvider({

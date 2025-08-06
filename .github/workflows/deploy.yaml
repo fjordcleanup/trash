@@ -60,11 +60,6 @@ jobs:
           node-version: "22.x"
           cache: "npm"
 
-      - name: Authenticate against NPM for private repo access
-        run:
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
-          ~/.npmrc
-
       - name: Install dependencies
         run: npm ci --no-audit
 
@@ -98,6 +93,26 @@ jobs:
             arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.STACK_PREFIX }}-cd-cd
           role-session-name: gh-actions-publish
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Bootstrap the stack
+        if: ${{ github.event.inputs.bootstrap == 'true' }}
+        env:
+          NODE_OPTIONS: "--experimental-transform-types --no-warnings"
+        run: |
+          npx cdk --app "node cdk/prod.ts" bootstrap
+
+      - name: Diff
+        env:
+          NODE_OPTIONS: "--experimental-transform-types --no-warnings"
+        run: |
+          npx cdk --app "node cdk/prod.ts" diff --all
+
+      # Disabled for now
+      # - name: Deploy to AWS
+      #   env:
+      #     NODE_OPTIONS: "--experimental-transform-types --no-warnings"
+      #   run: |
+      #     npx cdk --app "node cdk/prod.ts" deploy --require-approval never --all
 
       - name: Get bucket name
         run: |-
