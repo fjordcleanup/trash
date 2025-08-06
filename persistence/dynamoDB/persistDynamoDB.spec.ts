@@ -1,7 +1,7 @@
 import type { TransactWriteItemsCommandInput } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
 import { randomUUID } from 'crypto'
-import assert from 'node:assert'
+import assert from 'node:assert/strict'
 import { describe, it, mock } from 'node:test'
 import { decodeTime, ulid } from 'ulidx'
 import { fromEvent } from '../../aggregate/AggregateMeta.ts'

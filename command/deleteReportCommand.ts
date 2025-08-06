@@ -3,6 +3,8 @@ import { AggregateNames } from '../aggregate/AggregateNames.ts'
 import { inc, type AggregateVersion } from '../aggregate/AggregateVersion.ts'
 import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
+import { ConflictError } from '../domain/error/ConflictError.ts'
+import { NotFoundError } from '../domain/error/NotFoundError.ts'
 import type { ULID } from '../event/AggregateEvent.ts'
 import { EventNames } from '../event/EventNames.ts'
 import type { ReportDeletedEvent } from '../event/ReportDeletedEvent.ts'
@@ -18,11 +20,11 @@ export const deleteReportCommand =
 	): Promise<ReportAggregate> => {
 		const maybeReport = await findReportById(reportId)
 		if (maybeReport === null) {
-			throw new Error(`Report ${reportId} not found!`)
+			throw new NotFoundError(`Report ${reportId} not found!`)
 		}
 
 		if (maybeReport.$meta.version !== version) {
-			throw new Error(
+			throw new ConflictError(
 				`Report ${reportId} version mismatch! Expected ${version}, got ${maybeReport.$meta.version}`,
 			)
 		}

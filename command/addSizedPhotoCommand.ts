@@ -6,6 +6,7 @@ import type {
 	ReportAggregate,
 	SizedPhoto,
 } from '../aggregate/ReportAggregate.ts'
+import { NotFoundError } from '../domain/error/NotFoundError.ts'
 import type { ULID } from '../event/AggregateEvent.ts'
 import { EventNames } from '../event/EventNames.ts'
 import type { SizedPhotoAddedEvent } from '../event/SizedPhotoAddedEvent.ts'
@@ -22,7 +23,7 @@ export const addSizedPhotoCommand =
 	): Promise<ReportAggregate> => {
 		const maybeReport = await findReportById(reportId)
 		if (maybeReport === null) {
-			throw new Error(`Report ${reportId} not found!`)
+			throw new NotFoundError(`Report ${reportId} not found!`)
 		}
 
 		const event: SizedPhotoAddedEvent = {
