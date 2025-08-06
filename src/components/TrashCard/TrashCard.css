@@ -1,3 +1,7 @@
+.trash-card {
+  max-height: calc(100vh - 50px - 4rem);
+}
+
 .trash-card .card-header {
   width: 100%;
   height: auto;
@@ -60,4 +64,15 @@
   color: var(--fjordcleanup-color-text);
   font-weight: bold;
   height: 50px;
+}
+
+.trash-card .card-body .description {
+}
+
+.trash-card .card-body .description .description-body {
+  max-height: 25vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

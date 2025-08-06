@@ -44,7 +44,7 @@ const InputSchema = Type.Object({
 		lng: Type.Number({ minimum: -180, maximum: 180, title: 'Longitude' }),
 	}),
 	description: Type.Optional(
-		Type.String({ minLength: 1, title: 'Description' }),
+		Type.String({ minLength: 1, maxLength: 1000, title: 'Description' }),
 	),
 	numPhotos: Type.Integer({
 		title: 'Number of Photos',

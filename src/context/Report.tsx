@@ -53,7 +53,8 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 			location !== undefined &&
 			photos.length > 0 &&
 			trashType.length > 0 &&
-			(description === undefined || description.trim().length > 0),
+			(description === undefined ||
+				(description.trim().length > 0 && description.trim().length <= 1000)),
 		[location, photos, trashType, description],
 	)
 

@@ -74,6 +74,11 @@ export const Description = () => {
 		[OtherSelected, setTrashType, trashType],
 	)
 
+	const isValid = useMemo(
+		() => trashType.length === 0 && (description?.length ?? 0) <= 1000,
+		[trashType.length, description],
+	)
+
 	return (
 		<>
 			<div class="row justify-content-center">
@@ -249,11 +254,14 @@ export const Description = () => {
 							aria-describedby="helpBlock"
 							onBlur={(e) => setDescription((e.target as any).value)}
 							value={description}
+							maxLength={1000}
 						></textarea>
 						<div id="helpBlock" class="form-text">
 							Please provide any additional information that might help us with
 							the cleanup, such as the exact location of the trash or any other
 							relevant details.
+							<br />
+							<small class="text-muted">Max 1000 characters.</small>
 						</div>
 					</div>
 				</div>
@@ -270,7 +278,7 @@ export const Description = () => {
 						<button
 							onClick={() => route('/report/preview')}
 							class="btn btn-primary"
-							disabled={trashType.length === 0}
+							disabled={isValid}
 						>
 							Next
 						</button>
