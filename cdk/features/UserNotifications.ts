@@ -76,6 +76,9 @@ export class UserNotifications extends Construct {
 				],
 			},
 		)
-		userPool.userPool.grant(userReportPublishedFn.fn, 'cognito-idp:UserGetUser')
+		userPool.userPool.grant(
+			userReportPublishedFn.fn,
+			'cognito-idp:AdminGetUser',
+		)
 	}
 }
