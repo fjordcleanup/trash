@@ -12,7 +12,7 @@ import { NotificationsStack } from './stacks/NotificationsStack.ts'
 import { PersistenceStack } from './stacks/PersistenceStack.ts'
 import { PublicAPIStack } from './stacks/PublicAPIStack.ts'
 
-export class FjordCleanUpTrashApp extends App {
+export class FjordCleanUpTrashProductionApp extends App {
 	public constructor({
 		version,
 		baseDomainName,
