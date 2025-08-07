@@ -28,6 +28,11 @@ const Nav = () => {
 		<div class="topNav">
 			<nav class="left d-flex">
 				<img src="/static/logo.webp" alt="Fjord CleanUP" class="logo" />
+				<div class="mobile-nav">
+					<a href="/report" class="ms-2 d-flex align-items-center me-2">
+						<PlusCircle class="me-2" /> Report
+					</a>
+				</div>
 				<div class="desktop-nav">
 					<a href="/" class="ms-2 d-flex align-items-center me-2">
 						<Home class="me-2" /> Home

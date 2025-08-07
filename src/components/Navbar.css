@@ -89,6 +89,10 @@ div.topNav a {
   justify-content: center;
 }
 
+.mobile-nav {
+  display: flex;
+}
+
 /* Responsive breakpoints */
 @media (max-width: 768px) {
   .mobile-menu-toggle {
@@ -105,5 +109,11 @@ div.topNav a {
 
   div.topNav .logo {
     margin-right: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-nav {
+    display: none;
   }
 }
