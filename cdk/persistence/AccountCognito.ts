@@ -77,7 +77,7 @@ export class AccountCognito extends Construct {
 			userVerification: {
 				emailSubject: '[Fjord CleanUP] Verify your email',
 				emailBody:
-					'Hello {username},\n\nYour verification code is {####}.\n\nThank you for helping Fjord CleanUP!',
+					'Hei,\n\nyour verification code is {####}.\n\nThank you for helping Fjord CleanUP!',
 				emailStyle: VerificationEmailStyle.CODE,
 			},
 			email:
