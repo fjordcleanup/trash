@@ -16,6 +16,7 @@ export const PhotoUpload = ({
 					type="file"
 					accept="image/jpeg"
 					ref={ref}
+					class="btn btn-primary"
 					onChange={(e) => {
 						setProblem(null)
 						if (e.target === null) return

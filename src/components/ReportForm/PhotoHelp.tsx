@@ -5,10 +5,14 @@ export const PhotoHelp = ({ limit }: { limit: number }) => (
 		<div class="col-12 col-md-8 col-lg-6 mb-4">
 			<h2 class="fs-2 mb-3 d-flex align-items-center">
 				<Images class="flex-shrink-0 me-2" size={24} />
-				<span>Take a picture (or two)</span>
+				<span>Share a picture (or two)</span>
 			</h2>
 			<p>
 				Upload up to {limit} photos of the location where we can find the trash.
+			</p>
+			<p>
+				You can use your phone camera to take a photo of the trash you want to
+				report and return back to this page.
 			</p>
 			<p class="d-flex">
 				<ArrowDownToDot class="flex-shrink-0 me-2" size={24} />

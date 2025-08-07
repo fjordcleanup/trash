@@ -1,10 +1,11 @@
 import { useMapSettings } from '#context/MapSettings.tsx'
 import { useReports } from '#context/Reports.tsx'
+import { TrashType } from '#domain/TrashType.ts'
+import { shortId } from '#domain/shortId.ts'
 import cx from 'classnames'
 import maplibregl from 'maplibre-gl'
 import { route } from 'preact-router'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { TrashType } from '../../domain/TrashType.ts'
 
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './Map.css'
@@ -113,7 +114,7 @@ export const Map = ({
 
 			const titleEl = document.createElement('div')
 			titleEl.className = 'title'
-			let title = report.$meta.id.slice(-6)
+			let title = shortId(report)
 			if (report.isPublic !== true) title = '🔒' + title
 			titleEl.textContent = title
 			el.appendChild(titleEl)

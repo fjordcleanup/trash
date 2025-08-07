@@ -1,4 +1,5 @@
 import { useReport } from '#context/Report.tsx'
+import { shortId } from '#domain/shortId.ts'
 import { Sparkles } from 'lucide-preact'
 import { route } from 'preact-router'
 
@@ -19,16 +20,23 @@ export const ThankYou = () => {
 						</small>
 					</h2>
 					<p>We will review your report and publish it as soon as possible.</p>
-					<p>
-						You will receive an email when your report is published. Your report
-						ID is <code>{reportId}</code>.
-					</p>
+					<p>You will receive an email when your report is published.</p>
 					<p>
 						You can also view all reports on the <a href="/">home page</a>.
 					</p>
 					<p>
 						If you have any feedback or questions, please do not hesitate to{' '}
 						<a href="/about">reach out</a>.
+					</p>
+					<hr />
+					<p>
+						<small>
+							Your report ID is{' '}
+							<abbr title={reportId}>
+								{shortId({ $meta: { id: reportId! } })}
+							</abbr>
+							.
+						</small>
 					</p>
 				</div>
 			</div>

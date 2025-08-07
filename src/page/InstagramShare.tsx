@@ -3,6 +3,7 @@ import { TrashCardHeader } from '#components/TrashCard/TrashCardHeader.tsx'
 import { useReports } from '#context/Reports.tsx'
 import { useMemo } from 'preact/hooks'
 
+import { shortId } from '#domain/shortId.ts'
 import './InstagramShare.css'
 
 export const InstagramShare = (props: { reportId: string }) => {
@@ -31,7 +32,7 @@ export const InstagramShare = (props: { reportId: string }) => {
 								<small class="text-muted">Details</small>
 								<br />
 								<strong>
-									{document.location.host}/map/{report.$meta.id.slice(-6)}
+									{document.location.host}/map/{shortId(report)}
 								</strong>
 							</p>
 						</div>

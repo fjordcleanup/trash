@@ -1,6 +1,7 @@
 import { MiniMap } from '#components/MiniMap.tsx'
 import { TrashTypeSymbol } from '#components/TrashTypeSymbol.tsx'
 import type { Report } from '#context/Reports.tsx'
+import { shortId } from '#domain/shortId.ts'
 import cx from 'classnames'
 import { useMemo } from 'preact/hooks'
 import { PhotoSize } from '../../../domain/PhotoSize.ts'
@@ -31,7 +32,7 @@ export const TrashCardHeader = ({ report }: { report: Report }) => {
 				))}
 				<TrashTypeSymbol types={report.type} />
 			</div>
-			<div class="id">{report.$meta.id.slice(-6)}</div>
+			<div class="id">{shortId(report)}</div>
 		</>
 	)
 }

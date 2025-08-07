@@ -1,3 +1,4 @@
+import type { ULID } from '#event/AggregateEvent.ts'
 import type { LngLat } from 'maplibre-gl'
 import { createContext, type ComponentChildren } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
@@ -19,7 +20,7 @@ export const ReportContext = createContext<{
 	trashType: Array<TrashType>
 	setTrashType: (args: Array<TrashType>) => void
 	isValid: boolean
-	reportId?: string
+	reportId?: ULID
 	report: () => void
 	submitting: boolean
 	clear: () => void
@@ -45,7 +46,7 @@ export const Provider = ({ children }: { children: ComponentChildren }) => {
 	const [photos, setPhotos] = useState<Blob[]>([])
 	const [description, setDescription] = useState<string | undefined>(undefined)
 	const [trashType, setTrashType] = useState<Array<TrashType>>([])
-	const [reportId, setReportId] = useState<string>()
+	const [reportId, setReportId] = useState<ULID>()
 	const [submitting, setSubmitting] = useState(false)
 
 	const isValid = useMemo(
