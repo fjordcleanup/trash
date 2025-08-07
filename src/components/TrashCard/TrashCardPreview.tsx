@@ -1,5 +1,5 @@
+import type { TrashType } from '#domain/TrashType.ts'
 import cx from 'classnames'
-import type { TrashType } from '../../../domain/TrashType.ts'
 import { MiniMap } from '../MiniMap.tsx'
 import { TrashTypeSymbol } from '../TrashTypeSymbol.tsx'
 import { Photo } from './Photo.tsx'

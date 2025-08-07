@@ -1,10 +1,10 @@
 import { MiniMap } from '#components/MiniMap.tsx'
 import { TrashTypeSymbol } from '#components/TrashTypeSymbol.tsx'
 import type { Report } from '#context/Reports.tsx'
+import { PhotoSize } from '#domain/PhotoSize.ts'
 import { shortId } from '#domain/shortId.ts'
 import cx from 'classnames'
 import { useMemo } from 'preact/hooks'
-import { PhotoSize } from '../../../domain/PhotoSize.ts'
 import { Photo } from './Photo.tsx'
 
 export const TrashCardHeader = ({ report }: { report: Report }) => {

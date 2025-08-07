@@ -1,3 +1,6 @@
+import { AccessDeniedError } from '#domain/error/AccessDeniedError.ts'
+import { ConflictError } from '#domain/error/ConflictError.ts'
+import { NotFoundError } from '#domain/error/NotFoundError.ts'
 import { aProblem } from '@hello.nrfcloud.com/lambda-helpers/aProblem'
 import { ValidationFailedError } from '@hello.nrfcloud.com/lambda-helpers/validateInput'
 import { formatTypeBoxErrors } from '@hello.nrfcloud.com/proto'
@@ -8,9 +11,6 @@ import type {
 	APIGatewayProxyStructuredResultV2,
 	Context as LambdaContext,
 } from 'aws-lambda'
-import { AccessDeniedError } from '../../domain/error/AccessDeniedError.ts'
-import { ConflictError } from '../../domain/error/ConflictError.ts'
-import { NotFoundError } from '../../domain/error/NotFoundError.ts'
 
 export const handleDomainErrors = (
 	onInternalError: typeof console.error = console.error,

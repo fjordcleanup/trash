@@ -1,8 +1,8 @@
+import { TrashType } from '#domain/TrashType.ts'
+import type { ULID } from '#event/AggregateEvent.ts'
 import { ulid } from 'ulidx'
 import { v1 } from '../aggregate/AggregateVersion.ts'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
-import { TrashType } from '../domain/TrashType.ts'
-import type { ULID } from '../event/AggregateEvent.ts'
 import { testActor } from './testActor.ts'
 
 export const testReport = (): ReportAggregate => {

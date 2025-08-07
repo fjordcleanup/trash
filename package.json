@@ -4,8 +4,11 @@
   "description": "Web application to view and report trash to Fjord CleanUP",
   "type": "module",
   "imports": {
-    "#utils/*": {
-      "import": "./src/utils/*"
+    "#domain/*": {
+      "import": "./domain/*"
+    },
+    "#event/*": {
+      "import": "./event/*"
     }
   },
   "repository": {

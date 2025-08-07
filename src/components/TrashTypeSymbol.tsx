@@ -1,9 +1,9 @@
+import { TrashType } from '#domain/TrashType.ts'
 import { EScooter } from '#icons/Escooter.tsx'
 import { Tire } from '#icons/Tire.tsx'
 import { Trash } from '#icons/Trash.tsx'
 import cx from 'classnames'
 import { Frown } from 'lucide-preact'
-import { TrashType } from '../../domain/TrashType.ts'
 
 import './TrashTypeSymbol.css'
 

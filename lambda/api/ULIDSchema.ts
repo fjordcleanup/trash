@@ -1,5 +1,5 @@
+import type { ULID } from '#event/AggregateEvent.ts'
 import { Type } from '@sinclair/typebox'
-import type { ULID } from '../../event/AggregateEvent.ts'
 
 /**
  * Converts a string to an ULID

@@ -1,3 +1,4 @@
+import type { AggregateEvent, ULID } from '#event/AggregateEvent.ts'
 import type { TransactWriteItemsCommandInput } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
 import { randomUUID } from 'crypto'
@@ -6,7 +7,6 @@ import { describe, it, mock } from 'node:test'
 import { decodeTime, ulid } from 'ulidx'
 import { fromEvent } from '../../aggregate/AggregateMeta.ts'
 import { v, v1 } from '../../aggregate/AggregateVersion.ts'
-import type { AggregateEvent, ULID } from '../../event/AggregateEvent.ts'
 import { persistDynamoDB } from './persistDynamoDB.ts'
 
 void describe('persistDynamoDB()', () => {

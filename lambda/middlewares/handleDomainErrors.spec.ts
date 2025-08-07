@@ -1,3 +1,6 @@
+import { AccessDeniedError } from '#domain/error/AccessDeniedError.ts'
+import { ConflictError } from '#domain/error/ConflictError.ts'
+import { NotFoundError } from '#domain/error/NotFoundError.ts'
 import { ValidationFailedError } from '@hello.nrfcloud.com/lambda-helpers/validateInput'
 import { HttpStatusCode } from '@hello.nrfcloud.com/proto/hello'
 import type { Request } from '@middy/core'
@@ -8,9 +11,6 @@ import type {
 } from 'aws-lambda'
 import assert from 'node:assert/strict'
 import { describe, it, mock } from 'node:test'
-import { AccessDeniedError } from '../../domain/error/AccessDeniedError.ts'
-import { ConflictError } from '../../domain/error/ConflictError.ts'
-import { NotFoundError } from '../../domain/error/NotFoundError.ts'
 import { handleDomainErrors } from './handleDomainErrors.ts'
 
 const createMockRequest = (

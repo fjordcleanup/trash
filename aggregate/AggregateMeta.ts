@@ -1,5 +1,5 @@
+import type { AggregateEvent, ULID } from '#event/AggregateEvent.ts'
 import { decodeTime } from 'ulidx'
-import type { AggregateEvent, ULID } from '../event/AggregateEvent.ts'
 import type { AggregateVersion } from './AggregateVersion.ts'
 import { inc, v1 } from './AggregateVersion.ts'
 
