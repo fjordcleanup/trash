@@ -1,5 +1,5 @@
 import type { AggregateEvent, ULID } from '#event/AggregateEvent.ts'
-import assert from 'node:assert'
+import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import { ulid } from 'ulidx'
 import { testActor } from '../../test/testActor.ts'
@@ -59,8 +59,8 @@ void describe('reduceEvents()', () => {
 
 		const reducer = reduceEvents<TestAggregate>(apply)
 		const agg = reducer(events)
-		assert.strictEqual(agg.value, 3)
-		assert.strictEqual(agg.$meta.version, events[2]!.aggregateVersion)
+		assert.equal(agg.value, 3)
+		assert.equal(agg.$meta.version, events[2]!.aggregateVersion)
 		assert.deepStrictEqual(
 			processed,
 			events.map((e) => e.eventName),
@@ -104,8 +104,8 @@ void describe('reduceEvents()', () => {
 		const reducer = reduceEvents<TestAggregate>(apply)
 		const agg1 = reducer([firstEvent])
 		const agg2 = reducer([secondEvent], agg1)
-		assert.strictEqual(agg2.value, 2)
-		assert.strictEqual(agg2.$meta.version, secondEvent.aggregateVersion)
+		assert.equal(agg2.value, 2)
+		assert.equal(agg2.$meta.version, secondEvent.aggregateVersion)
 	})
 
 	void it('should throw when events array is empty', () => {

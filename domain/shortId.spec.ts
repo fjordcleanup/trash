@@ -8,6 +8,6 @@ void describe('shortId()', () => {
 	void it('should return the last 6 characters of the id', () => {
 		const id = ulid() as ULID
 		const result = shortId({ $meta: { id } })
-		assert.strictEqual(result, id.slice(-6))
+		assert.equal(result, id.slice(-6))
 	})
 })
