@@ -1,14 +1,11 @@
 import type { PackedLambdaFn } from '@bifravst/aws-cdk-lambda-helpers/cdk'
-import { isTest } from '@bifravst/aws-cdk-lambda-helpers/util'
 import type { aws_lambda as Lambda } from 'aws-cdk-lib'
-import { Duration } from 'aws-cdk-lib'
 import {
 	AuthorizationType,
 	type CognitoUserPoolsAuthorizer,
 	Cors,
 	DomainName,
 	EndpointType,
-	type IntegrationOptions,
 	LambdaIntegration,
 	type LambdaIntegrationOptions,
 	type Method,
@@ -45,11 +42,6 @@ export class PublicAPI extends Construct {
 			},
 			deployOptions: {
 				stageName: 'latest',
-				// Caching
-				cachingEnabled: !isTest(this),
-				cacheClusterEnabled: !isTest(this),
-				cacheClusterSize: !isTest(this) ? '0.5' : undefined,
-				cacheTtl: !isTest(this) ? Duration.minutes(1) : undefined,
 			},
 		})
 
@@ -111,7 +103,6 @@ export class PublicAPI extends Construct {
 		methodAndRoute: string,
 		{ fn }: PackedLambdaFn,
 		authorizer?: CognitoUserPoolsAuthorizer,
-		options?: RouteOptions,
 	): {
 		parsedResource: { method: string; resource: string }
 		method: Method
@@ -129,23 +120,6 @@ export class PublicAPI extends Construct {
 			proxy: true,
 		}
 		const methodOptions: Writeable<MethodOptions> = {}
-		if (options?.cachingEnabled === true) {
-			if (method !== 'GET')
-				throw new Error(
-					`Cache key parameters can only be used with GET methods.`,
-				)
-			if (options.cacheKeyParameters !== undefined) {
-				integrationOptions.cacheKeyParameters = options.cacheKeyParameters
-				methodOptions.requestParameters =
-					options.cacheKeyParameters.reduce(
-						(acc, param) => ({
-							...acc,
-							[param]: true,
-						}),
-						{},
-					) ?? {}
-			}
-		}
 
 		if (authorizer !== undefined) {
 			methodOptions.authorizationType = AuthorizationType.COGNITO
@@ -169,17 +143,5 @@ export class PublicAPI extends Construct {
 
 const isMethod = (method?: string): method is Lambda.HttpMethod =>
 	['GET', 'PUT', 'HEAD', 'POST', 'DELETE', 'PATCH'].includes(method ?? '')
-
-export type RouteOptions =
-	| {
-			cachingEnabled: true
-			/**
-			 * Specify cache key parameters for the integration.
-			 * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html#api-gateway-caching-parameters
-			 * @example ['method.request.header.Authorization', 'method.request.querystring.param1', 'method.request.header.param2']
-			 */
-			cacheKeyParameters?: IntegrationOptions['cacheKeyParameters']
-	  }
-	| { cachingEnabled: false }
 
 type Writeable<T> = { -readonly [K in keyof T]: T[K] }

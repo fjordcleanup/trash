@@ -60,9 +60,7 @@ export class PublicAPIOperations extends Construct {
 				REPORT_AGGREGATES_TABLE_NAME: reportAggregatesTable.table.tableName,
 			},
 		})
-		api.addRoute('GET /reports', listReportsFn, undefined, {
-			cachingEnabled: true,
-		})
+		api.addRoute('GET /reports', listReportsFn)
 		reportAggregatesTable.table.grantReadData(listReportsFn.fn)
 	}
 }
