@@ -3,6 +3,7 @@ import { LambdaClient } from '@aws-sdk/client-lambda'
 import type { PackedLambda } from '@bifravst/aws-cdk-lambda-helpers'
 import { updateLambdaCode } from '@bifravst/aws-cdk-lambda-helpers/util'
 import chalk from 'chalk'
+import path from 'node:path'
 import { packLambdas as packNotificationLambdas } from '../lambdas/notificationLambdas.ts'
 import { packLambdas as packPersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { packLambdas as packUserLambdas } from '../lambdas/userLambdas.ts'
@@ -16,12 +17,14 @@ const cf = new CloudFormationClient()
 const lambda = new LambdaClient()
 const update = updateLambdaCode({ cf, lambda })
 
+const tsConfigFilePath = path.join(process.cwd(), 'tsconfig.json')
+
 const start = new Date()
 const [UserLambdas, PersistenceLambdas, NotificationLambdas] =
 	await Promise.all([
-		packUserLambdas(),
-		packPersistenceLambdas(),
-		packNotificationLambdas(),
+		packUserLambdas(tsConfigFilePath),
+		packPersistenceLambdas(tsConfigFilePath),
+		packNotificationLambdas(tsConfigFilePath),
 	])
 console.debug('Packed lambdas in', new Date().getTime() - start.getTime(), 'ms')
 

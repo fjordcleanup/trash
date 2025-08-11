@@ -8,9 +8,12 @@ export type PersistenceLambdas = {
 	resizePhotos: PackedLambda
 }
 
-export const packLambdas = async (): Promise<PersistenceLambdas> => ({
+export const packLambdas = async (
+	tsConfigFilePath: string,
+): Promise<PersistenceLambdas> => ({
 	resizePhotos: await packLambdaFromPath({
 		id: `${PERSISTENCE_STACK_NAME}-resizePhotos`,
 		sourceFilePath: 'lambda/resizePhotos.ts',
+		tsConfigFilePath,
 	}),
 })

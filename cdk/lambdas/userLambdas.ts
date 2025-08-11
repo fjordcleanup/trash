@@ -11,21 +11,27 @@ export type UserLambdas = {
 	publishReport: PackedLambda
 }
 
-export const packLambdas = async (): Promise<UserLambdas> => ({
+export const packLambdas = async (
+	tsConfigFilePath: string,
+): Promise<UserLambdas> => ({
 	submitReport: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-submitReport`,
 		sourceFilePath: 'lambda/submitReport.ts',
+		tsConfigFilePath,
 	}),
 	listReports: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-listReports`,
 		sourceFilePath: 'lambda/listReports.ts',
+		tsConfigFilePath,
 	}),
 	deleteReport: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-deleteReport`,
 		sourceFilePath: 'lambda/deleteReport.ts',
+		tsConfigFilePath,
 	}),
 	publishReport: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-publishReport`,
 		sourceFilePath: 'lambda/publishReport.ts',
+		tsConfigFilePath,
 	}),
 })

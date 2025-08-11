@@ -3,6 +3,7 @@ import { STSClient } from '@aws-sdk/client-sts'
 import { ensureGitHubOIDCProvider } from '@bifravst/ci'
 import { fromEnv } from '@bifravst/from-env'
 import chalk from 'chalk'
+import path from 'node:path'
 import { env } from '../aws/env.ts'
 import pJSON from '../package.json' with { type: 'json' }
 import { FjordCleanUpTrashProductionApp } from './FjordCleanUpTrashProductionApp.ts'
@@ -35,6 +36,8 @@ for (const [k, v] of Object.entries({
 	console.debug(chalk.magenta(k), chalk.green(v))
 }
 
+const tsConfigFilePath = path.join(process.cwd(), 'tsconfig.json')
+
 new FjordCleanUpTrashProductionApp({
 	repository,
 	baseDomainName,
@@ -43,9 +46,9 @@ new FjordCleanUpTrashProductionApp({
 	}),
 	env: accountEnv,
 	lambdaSources: {
-		user: await packUserLambdas(),
-		persistence: await packPersistenceLambdas(),
-		notifications: await packNotificationLambdas(),
+		user: await packUserLambdas(tsConfigFilePath),
+		persistence: await packPersistenceLambdas(tsConfigFilePath),
+		notifications: await packNotificationLambdas(tsConfigFilePath),
 	},
 	baseLayerSource: await packBaseLayer(),
 	version,
