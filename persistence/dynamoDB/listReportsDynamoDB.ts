@@ -1,7 +1,7 @@
 import { type DynamoDBClient, paginateScan } from '@aws-sdk/client-dynamodb'
+import { unmarshallAggregate } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
 import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
 import type { listReportsFn } from '../listReportsFn.ts'
-import { unmarshallAggregate } from './unmarshallAggregate.ts'
 
 export const listReportsDynamoDB =
 	(db: DynamoDBClient, TableName: string): listReportsFn =>

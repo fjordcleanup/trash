@@ -1,7 +1,7 @@
-import { TrashType } from '#domain/TrashType.ts'
-import type { ULID } from '#event/AggregateEvent.ts'
+import { v1 } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
+import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
+import { TrashType } from '@fjordcleanup/trash-proto'
 import { ulid } from 'ulidx'
-import { v1 } from '../aggregate/AggregateVersion.ts'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
 import { testActor } from './testActor.ts'
 

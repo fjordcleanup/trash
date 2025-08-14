@@ -1,6 +1,6 @@
-import { TrashType } from '#domain/TrashType.ts'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { fromEnv } from '@bifravst/from-env'
+import { TrashType } from '@fjordcleanup/trash-proto'
 import { addCORSHeaders } from '@hello.nrfcloud.com/lambda-helpers/addCORSHeaders'
 import { addVersionHeader } from '@hello.nrfcloud.com/lambda-helpers/addVersionHeader'
 import { aResponse } from '@hello.nrfcloud.com/lambda-helpers/aResponse'

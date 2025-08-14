@@ -1,8 +1,8 @@
 import { type DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
 import { marshall } from '@aws-sdk/util-dynamodb'
+import { unmarshallAggregate } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
 import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
 import type { findReportByIdFn } from '../findReportByIdFn.ts'
-import { unmarshallAggregate } from './unmarshallAggregate.ts'
 
 export const findReportByIdDynamoDB =
 	(db: DynamoDBClient, TableName: string): findReportByIdFn =>

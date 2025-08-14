@@ -6,10 +6,10 @@ import {
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
 import { fromEnv } from '@bifravst/from-env'
+import { extractEventsFromDynamoDBEvent } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
 import type { SQSEvent } from 'aws-lambda'
-import { extractEventsFromDynamoDBEvent } from '../../persistence/dynamoDB/extractEventsFromDynamoDBEvent.ts'
 import { findReportByIdDynamoDB } from '../../persistence/dynamoDB/findReportByIdDynamoDB.ts'
 
 const { fromAddress, cognitoUserPoolId, reportAggregatesTableName } = fromEnv({

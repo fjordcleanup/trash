@@ -1,5 +1,8 @@
+import type { AggregateEvent } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
-import type { AggregateEvent } from './AggregateEvent.ts'
+import type { EventNames } from './EventNames.ts'
 
-export type ReportCreatedEvent = AggregateEvent &
-	Omit<ReportAggregate, '$meta' | 'authorId'>
+export type ReportCreatedEvent = Omit<AggregateEvent, 'eventName'> &
+	Omit<ReportAggregate, '$meta' | 'authorId'> & {
+		eventName: EventNames.ReportCreated
+	}

@@ -1,6 +1,8 @@
-import { AccessDeniedError } from '#domain/error/AccessDeniedError.ts'
-import { ConflictError } from '#domain/error/ConflictError.ts'
-import { NotFoundError } from '#domain/error/NotFoundError.ts'
+import { AccessDeniedError } from '#error/AccessDeniedError.ts'
+import {
+	ConflictError,
+	NotFoundError,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/error'
 import { ValidationFailedError } from '@hello.nrfcloud.com/lambda-helpers/validateInput'
 import { HttpStatusCode } from '@hello.nrfcloud.com/proto/hello'
 import type { Request } from '@middy/core'

@@ -1,11 +1,16 @@
-import { ConflictError } from '#domain/error/ConflictError.ts'
-import { NotFoundError } from '#domain/error/NotFoundError.ts'
-import type { ULID } from '#event/AggregateEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import type { ReportPublishedEvent } from '#event/ReportPublishedEvent.ts'
+import {
+	inc,
+	type AggregateVersion,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
+import {
+	ConflictError,
+	NotFoundError,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/error'
+import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
 import { ulid } from 'ulidx'
 import { AggregateNames } from '../aggregate/AggregateNames.ts'
-import { inc, type AggregateVersion } from '../aggregate/AggregateVersion.ts'
 import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
 import type { findReportByIdFn } from '../persistence/findReportByIdFn.ts'

@@ -60,34 +60,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.x"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci --no-audit
-
-      - name: Ensure it builds
-        env:
-          COGNITO_USER_POOL_CLIENT_ID: some-client-id
-          COGNITO_USER_POOL_URL: https://cognito-idp.us-east-1.amazonaws.com/us-east-1_some-pool-id
-          COGNITO_IDENTITY_POOL_ID: "eu-north-1:ae157ebe-bf8b-4054-83d4-8a8d4ff89d09"
-          AWS_REGION: eu-north-1
-          MAP_API_KEY: v1.public.some-map-api-key
-
-        run: |
-          npm run build
-          cp -L -r ./static ./build
-
   e2e-tests:
-    needs: [stack-name, build, unit-tests]
+    needs: [stack-name, unit-tests]
 
     runs-on: ubuntu-latest
 

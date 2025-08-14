@@ -1,5 +1,3 @@
-import { PhotoSize } from '#domain/PhotoSize.ts'
-import type { ULID } from '#event/AggregateEvent.ts'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import {
 	GetObjectCommand,
@@ -7,6 +5,8 @@ import {
 	S3Client,
 } from '@aws-sdk/client-s3'
 import { fromEnv } from '@bifravst/from-env'
+import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
+import { PhotoSize } from '@fjordcleanup/trash-proto'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
 import type { S3Event } from 'aws-lambda'

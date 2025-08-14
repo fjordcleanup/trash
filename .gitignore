@@ -11,7 +11,6 @@
 # https://docs.github.com/en/get-started/git-basics/ignoring-files#configuring-ignored-files-for-all-repositories-on-your-computer
 # 
 node_modules/
-build/
 cdk.out/
 dist/
 logs/

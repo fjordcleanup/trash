@@ -1,10 +1,10 @@
-import { NotFoundError } from '#domain/error/NotFoundError.ts'
-import type { ULID } from '#event/AggregateEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import type { SizedPhotoAddedEvent } from '#event/SizedPhotoAddedEvent.ts'
+import { inc } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
+import { NotFoundError } from '@coderbyheart/aws-dynamodb-es-cqrs/error'
+import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
 import { ulid } from 'ulidx'
 import { AggregateNames } from '../aggregate/AggregateNames.ts'
-import { inc } from '../aggregate/AggregateVersion.ts'
 import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
 import type {
 	ReportAggregate,

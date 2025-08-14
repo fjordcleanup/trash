@@ -1,6 +1,5 @@
-import type { PhotoSize } from '#domain/PhotoSize.ts'
-import type { TrashType } from '#domain/TrashType.ts'
-import type { AggregateMeta } from './AggregateMeta.ts'
+import type { AggregateMeta } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
+import type { PhotoSize, TrashType } from '@fjordcleanup/trash-proto'
 
 export type SizedPhoto = {
 	[PhotoSize.placeholder]: string

@@ -1,13 +1,18 @@
-import { assertAggregateEvent } from '#event/assertAggregateEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
-import { isNamedEvent } from '#event/isNamedEvent.ts'
 import type { ReportCreatedEvent } from '#event/ReportCreatedEvent.ts'
 import type { ReportDeletedEvent } from '#event/ReportDeletedEvent.ts'
 import type { ReportPublishedEvent } from '#event/ReportPublishedEvent.ts'
 import type { SizedPhotoAddedEvent } from '#event/SizedPhotoAddedEvent.ts'
-import { fromEvent, updateFromEvent } from '../AggregateMeta.ts'
+import {
+	fromEvent,
+	reduceEvents,
+	updateFromEvent,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
+import {
+	assertAggregateEvent,
+	isNamedEvent,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/event'
 import type { ReportAggregate } from '../ReportAggregate.ts'
-import { reduceEvents } from './reduceEvents.ts'
 
 export const reportReducer = reduceEvents<ReportAggregate>(
 	(event, aggregate) => {

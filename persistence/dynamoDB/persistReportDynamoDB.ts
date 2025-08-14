@@ -1,7 +1,7 @@
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import type { PersistFn } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
+import { persistDynamoDB } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
 import type { ReportAggregate } from '../../aggregate/ReportAggregate.ts'
-import type { PersistFn } from '../PersistFn.ts'
-import { persistDynamoDB } from './persistDynamoDB.ts'
 
 export const persistReportDynamoDB = (
 	db: DynamoDBClient,
