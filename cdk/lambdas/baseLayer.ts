@@ -11,6 +11,8 @@ const dependencies: Array<keyof (typeof pJson)['dependencies']> = [
 	'@sinclair/typebox',
 	'ulidx',
 	'@hello.nrfcloud.com/lambda-helpers',
+	'@fjordcleanup/trash-proto',
+	'@coderbyheart/aws-dynamodb-es-cqrs',
 ]
 
 export const pack = async (): Promise<PackedLayer> =>
