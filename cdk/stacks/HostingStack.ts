@@ -9,6 +9,13 @@ import {
 } from 'aws-cdk-lib'
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager'
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins'
+import {
+	OpenIdConnectProvider,
+	PolicyDocument,
+	PolicyStatement,
+	Role,
+	WebIdentityPrincipal,
+} from 'aws-cdk-lib/aws-iam'
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53'
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets'
 import { SSMParameterReader } from '../constructs/SSMParameterReader.ts'
@@ -21,9 +28,17 @@ export class HostingStack extends Stack {
 		{
 			baseDomainName,
 			env,
+			webAppRepository,
+			gitHubOICDProviderArn,
 		}: {
 			baseDomainName: string
 			env: Environment
+			webAppRepository: {
+				owner: string
+				repo: string
+				environment?: string
+			}
+			gitHubOICDProviderArn: string
 		},
 	) {
 		super(parent, HOSTING_STACK_NAME, {
@@ -159,6 +174,40 @@ export class HostingStack extends Stack {
 			recordName: domainName,
 			target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
 		})
+
+		// Add a role for web application CD
+		const gitHubOIDC = OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+			this,
+			'gitHubOICDProvider',
+			gitHubOICDProviderArn,
+		)
+
+		const cdRole = new Role(this, 'cdRole', {
+			roleName: `${Stack.of(this).stackName}-web-app-cd`,
+			assumedBy: new WebIdentityPrincipal(gitHubOIDC.openIdConnectProviderArn, {
+				StringEquals: {
+					[`token.actions.githubusercontent.com:sub`]: `repo:${webAppRepository.owner}/${webAppRepository.repo}:environment:${webAppRepository.environment ?? 'production'}`,
+					[`token.actions.githubusercontent.com:aud`]: 'sts.amazonaws.com',
+				},
+			}),
+			description: `This role is used by GitHub Actions to deploy the web application`,
+			maxSessionDuration: Duration.hours(1),
+			inlinePolicies: {
+				// To retrieve stack outputs
+				describeStack: new PolicyDocument({
+					statements: [
+						new PolicyStatement({
+							actions: ['cloudformation:DescribeStacks'],
+							resources: [Stack.of(this).stackId],
+						}),
+					],
+				}),
+			},
+		})
+
+		websiteBucket.grantDelete(cdRole)
+		websiteBucket.grantReadWrite(cdRole)
+		distribution.grantCreateInvalidation(cdRole)
 
 		new CfnOutput(this, 'distributionDomainName', {
 			value: distribution.distributionDomainName,

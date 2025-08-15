@@ -55,6 +55,8 @@ export class FjordCleanUpTrashProductionApp extends App {
 		const hosting = new HostingStack(this, {
 			baseDomainName,
 			env,
+			webAppRepository,
+			gitHubOICDProviderArn,
 		})
 		hosting.addDependency(domain)
 
@@ -94,7 +96,6 @@ export class FjordCleanUpTrashProductionApp extends App {
 		new CDStack(this, {
 			gitHubOICDProviderArn,
 			repository,
-			webAppRepository,
 		})
 	}
 }
