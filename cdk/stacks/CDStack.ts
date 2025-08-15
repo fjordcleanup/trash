@@ -8,11 +8,17 @@ export class CDStack extends Stack {
 		parent: App,
 		{
 			repository,
+			webAppRepository,
 			gitHubOICDProviderArn,
 		}: {
 			repository: {
 				owner: string
 				repo: string
+			}
+			webAppRepository: {
+				owner: string
+				repo: string
+				environment?: string
 			}
 			gitHubOICDProviderArn: string
 		},
@@ -25,6 +31,12 @@ export class CDStack extends Stack {
 			repository,
 			gitHubOICDProviderArn,
 			environment: this.node.tryGetContext('gitHubEnvironment') as string,
+		})
+
+		new ContinuousDeployment(this, {
+			repository: webAppRepository,
+			gitHubOICDProviderArn,
+			environment: webAppRepository.environment,
 		})
 	}
 }

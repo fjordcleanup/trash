@@ -28,10 +28,20 @@ const repository = {
 	repo: repoUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ?? 'trash',
 }
 
+const webAppRepositoryUrl = new URL(pJSON.webAppRepository.url)
+const webAppRepository = {
+	owner: webAppRepositoryUrl.pathname.split('/')[1] ?? 'fjordcleanup',
+	repo:
+		webAppRepositoryUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ??
+		'trash-web',
+}
+
 for (const [k, v] of Object.entries({
 	'Base domain name': baseDomainName,
-	'Web App Owner': repository.owner,
-	'Web App Repo': repository.repo,
+	'Backend Owner': repository.owner,
+	'Backend Repo': repository.repo,
+	'Web App Owner': webAppRepository.owner,
+	'Web App Repo': webAppRepository.repo,
 })) {
 	console.debug(chalk.magenta(k), chalk.green(v))
 }
@@ -40,6 +50,7 @@ const tsConfigFilePath = path.join(process.cwd(), 'tsconfig.json')
 
 new FjordCleanUpTrashProductionApp({
 	repository,
+	webAppRepository,
 	baseDomainName,
 	gitHubOICDProviderArn: await ensureGitHubOIDCProvider({
 		iam,

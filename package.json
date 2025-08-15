@@ -18,6 +18,10 @@
     "type": "git",
     "url": "git+https://github.com/fjordcleanup/trash.git"
   },
+  "webAppRepository": {
+    "type": "git",
+    "url": "git+https://github.com/fjordcleanup/trash-web.git"
+  },
   "bugs": {
     "url": "https://github.com/fjordcleanup/trash/issues"
   },

@@ -18,6 +18,7 @@ export class FjordCleanUpTrashProductionApp extends App {
 		baseDomainName,
 		gitHubOICDProviderArn,
 		repository,
+		webAppRepository,
 		baseLayerSource,
 		env,
 		lambdaSources,
@@ -26,6 +27,11 @@ export class FjordCleanUpTrashProductionApp extends App {
 		baseDomainName: string
 		gitHubOICDProviderArn: string
 		repository: { owner: string; repo: string }
+		webAppRepository: {
+			owner: string
+			repo: string
+			environment?: string
+		}
 		lambdaSources: {
 			user: UserLambdas
 			persistence: PersistenceLambdas
@@ -88,6 +94,7 @@ export class FjordCleanUpTrashProductionApp extends App {
 		new CDStack(this, {
 			gitHubOICDProviderArn,
 			repository,
+			webAppRepository,
 		})
 	}
 }
