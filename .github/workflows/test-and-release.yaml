@@ -93,16 +93,7 @@ jobs:
       - name: Deploy to AWS
         run: npx cdk deploy --require-approval never --all
 
-      # Integration tests are retried, because wiring up the new stack can take a while
-      - name: Run integration tests
-        uses: nick-fields/retry@v3
-        with:
-          max_attempts: 3
-          retry_on: error
-          timeout_minutes: 5
-          command: npm run test:integration
-
-      # Integration tests are retried, because wiring up the new stack can take a while
+      # E2E tests are retried, because wiring up the new stack can take a while
       - name: Run e2e tests
         uses: nick-fields/retry@v3
         with:

@@ -30,11 +30,10 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky",
-    "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules|e2e-tests|integration-tests)/**/*.spec.ts\"",
-    "test:watch": "node --no-warnings --experimental-transform-types --test --watch \"!(node_modules|e2e-tests|integration-tests)/**/*.spec.ts\"",
+    "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules|e2e-tests)/**/*.spec.ts\"",
+    "test:watch": "node --no-warnings --experimental-transform-types --test --watch \"!(node_modules|e2e-tests)/**/*.spec.ts\"",
     "cdk:lambda:update": "node --no-warnings --experimental-transform-types ./cdk/cli/update-lambdas.ts",
-    "test:e2e": "node --experimental-transform-types --no-warnings  --test e2e-tests/**/*.spec.ts",
-    "test:integration": "node --experimental-transform-types --no-warnings  --test integration-tests/**/*.spec.ts"
+    "test:e2e": "node --experimental-transform-types --no-warnings  --test e2e-tests/**/*.spec.ts"
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "5.2.0",

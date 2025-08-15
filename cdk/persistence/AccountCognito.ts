@@ -161,6 +161,7 @@ export class AccountCognito extends Construct {
 				userSrp: false,
 				custom: false,
 				user: true,
+				adminUserPassword: isTest(this) ? true : false,
 			},
 			oAuth: {
 				flows: {

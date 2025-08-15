@@ -36,6 +36,7 @@
     "aggregate/**/*",
     "aws/**/*",
     "test/**/*",
+    "e2e-tests/**/*",
     "error/**/*"
   ]
 }
