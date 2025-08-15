@@ -44,10 +44,10 @@
     "@bifravst/from-env": "3.0.2",
     "@coderbyheart/aws-dynamodb-es-cqrs": "1.0.3",
     "@fjordcleanup/trash-proto": "npm:@jsr/fjordcleanup__trash-proto@1.1.0",
-    "@hello.nrfcloud.com/lambda-helpers": "3.5.7",
+    "@hello.nrfcloud.com/lambda-helpers": "3.5.8",
     "@middy/core": "6.4.3",
     "@middy/input-output-logger": "6.4.3",
-    "@sinclair/typebox": "0.34.38",
+    "@sinclair/typebox": "0.34.39",
     "ulidx": "2.4.1"
   },
   "devDependencies": {
