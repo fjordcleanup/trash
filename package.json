@@ -29,11 +29,11 @@
   "author": "Markus Tacker <m@coderbyheart.com> | https://coderbyheart.com",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky",
-    "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules|e2e-tests)/**/*.spec.ts\"",
-    "test:watch": "node --no-warnings --experimental-transform-types --test --watch \"!(node_modules|e2e-tests)/**/*.spec.ts\"",
+    "prepare": "husky && check-node-version --package",
+    "test": "node --no-warnings --experimental-transform-types --test \"!(node_modules)/**/*.spec.ts\"",
+    "test:watch": "node --no-warnings --experimental-transform-types --test --watch \"!(node_modules)/**/*.spec.ts\"",
     "cdk:lambda:update": "node --no-warnings --experimental-transform-types ./cdk/cli/update-lambdas.ts",
-    "test:e2e": "node --experimental-transform-types --no-warnings  --test e2e-tests/**/*.spec.ts"
+    "test:e2e": "node --experimental-transform-types --no-warnings ./features/run-features.ts > e2e-test-result.json && cat e2e-test-result.json | node --experimental-transform-types --no-warnings ./features/console-reporter.ts --only-failed --with-timestamps"
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "5.2.0",
@@ -60,11 +60,13 @@
     "@aws-sdk/util-dynamodb": "3.868.0",
     "@babel/plugin-syntax-import-assertions": "7.27.1",
     "@bifravst/aws-cdk-lambda-helpers": "3.5.0",
+    "@bifravst/bdd-markdown": "8.2.74",
     "@bifravst/ci": "2.1.1",
     "@bifravst/cloudformation-helpers": "9.1.1",
     "@bifravst/eslint-config-typescript": "6.4.3",
     "@bifravst/prettier-config": "1.1.12",
     "@commitlint/config-conventional": "19.8.1",
+    "@hello.nrfcloud.com/bdd-markdown-steps": "3.1.0",
     "@types/aws-lambda": "8.10.152",
     "@types/node": "24.3.0",
     "aws-cdk-lib": "2.211.0",

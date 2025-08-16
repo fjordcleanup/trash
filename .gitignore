@@ -14,3 +14,4 @@ node_modules/
 cdk.out/
 dist/
 logs/
+e2e-test-result.json
