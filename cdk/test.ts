@@ -18,4 +18,5 @@ new FjordCleanUpTrashTestApp({
 		notifications: await packNotificationLambdas(tsConfigFilePath),
 	},
 	baseLayerSource: await packBaseLayer(),
+	version: process.env.VERSION ?? '0.0.0-development',
 })
