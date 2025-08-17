@@ -46,7 +46,7 @@
     "@hello.nrfcloud.com/lambda-helpers": "3.5.8",
     "@middy/core": "6.4.3",
     "@middy/input-output-logger": "6.4.3",
-    "@sinclair/typebox": "0.34.39",
+    "@sinclair/typebox": "0.34.40",
     "ulidx": "2.4.1"
   },
   "devDependencies": {
