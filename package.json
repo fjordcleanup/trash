@@ -42,7 +42,7 @@
     "@aws-sdk/s3-request-presigner": "3.879.0",
     "@bifravst/from-env": "3.0.2",
     "@coderbyheart/aws-dynamodb-es-cqrs": "1.0.3",
-    "@fjordcleanup/trash-proto": "npm:@jsr/fjordcleanup__trash-proto@1.1.0",
+    "@fjordcleanup/trash-proto": "npm:@jsr/fjordcleanup__trash-proto@1.1.4",
     "@hello.nrfcloud.com/lambda-helpers": "3.5.17",
     "@middy/core": "6.4.4",
     "@middy/input-output-logger": "6.4.4",
