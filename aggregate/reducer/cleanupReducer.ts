@@ -1,15 +1,20 @@
 import type { CleanUpReportedEvent } from '#event/CleanUpReportedEvent.ts'
+import type { CleanupApprovedEvent } from '#event/CleanupApprovedEvent.ts'
+import type { CleanupRejectedEvent } from '#event/CleanupRejectedEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import {
 	fromEvent,
 	reduceEvents,
+	updateFromEvent,
 } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
-import { isNamedEvent } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
-import type { CleanupAggregate } from '../CleanupAggregate.ts'
+import {
+	assertAggregateEvent,
+	isNamedEvent,
+} from '@coderbyheart/aws-dynamodb-es-cqrs/event'
+import { CleanupState, type CleanupAggregate } from '../CleanupAggregate.ts'
 
 export const cleanupReducer = reduceEvents<CleanupAggregate>(
 	(event, aggregate) => {
-		void aggregate
 		if (isCleanUpReportedEvent(event)) {
 			return {
 				$meta: fromEvent(event),
@@ -20,10 +25,34 @@ export const cleanupReducer = reduceEvents<CleanupAggregate>(
 				state: event.state,
 			}
 		}
+		if (isCleanupApprovedEvent(event)) {
+			assertAggregateEvent(aggregate, event)
+			return {
+				...aggregate,
+				$meta: updateFromEvent(aggregate.$meta, event),
+				state: CleanupState.approved,
+			}
+		}
+		if (isCleanupRejectedEvent(event)) {
+			assertAggregateEvent(aggregate, event)
+			return {
+				...aggregate,
+				$meta: updateFromEvent(aggregate.$meta, event),
+				state: CleanupState.rejected,
+			}
+		}
 		return undefined
 	},
 )
 
 const isCleanUpReportedEvent = isNamedEvent<CleanUpReportedEvent>(
 	EventNames.CleanUpReported,
+)
+
+const isCleanupApprovedEvent = isNamedEvent<CleanupApprovedEvent>(
+	EventNames.CleanupApproved,
+)
+
+const isCleanupRejectedEvent = isNamedEvent<CleanupRejectedEvent>(
+	EventNames.CleanupRejected,
 )
