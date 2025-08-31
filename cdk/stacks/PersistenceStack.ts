@@ -14,6 +14,7 @@ import {
 } from 'aws-cdk-lib/aws-s3'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { PersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
+import { CleanupAggregatesTable } from '../persistence/CleanupAggregatesTable.ts'
 import { EventsTable } from '../persistence/EventsTable.ts'
 import { ReportAggregatesTable } from '../persistence/ReportAggregatesTable.ts'
 import { PERSISTENCE_STACK_NAME } from './stackName.ts'
@@ -40,6 +41,13 @@ export class PersistenceStack extends Stack {
 			value: reportAggregatesTable.table.tableName,
 			description: 'The name of the report aggregates table',
 			exportName: `${Stack.of(this).stackName}:reportAggregatesTableName`,
+		})
+
+		const cleanupAggregatesTable = new CleanupAggregatesTable(this)
+		new CfnOutput(this, 'cleanupAggregatesTableName', {
+			value: cleanupAggregatesTable.table.tableName,
+			description: 'The name of the cleanup aggregates table',
+			exportName: `${Stack.of(this).stackName}:cleanupAggregatesTableName`,
 		})
 
 		const eventsTable = new EventsTable(this)

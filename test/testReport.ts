@@ -5,12 +5,14 @@ import { ulid } from 'ulidx'
 import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
 import { testActor } from './testActor.ts'
 
-export const testReport = (): ReportAggregate => {
+export const testReport = (
+	reportId: ULID = ulid() as ULID,
+): ReportAggregate => {
 	const actorId = testActor()
 	return {
 		$meta: {
 			actorId,
-			id: ulid() as ULID,
+			id: reportId,
 			version: v1,
 		},
 		authorId: actorId,
