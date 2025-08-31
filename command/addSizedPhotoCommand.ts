@@ -3,13 +3,11 @@ import type { SizedPhotoAddedEvent } from '#event/SizedPhotoAddedEvent.ts'
 import { inc } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
 import { NotFoundError } from '@coderbyheart/aws-dynamodb-es-cqrs/error'
 import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
+import type { SizedPhoto } from 'aggregate/SizedPhoto.ts'
 import { ulid } from 'ulidx'
 import { AggregateNames } from '../aggregate/AggregateNames.ts'
 import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
-import type {
-	ReportAggregate,
-	SizedPhoto,
-} from '../aggregate/ReportAggregate.ts'
+import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
 import type { findReportByIdFn } from '../persistence/findReportByIdFn.ts'
 import type { PersistReportFn } from '../persistence/persistReport.ts'
 
