@@ -3,7 +3,7 @@ export enum EventNames {
 	ReportDeleted = 'ReportDeleted',
 	ReportPublished = 'ReportPublished',
 	SizedPhotoAdded = 'SizedPhotoAdded',
-	CleanUpReported = 'CleanUpReported',
+	CleanupReported = 'CleanupReported',
 	CleanupApproved = 'CleanupApproved',
 	CleanupRejected = 'CleanupRejected',
 }

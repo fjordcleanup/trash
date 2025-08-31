@@ -1,6 +1,6 @@
-import type { CleanUpReportedEvent } from '#event/CleanUpReportedEvent.ts'
 import type { CleanupApprovedEvent } from '#event/CleanupApprovedEvent.ts'
 import type { CleanupRejectedEvent } from '#event/CleanupRejectedEvent.ts'
+import type { CleanupReportedEvent } from '#event/CleanupReportedEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import {
 	fromEvent,
@@ -15,7 +15,7 @@ import { CleanupState, type CleanupAggregate } from '../CleanupAggregate.ts'
 
 export const cleanupReducer = reduceEvents<CleanupAggregate>(
 	(event, aggregate) => {
-		if (isCleanUpReportedEvent(event)) {
+		if (isCleanupReportedEvent(event)) {
 			return {
 				$meta: fromEvent(event),
 				authorId: event.actorId,
@@ -45,8 +45,8 @@ export const cleanupReducer = reduceEvents<CleanupAggregate>(
 	},
 )
 
-const isCleanUpReportedEvent = isNamedEvent<CleanUpReportedEvent>(
-	EventNames.CleanUpReported,
+const isCleanupReportedEvent = isNamedEvent<CleanupReportedEvent>(
+	EventNames.CleanupReported,
 )
 
 const isCleanupApprovedEvent = isNamedEvent<CleanupApprovedEvent>(

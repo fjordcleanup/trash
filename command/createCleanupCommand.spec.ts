@@ -1,4 +1,4 @@
-import type { CleanUpReportedEvent } from '#event/CleanUpReportedEvent.ts'
+import type { CleanupReportedEvent } from '#event/CleanupReportedEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import { v1 } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
 import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
@@ -43,8 +43,8 @@ void describe('createCleanupCommand()', () => {
 
 		assert.ok(cleanup.$meta.id !== undefined, 'Cleanup ID should be defined')
 
-		const expectedEvent: Partial<CleanUpReportedEvent> = {
-			eventName: EventNames.CleanUpReported,
+		const expectedEvent: Partial<CleanupReportedEvent> = {
+			eventName: EventNames.CleanupReported,
 			aggregateName: AggregateNames.Cleanup,
 			aggregateId: cleanup.$meta.id,
 			aggregateVersion: v1,

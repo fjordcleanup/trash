@@ -1,4 +1,4 @@
-import type { CleanUpReportedEvent } from '#event/CleanUpReportedEvent.ts'
+import type { CleanupReportedEvent } from '#event/CleanupReportedEvent.ts'
 import { EventNames } from '#event/EventNames.ts'
 import { v1 } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
 import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
@@ -16,9 +16,9 @@ export const createCleanupCommand =
 	): Promise<CleanupAggregate> => {
 		const id = ulid() as ULID
 		const { reportId, description, photos } = data
-		const event: CleanUpReportedEvent = {
+		const event: CleanupReportedEvent = {
 			eventId: ulid() as ULID,
-			eventName: EventNames.CleanUpReported,
+			eventName: EventNames.CleanupReported,
 			aggregateName: AggregateNames.Cleanup,
 			aggregateId: id,
 			aggregateVersion: v1,
