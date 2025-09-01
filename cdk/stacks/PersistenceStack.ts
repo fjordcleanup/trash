@@ -12,6 +12,7 @@ import {
 	HttpMethods,
 	ObjectOwnership,
 } from 'aws-cdk-lib/aws-s3'
+import { ProcessCleanup } from 'cdk/features/ProcessCleanup.ts'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { PersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { CleanupAggregatesTable } from '../persistence/CleanupAggregatesTable.ts'
@@ -146,6 +147,13 @@ export class PersistenceStack extends Stack {
 		resizedBucket.grantReadWrite(resizePhotosFn.fn)
 		reportAggregatesTable.table.grantReadWriteData(resizePhotosFn.fn)
 		eventsTable.table.grantWriteData(resizePhotosFn.fn)
+
+		new ProcessCleanup(this, {
+			lambdaSources,
+			baseLayerVersion,
+			eventsTable,
+			reportAggregatesTable,
+		})
 	}
 }
 

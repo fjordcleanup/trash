@@ -18,7 +18,7 @@ import os from 'node:os'
 import path, { parse } from 'node:path'
 import { addSizedPhotoCommand } from '../command/addSizedPhotoCommand.ts'
 import { findReportByIdDynamoDB } from '../persistence/dynamoDB/findReportByIdDynamoDB.ts'
-import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
+import { persistReportEventDynamoDB } from '../persistence/dynamoDB/persistReportEventDynamoDB.ts'
 
 const s3 = new S3Client({})
 const db = new DynamoDBClient({})
@@ -31,7 +31,7 @@ const { resizedBucketName, reportAggregatesTableName, eventsTableName } =
 		eventsTableName: 'EVENTS_TABLE_NAME',
 	})(process.env)
 
-const persist = persistReportDynamoDB(
+const persist = persistReportEventDynamoDB(
 	db,
 	reportAggregatesTableName,
 	eventsTableName,

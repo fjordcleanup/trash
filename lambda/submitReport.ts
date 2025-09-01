@@ -12,7 +12,7 @@ import inputOutputLogger from '@middy/input-output-logger'
 import { Type } from '@sinclair/typebox'
 import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda'
 import { createReportCommand } from '../command/createReportCommand.ts'
-import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
+import { persistReportEventDynamoDB } from '../persistence/dynamoDB/persistReportEventDynamoDB.ts'
 import { actorFromEvent } from './authorizer/actorFromEvent.ts'
 import type { AuthorizedEvent } from './authorizer/AuthorizedEvent.ts'
 import type { CognitoClaims } from './authorizer/CognitoClaims.ts'
@@ -53,7 +53,7 @@ const InputSchema = Type.Object({
 	}),
 })
 
-const persist = persistReportDynamoDB(
+const persist = persistReportEventDynamoDB(
 	db,
 	reportAggregatesTableName,
 	eventsTableName,
