@@ -12,7 +12,7 @@ import {
 	HttpMethods,
 	ObjectOwnership,
 } from 'aws-cdk-lib/aws-s3'
-import { ProcessCleanup } from 'cdk/features/ProcessCleanup.ts'
+import { ProcessCleanup } from '../features/ProcessCleanup.ts'
 import { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
 import type { PersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import { CleanupAggregatesTable } from '../persistence/CleanupAggregatesTable.ts'
