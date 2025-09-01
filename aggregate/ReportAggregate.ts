@@ -1,11 +1,6 @@
 import type { AggregateMeta } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
-import type { PhotoSize, TrashType } from '@fjordcleanup/trash-proto'
-
-export type SizedPhoto = {
-	[PhotoSize.placeholder]: string
-	[PhotoSize.thumbnail]: string
-	[PhotoSize.scaled]: string
-}
+import type { TrashType } from '@fjordcleanup/trash-proto'
+import type { SizedPhoto } from './SizedPhoto.ts'
 
 export type ReportAggregate = {
 	$meta: AggregateMeta

@@ -14,6 +14,7 @@ export const createReportCommand =
 		data: Omit<ReportAggregate, '$meta' | 'authorId'>,
 		actorId: string,
 	): Promise<ReportAggregate> => {
+		const { type, description, photos, location } = data
 		const id = ulid() as ULID
 		const event: ReportCreatedEvent = {
 			eventId: ulid() as ULID,
@@ -22,7 +23,10 @@ export const createReportCommand =
 			aggregateId: id,
 			aggregateVersion: v1,
 			actorId,
-			...data,
+			type,
+			description,
+			photos,
+			location,
 		}
 
 		const applied = reportReducer([event])

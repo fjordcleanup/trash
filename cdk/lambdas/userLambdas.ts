@@ -9,6 +9,7 @@ export type UserLambdas = {
 	listReports: PackedLambda
 	deleteReport: PackedLambda
 	publishReport: PackedLambda
+	submitCleanup: PackedLambda
 }
 
 export const packLambdas = async (
@@ -32,6 +33,11 @@ export const packLambdas = async (
 	publishReport: await packLambdaFromPath({
 		id: `${PUBLIC_API_STACK_NAME}-publishReport`,
 		sourceFilePath: 'lambda/publishReport.ts',
+		tsConfigFilePath,
+	}),
+	submitCleanup: await packLambdaFromPath({
+		id: `${PUBLIC_API_STACK_NAME}-submitCleanup`,
+		sourceFilePath: 'lambda/submitCleanup.ts',
 		tsConfigFilePath,
 	}),
 })
