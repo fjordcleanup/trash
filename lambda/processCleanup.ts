@@ -4,10 +4,10 @@ import { fromEnv } from '@bifravst/from-env'
 import { extractEventsFromDynamoDBEvent } from '@coderbyheart/aws-dynamodb-es-cqrs/persistence'
 import middy from '@middy/core'
 import inputOutputLogger from '@middy/input-output-logger'
-import { reportReducer } from 'aggregate/reducer/reportReducer.ts'
 import type { SQSEvent } from 'aws-lambda'
-import { findReportByIdDynamoDB } from 'persistence/dynamoDB/findReportByIdDynamoDB.ts'
-import { persistReportDynamoDB } from 'persistence/dynamoDB/persistReportDynamoDB.ts'
+import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
+import { findReportByIdDynamoDB } from '../persistence/dynamoDB/findReportByIdDynamoDB.ts'
+import { persistReportDynamoDB } from '../persistence/dynamoDB/persistReportDynamoDB.ts'
 
 const { reportAggregatesTableName } = fromEnv({
 	fromAddress: 'FROM_ADDRESS',
