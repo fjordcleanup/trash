@@ -29,8 +29,8 @@ npm start
   [`image-magick-lambda-layer`](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:145266761615:applications~image-magick-lambda-layer)
 
 ```bash
-npx cdk bootstrap
-npx cdk deploy --all
+npm run cdk:bootstrap
+npm run cdk:prod:deploy
 ```
 
 ## Continuous Deployment with GitHub Actions

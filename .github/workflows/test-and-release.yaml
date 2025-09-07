@@ -87,7 +87,7 @@ jobs:
           aws-region: ${{ vars.CI__AWS_REGION }}
 
       - name: Deploy to AWS
-        run: npx cdk deploy --require-approval never --all
+        run: npm run cdk:ci:deploy
 
       # E2E tests are retried, because wiring up the new stack can take a while
       - name: Run e2e tests

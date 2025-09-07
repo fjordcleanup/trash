@@ -14,7 +14,6 @@ import { PublicAPIStack } from './stacks/PublicAPIStack.ts'
 
 export class FjordCleanUpTrashProductionApp extends App {
 	public constructor({
-		version,
 		baseDomainName,
 		gitHubOICDProviderArn,
 		repository,
@@ -22,8 +21,8 @@ export class FjordCleanUpTrashProductionApp extends App {
 		baseLayerSource,
 		env,
 		lambdaSources,
+		context,
 	}: {
-		version: string
 		baseDomainName: string
 		gitHubOICDProviderArn: string
 		repository: { owner: string; repo: string }
@@ -39,11 +38,14 @@ export class FjordCleanUpTrashProductionApp extends App {
 		}
 		baseLayerSource: PackedLayer
 		env: Environment
+		context: Record<string, unknown> & {
+			version: string
+		}
 	}) {
 		super({
 			context: {
+				...context,
 				isTest: false,
-				version,
 			},
 		})
 

@@ -1,12 +1,9 @@
-import type { STSClient } from '@aws-sdk/client-sts'
-import { GetCallerIdentityCommand } from '@aws-sdk/client-sts'
+import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
 import type { Environment } from 'aws-cdk-lib'
 
-export const env = async ({
-	sts,
-}: {
-	sts: STSClient
-}): Promise<Required<Environment>> => {
+export const env = async (
+	sts: STSClient = new STSClient(),
+): Promise<Required<Environment>> => {
 	const { Account } = await sts.send(new GetCallerIdentityCommand({}))
 	if (Account === undefined) throw new Error(`Failed to get caller identity!`)
 	return {

@@ -1,3 +1,0 @@
-{
-  "app": "node --no-warnings --experimental-transform-types --no-warnings cdk/test.ts"
-}

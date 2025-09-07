@@ -44,4 +44,4 @@ jobs:
           aws-region: ${{ vars.CI__AWS_REGION }}
 
       - name: Clean up resources
-        run: npx cdk destroy --force --all
+        run: npm run cdk:ci:destroy

@@ -11,7 +11,7 @@ export class FjordCleanUpTrashTestApp extends App {
 	public constructor({
 		baseLayerSource,
 		lambdaSources,
-		version,
+		context,
 	}: {
 		lambdaSources: {
 			user: UserLambdas
@@ -19,12 +19,12 @@ export class FjordCleanUpTrashTestApp extends App {
 			notifications: NotificationLambdas
 		}
 		baseLayerSource: PackedLayer
-		version: string
+		context: Record<string, unknown> & { version: string }
 	}) {
 		super({
 			context: {
+				...context,
 				isTest: true,
-				version,
 			},
 		})
 
