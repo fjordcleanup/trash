@@ -73,6 +73,11 @@ export class AccountCognito extends Construct {
 				},
 			},
 			passkeyUserVerification: PasskeyUserVerification.PREFERRED,
+			...(baseDomainName !== undefined && {
+				passkeySettings: {
+					relyingPartyId: `auth.accounts.${baseDomainName}`,
+				},
+			}),
 			// signInCaseSensitive: false,
 			userVerification: {
 				emailSubject: '[Fjord CleanUP] Verify your email',
