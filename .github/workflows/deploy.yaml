@@ -63,15 +63,15 @@ jobs:
         id: cache-aws-cli
         uses: actions/cache@v4
         with:
-          path: aws/
+          path: aws-cli/
           key: cache-aws-cli
 
       - name: Install AWS
         if: steps.cache-aws-cli.outputs.cache-hit != 'true'
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip -q awscliv2.zip
-          sudo ./aws/install --update
+          unzip -q awscliv2.zip -d aws-cli
+          sudo ./aws-cli/aws/install --update
 
       - name: configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
