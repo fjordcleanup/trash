@@ -83,16 +83,10 @@ jobs:
 
       - name: Bootstrap the stack
         if: ${{ github.event.inputs.bootstrap == 'true' }}
-        env:
-          NODE_OPTIONS: "--experimental-transform-types --no-warnings"
         run: npm run cdk:bootstrap
 
       - name: Diff
-        env:
-          NODE_OPTIONS: "--experimental-transform-types --no-warnings"
         run: npm run cdk:prod:diff
 
       - name: Deploy to AWS
-        env:
-          NODE_OPTIONS: "--experimental-transform-types --no-warnings"
         run: npm run cdk:prod:deploy
