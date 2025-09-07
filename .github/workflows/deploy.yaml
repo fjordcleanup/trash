@@ -86,7 +86,9 @@ jobs:
         run: npm run cdk:bootstrap
 
       - name: Diff
-        run: npm run cdk:prod:diff
+        run: |
+          cat ./aws/env.ts
+          npm run cdk:prod:diff
 
       - name: Deploy to AWS
         run: npm run cdk:prod:deploy
