@@ -56,7 +56,7 @@
     "ulidx": "2.4.1"
   },
   "devDependencies": {
-    "@aws-cdk/toolkit-lib": "1.8.3",
+    "@aws-cdk/toolkit-lib": "1.9.0",
     "@aws-sdk/client-cloudfront": "3.899.0",
     "@aws-sdk/client-cloudwatch-logs": "3.899.0",
     "@aws-sdk/client-cognito-identity-provider": "3.899.0",
