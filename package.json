@@ -76,7 +76,7 @@
     "@hello.nrfcloud.com/bdd-markdown-steps": "3.1.22",
     "@types/aws-lambda": "8.10.153",
     "@types/command-line-args": "5.2.3",
-    "@types/node": "24.6.0",
+    "@types/node": "24.6.1",
     "aws-cdk-lib": "2.218.0",
     "check-node-version": "4.2.1",
     "command-line-args": "6.0.1",
