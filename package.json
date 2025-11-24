@@ -66,7 +66,7 @@
     "@aws-sdk/client-sts": "3.936.0",
     "@aws-sdk/util-dynamodb": "3.936.0",
     "@babel/plugin-syntax-import-assertions": "7.27.1",
-    "@bifravst/aws-cdk-lambda-helpers": "3.5.117",
+    "@bifravst/aws-cdk-lambda-helpers": "3.5.120",
     "@bifravst/bdd-markdown": "8.2.78",
     "@bifravst/ci": "2.1.1",
     "@bifravst/cloudformation-helpers": "9.1.1",
