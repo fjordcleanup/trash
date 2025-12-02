@@ -1,6 +1,6 @@
 import type { PackedLayer } from '@bifravst/aws-cdk-lambda-helpers/layer'
 import type { App, Environment } from 'aws-cdk-lib'
-import { CfnOutput, Duration, Fn, Stack } from 'aws-cdk-lib'
+import { CfnOutput, Fn, Stack } from 'aws-cdk-lib'
 import { CognitoUserPoolsAuthorizer } from 'aws-cdk-lib/aws-apigateway'
 import { Bucket } from 'aws-cdk-lib/aws-s3'
 import { AdminAPIOperations } from '../api/AdminAPIOperations.ts'
@@ -44,7 +44,6 @@ export class PublicAPIStack extends Stack {
 
 		const authorizer = new CognitoUserPoolsAuthorizer(this, 'authorizer', {
 			cognitoUserPools: [userPool.userPool],
-			resultsCacheTtl: Duration.minutes(15),
 			authorizerName: 'CognitoUsers',
 		})
 
