@@ -105,7 +105,7 @@ jobs:
           --no-warnings ./feature-runner/console-reporter.ts  --only-failed
           --with-timestamps
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
           name: e2e-test-result-${{ github.sha }}
@@ -118,7 +118,7 @@ jobs:
           AWS_REGION: ${{ vars.CI__AWS_REGION }}
         run: node ./aws/logs.ts
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
           name: logs-${{ github.sha }}
@@ -142,7 +142,7 @@ jobs:
         run: |
           gh workflow run --ref saga deploy.yaml -F ref=${{ github.sha }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: lambdas-${{ github.sha }}
