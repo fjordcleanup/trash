@@ -19,11 +19,11 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "allowImportingTsExtensions": true,
-    "baseUrl": ".",
+    "types": ["node", "aws-lambda"],
     "paths": {
-      "#domain/*": ["domain/*"],
-      "#error/*": ["error/*"],
-      "#event/*": ["event/*"]
+      "#domain/*": ["./domain/*"],
+      "#error/*": ["./error/*"],
+      "#event/*": ["./event/*"]
     }
   },
   "include": [

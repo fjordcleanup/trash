@@ -4,5 +4,5 @@ import type { EventNames } from './EventNames.ts'
 
 export type ReportCreatedEvent = Omit<AggregateEvent, 'eventName'> &
 	Omit<ReportAggregate, '$meta' | 'authorId'> & {
-		eventName: EventNames.ReportCreated
+		eventName: (typeof EventNames)['ReportCreated']
 	}

@@ -2,11 +2,11 @@ import { EventNames } from '#event/EventNames.ts'
 import { PackedLambdaFn } from '@bifravst/aws-cdk-lambda-helpers/cdk'
 import { StartingPosition } from 'aws-cdk-lib/aws-lambda'
 import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources'
-import type { PersistenceLambdas } from 'cdk/lambdas/persistenceLambdas.ts'
-import type { ReportAggregatesTableReference } from 'cdk/persistence/ReportAggregatesTableReference.ts'
 import { Construct } from 'constructs'
 import type { BaseLayerVersion } from '../lambdas/BaseLayerVersion.ts'
+import type { PersistenceLambdas } from '../lambdas/persistenceLambdas.ts'
 import type { EventsTableReference } from '../persistence/EventsTableReference.ts'
+import type { ReportAggregatesTableReference } from '../persistence/ReportAggregatesTableReference.ts'
 
 /**
  * Process cleanup events and update the respective trash report
