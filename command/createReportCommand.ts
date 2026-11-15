@@ -1,37 +1,37 @@
-import { EventNames } from '#event/EventNames.ts'
-import type { ReportCreatedEvent } from '#event/ReportCreatedEvent.ts'
-import { v1 } from '@coderbyheart/aws-dynamodb-es-cqrs/aggregate'
-import type { ULID } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
-import { ulid } from 'ulidx'
-import { AggregateNames } from '../aggregate/AggregateNames.ts'
-import { reportReducer } from '../aggregate/reducer/reportReducer.ts'
-import type { ReportAggregate } from '../aggregate/ReportAggregate.ts'
-import type { PersistReportFn } from '../persistence/persistReport.ts'
+import { EventNames } from "#event/EventNames.ts"
+import type { ReportCreatedEvent } from "#event/ReportCreatedEvent.ts"
+import { v1 } from "@coderbyheart/aws-dynamodb-es-cqrs/aggregate"
+import type { ULID } from "@coderbyheart/aws-dynamodb-es-cqrs/event"
+import { ulid } from "ulidx"
+import { AggregateNames } from "../aggregate/AggregateNames.ts"
+import { reportReducer } from "../aggregate/reducer/reportReducer.ts"
+import type { ReportAggregate } from "../aggregate/ReportAggregate.ts"
+import type { PersistReportFn } from "../persistence/persistReport.ts"
 
 export const createReportCommand =
-	(persistReport: PersistReportFn) =>
-	async (
-		data: Omit<ReportAggregate, '$meta' | 'authorId'>,
-		actorId: string,
-	): Promise<ReportAggregate> => {
-		const { type, description, photos, location } = data
-		const id = ulid() as ULID
-		const event: ReportCreatedEvent = {
-			eventId: ulid() as ULID,
-			eventName: EventNames.ReportCreated,
-			aggregateName: AggregateNames.Report,
-			aggregateId: id,
-			aggregateVersion: v1,
-			actorId,
-			type,
-			description,
-			photos,
-			location,
-		}
+  (persistReport: PersistReportFn) =>
+  async (
+    data: Omit<ReportAggregate, "$meta" | "authorId">,
+    actorId: string,
+  ): Promise<ReportAggregate> => {
+    const { type, description, photos, location } = data
+    const id = ulid() as ULID
+    const event: ReportCreatedEvent = {
+      eventId: ulid() as ULID,
+      eventName: EventNames.ReportCreated,
+      aggregateName: AggregateNames.Report,
+      aggregateId: id,
+      aggregateVersion: v1,
+      actorId,
+      type,
+      description,
+      photos,
+      location,
+    }
 
-		const applied = reportReducer([event])
+    const applied = reportReducer([event])
 
-		await persistReport(applied, event)
+    await persistReport(applied, event)
 
-		return applied
-	}
+    return applied
+  }

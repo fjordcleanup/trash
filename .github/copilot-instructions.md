@@ -17,7 +17,9 @@ Always run these commands before committing to ensure everything looks good:
 # Compile TypeScript
 npx tsc
 # Format source code
-npx prettier --write ./
+npx oxfmt
+# Lint source code
+npx oxlint ./
 # Run unit tests
 npm test
 ```
