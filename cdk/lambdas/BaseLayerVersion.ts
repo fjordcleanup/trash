@@ -17,7 +17,11 @@ export class BaseLayerVersion extends Construct {
 				hash: baseLayer.hash,
 			}).code,
 			compatibleArchitectures: [Lambda.Architecture.ARM_64],
-			compatibleRuntimes: [Lambda.Runtime.NODEJS_26_X],
+			compatibleRuntimes: [
+				// Must match the runtime used by PackedLambdaFn from @bifravst/aws-cdk-lambda-helpers,
+				// CDK's Runtime.NODEJS_26_X is not considered equal (supportsInlineCode differs).
+				new Lambda.Runtime('nodejs26.x', Lambda.RuntimeFamily.NODEJS),
+			],
 		})
 	}
 }
