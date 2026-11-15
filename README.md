@@ -17,6 +17,16 @@ that version rather than the one installed in CI.
 
 ## Setup
 
+[`@fjordcleanup/trash-proto`](https://github.com/fjordcleanup/trash-proto) is
+published to the GitHub npm registry, which requires authentication, even for
+public packages. Log in with a
+[personal access token (classic)](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-with-a-personal-access-token)
+that has the `read:packages` scope:
+
+```bash
+npm login --scope=@fjordcleanup --auth-type=legacy --registry=https://npm.pkg.github.com
+```
+
 Install the dependencies:
 
 ```bash

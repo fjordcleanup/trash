@@ -18,6 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  packages: read
   id-token: write
   actions: write
   contents: read
@@ -55,12 +56,16 @@ jobs:
         with:
           node-version: ">=26.13.1 <27"
           cache: "npm"
+          registry-url: https://npm.pkg.github.com
+          scope: "@fjordcleanup"
 
       - name: Install NPM version specified in package.json
         uses: ./.github/actions/install-npm
 
       - name: Install dependencies
         run: npm ci --no-audit
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache AWS CLI (Linux)
         id: cache-awscli
