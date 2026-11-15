@@ -3,18 +3,11 @@
   "extends": ["github>coderbyheart/renovate-config"],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "@hello.nrfcloud.com/proto",
-        "@sinclair/typebox"
-      ],
+      "matchPackagePatterns": ["@hello.nrfcloud.com/proto", "@sinclair/typebox"],
       "groupName": "proto"
     },
     {
-      "matchPackagePatterns": [
-        "mcr.microsoft.com/playwright",
-        "@playwright/test",
-        "playwright"
-      ],
+      "matchPackagePatterns": ["mcr.microsoft.com/playwright", "@playwright/test", "playwright"],
       "groupName": "playwright"
     }
   ]

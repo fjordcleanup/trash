@@ -1,5 +1,5 @@
-import type { IUserPool } from 'aws-cdk-lib/aws-cognito'
+import type { IUserPool } from "aws-cdk-lib/aws-cognito"
 
 export type UserPoolReference = {
-	readonly userPool: IUserPool
+  readonly userPool: IUserPool
 }

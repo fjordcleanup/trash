@@ -1,6 +1,6 @@
-import type { AggregateEvent } from '@coderbyheart/aws-dynamodb-es-cqrs/event'
-import type { EventNames } from './EventNames.ts'
+import type { AggregateEvent } from "@coderbyheart/aws-dynamodb-es-cqrs/event"
+import type { EventNames } from "./EventNames.ts"
 
-export type ReportDeletedEvent = Omit<AggregateEvent, 'eventName'> & {
-	eventName: (typeof EventNames)['ReportDeleted']
+export type ReportDeletedEvent = Omit<AggregateEvent, "eventName"> & {
+  eventName: (typeof EventNames)["ReportDeleted"]
 }
