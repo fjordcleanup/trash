@@ -111,7 +111,7 @@ void describe("reportReducer()", () => {
     const agg1 = reportReducer([created])
     const sized = createSizedPhotoAddedEvent(agg1)
     // Break by removing the create event
-    assert.throws(() => reportReducer([sized as any]), /requires an aggregate/)
+    assert.throws(() => reportReducer([sized]), /requires an aggregate/)
   })
 
   void it("should throw when applying event for different aggregate id", () => {
