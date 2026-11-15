@@ -97,7 +97,7 @@ jobs:
 
       # E2E tests are retried, because wiring up the new stack can take a while
       - name: Run e2e tests
-        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         with:
           max_attempts: 3
           retry_on: error
