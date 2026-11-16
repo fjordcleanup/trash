@@ -1,11 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>coderbyheart/renovate-config"],
-  "packageRules": [
+  "hostRules": [
     {
-      "matchPackagePatterns": ["@hello.nrfcloud.com/proto", "@sinclair/typebox"],
-      "groupName": "proto"
-    },
+      "matchHost": "npm.pkg.github.com",
+      "hostType": "npm",
+      "token": "{{ secrets.GITHUB_PACKAGES_TOKEN }}"
+    }
+  ],
+  "packageRules": [
     {
       "matchPackagePatterns": ["mcr.microsoft.com/playwright", "@playwright/test", "playwright"],
       "groupName": "playwright"
