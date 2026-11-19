@@ -68,7 +68,7 @@
     "@bifravst/cloudformation-helpers": "10.0.3",
     "@coderbyheart/oxlint-config": "1.0.1",
     "@commitlint/config-conventional": "21.2.4",
-    "@hello.nrfcloud.com/bdd-markdown-steps": "5.0.5",
+    "@hello.nrfcloud.com/bdd-markdown-steps": "5.0.6",
     "@types/aws-lambda": "8.10.164",
     "@types/command-line-args": "5.2.3",
     "@types/node": "26.6.6",
